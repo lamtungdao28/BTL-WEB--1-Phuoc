@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết tin tức - PTIT Library</title>
+
+    <link rel="stylesheet" href="css/giao-dien.css">
+    <link rel="stylesheet" href="css/tin-tuc.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .article-breadcrumb span{
+    position: relative;
+    font-weight: bold;
+}
+.related-news{
+    margin-top: 60px;
+}
+
+.related-title{
+    color: #c8102e;
+    font-size: 18px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+
+.related-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.related-card{
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.related-card:hover{
+    transform: translateY(-5px);
+}
+
+.related-card img{
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.related-content{
+    padding: 16px;
+}
+
+.related-content h4{
+    color: #0d2a5c;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.related-content span{
+    color: #888;
+    font-size: 13px;
+}
+
+@media(max-width:768px){
+
+    .related-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.article-breadcrumb span::after{
+    content: "";
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 3px;
+
+    background: #c8102e;
+}
+
+        .article-banner{
+            background:
+            linear-gradient(rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)),
+            url("tai-nguyen/banner-tin-tuc.jpg")
+            center/cover no-repeat;
+
+            padding: 90px 0;
+            color: white;
+        }
+
+        .article-banner h1{
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .article-breadcrumb a{
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .article-wrapper{
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+
+            display: flex;
+            gap: 40px;
+        }
+
+        .article-main{
+            flex: 2.5;
+        }
+
+        .article-sidebar{
+            flex: 1;
+        }
+
+        .article-main img{
+            width: 100%;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .article-meta{
+            display: flex;
+            gap: 20px;
+            color: #777;
+            margin: 15px 0 25px;
+            font-size: 14px;
+        }
+
+        .article-meta i{
+            color: #c8102e;
+        }
+
+        .article-title{
+            font-size: 38px;
+            color: #0d2a5c;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .article-content p{
+            font-size: 17px;
+            line-height: 1.9;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 22px;
+        }
+
+        .article-content h3{
+            color: #0d2a5c;
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        .sidebar-box{
+            background: #f8f8f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-box h3{
+            border-left: 4px solid #c8102e;
+            padding-left: 12px;
+            color: #0d2a5c;
+            margin-bottom: 20px;
+        }
+
+        .related-item{
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .related-item img{
+            width: 90px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .related-item a{
+            text-decoration: none;
+            color: #0d2a5c;
+            font-weight: bold;
+            line-height: 1.5;
+            transition: 0.3s;
+        }
+
+        .related-item a:hover{
+            color: #c8102e;
+        }
+
+        @media(max-width: 768px){
+
+            .article-wrapper{
+                flex-direction: column;
+                padding: 0 18px;
+            }
+
+            .article-title{
+                font-size: 28px;
+            }
+
+            .article-banner h1{
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="dau-trang"></div>
+
+    <!-- BANNER -->
+    <section class="article-banner">
+        <div class="container-news">
+
+            <h1>TIN TỨC</h1>
+
+            <div class="article-breadcrumb">
+                <a href="trang-chu.html">Trang chủ</a> /
+                <a href="tin-tuc.html">Tin tức</a> /
+                <span>Bài viết</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NỘI DUNG -->
+    <section class="article-wrapper">
+
+        <div class="article-main">
+
+            <h1 class="article-title">
+                Ra mắt sách "Lịch sử Việt Nam bằng hình"
+            </h1>
+
+            <div class="article-meta">
+
+                <span>
+                    <i class="fas fa-calendar-alt"></i>
+                    10/05/2026
+                </span>
+
+                <span>
+                    <i class="fas fa-folder"></i>
+                    Hướng dẫn
+                </span>
+
+            </div>
+
+
+          <div class="article-content">
+
+    <p>
+        <strong>
+            Trung tâm Thông tin - Thư viện phối hợp cùng Nhà xuất bản Giáo dục Việt Nam
+            chính thức ra mắt bộ sách “Lịch sử Việt Nam bằng hình” nhằm mang đến cho
+            bạn đọc một góc nhìn trực quan, sinh động và dễ tiếp cận hơn về lịch sử dân tộc.
+        </strong>
+    </p>
+
+    <p>
+        Bộ sách được biên soạn công phu với hàng trăm hình ảnh tư liệu quý,
+        tranh minh họa và sơ đồ lịch sử được chọn lọc kỹ lưỡng. Đây được xem là
+        một trong những dự án xuất bản có giá trị học thuật và giáo dục cao,
+        góp phần lan tỏa tình yêu lịch sử đến thế hệ trẻ.
+    </p>
+
+    <img src="tai-nguyen/News3.jpg" alt="Ra mắt sách lịch sử">
+
+    <p class="img-caption">
+        Không gian trưng bày bộ sách “Lịch sử Việt Nam bằng hình” tại Thư viện PTIT.
+    </p>
+
+    <h3>Điểm nổi bật của bộ sách</h3>
+
+    <p>
+        Khác với nhiều đầu sách lịch sử truyền thống, bộ sách lần này tập trung
+        khai thác yếu tố hình ảnh nhằm giúp người đọc dễ dàng hình dung các giai đoạn,
+        sự kiện và nhân vật lịch sử quan trọng của Việt Nam.
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>
+            <strong>Hơn 500 hình ảnh tư liệu quý</strong> được sưu tầm từ nhiều nguồn uy tín.
+        </li>
+
+        <li>
+            <strong>Thiết kế hiện đại, trực quan</strong> giúp việc tiếp cận kiến thức lịch sử trở nên dễ dàng hơn.
+        </li>
+
+        <li>
+            <strong>Nội dung ngắn gọn, dễ hiểu</strong> phù hợp với học sinh, sinh viên và bạn đọc trẻ.
+        </li>
+
+        <li>
+            <strong>Kết hợp infographic và sơ đồ tư duy</strong> giúp ghi nhớ thông tin hiệu quả.
+        </li>
+
+    </ul>
+
+    <blockquote style="
+        border-left:4px solid #c8102e;
+        padding:15px 20px;
+        background:#f8f8f8;
+        font-style:italic;
+        color:#555;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Lịch sử không chỉ là những con số hay sự kiện khô khan,
+        mà còn là hành trình dựng nước và giữ nước đầy tự hào của dân tộc Việt Nam.”
+    </blockquote>
+
+    <h3>Lan tỏa tình yêu lịch sử tới giới trẻ</h3>
+
+    <p>
+        Đại diện Ban tổ chức cho biết việc ra mắt bộ sách nhằm góp phần đổi mới
+        phương pháp tiếp cận lịch sử đối với học sinh, sinh viên trong bối cảnh
+        chuyển đổi số giáo dục hiện nay.
+    </p>
+
+    <p>
+        Thông qua hình ảnh minh họa trực quan, bạn đọc có thể dễ dàng tiếp cận
+        các giai đoạn lịch sử quan trọng như:
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>Thời kỳ dựng nước Văn Lang - Âu Lạc.</li>
+
+        <li>Các cuộc kháng chiến chống ngoại xâm.</li>
+
+        <li>Những dấu mốc quan trọng của lịch sử cận đại.</li>
+
+        <li>Quá trình xây dựng và phát triển đất nước hiện đại.</li>
+
+    </ul>
+
+    <h3>Hoạt động trưng bày và giới thiệu sách</h3>
+
+    <p>
+        Trong khuôn khổ sự kiện, Thư viện tổ chức không gian trưng bày chuyên đề
+        nhằm giới thiệu các ấn phẩm nổi bật của bộ sách đến đông đảo bạn đọc.
+        Sinh viên có thể trực tiếp tham quan, đọc thử và tìm hiểu nội dung sách
+        tại khu vực triển lãm tầng 1.
+    </p>
+
+    <p>
+        Ngoài ra, chương trình còn có nhiều hoạt động giao lưu thú vị như:
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>Talkshow chia sẻ về phương pháp học lịch sử hiệu quả.</li>
+
+        <li>Mini game tìm hiểu kiến thức lịch sử Việt Nam.</li>
+
+        <li>Check-in nhận quà lưu niệm từ chương trình.</li>
+
+        <li>Giao lưu cùng các tác giả và nhóm biên soạn sách.</li>
+
+    </ul>
+
+    
+    <p class="img-caption">
+        Sinh viên tham quan khu vực trưng bày sách và tư liệu lịch sử.
+    </p>
+
+    <h3>Ứng dụng công nghệ số trong xuất bản lịch sử</h3>
+
+    <p>
+        Bên cạnh phiên bản in truyền thống, bộ sách “Lịch sử Việt Nam bằng hình”
+        còn được tích hợp nhiều nội dung số hiện đại nhằm nâng cao trải nghiệm đọc
+        và học tập cho sinh viên, học sinh và bạn đọc trẻ.
+    </p>
+
+    <p>
+        Một số trang sách được gắn mã QR giúp người đọc có thể truy cập nhanh tới:
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>
+            Video tư liệu lịch sử và phim tài liệu ngắn.
+        </li>
+
+        <li>
+            Hình ảnh 3D phục dựng các công trình, di tích lịch sử.
+        </li>
+
+        <li>
+            Timeline tương tác về các sự kiện quan trọng của dân tộc.
+        </li>
+
+        <li>
+            Kho dữ liệu số phục vụ học tập và nghiên cứu.
+        </li>
+
+    </ul>
+
+    <p>
+        Đại diện nhóm biên soạn cho biết việc kết hợp công nghệ số vào xuất bản
+        là xu hướng tất yếu nhằm tạo ra trải nghiệm học tập trực quan, sinh động
+        và phù hợp với thế hệ độc giả trẻ hiện nay.
+    </p>
+
+    <blockquote style="
+        border-left:4px solid #c8102e;
+        padding:15px 20px;
+        background:#f8f8f8;
+        font-style:italic;
+        color:#555;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Lịch sử cần được kể lại bằng ngôn ngữ gần gũi với thế hệ trẻ,
+        nơi hình ảnh, công nghệ và cảm xúc cùng góp phần truyền tải giá trị dân tộc.”
+    </blockquote>
+
+    <h3>Phản hồi tích cực từ sinh viên</h3>
+
+    <p>
+        Ngay trong ngày đầu tiên ra mắt, khu vực trưng bày sách đã thu hút đông đảo
+        sinh viên tới tham quan và tìm hiểu. Nhiều bạn đánh giá cao cách trình bày trực quan,
+        hiện đại cũng như khả năng tiếp cận kiến thức lịch sử một cách nhẹ nhàng hơn.
+    </p>
+
+    <p>
+        Bạn Nguyễn Minh Anh – sinh viên ngành Công nghệ thông tin chia sẻ:
+    </p>
+
+    <p style="
+        background:#fafafa;
+        padding:18px 22px;
+        border-radius:8px;
+        border:1px solid #eee;
+        line-height:1.9;
+        color:#555;
+    ">
+        “Trước đây mình thường cảm thấy lịch sử khá khó nhớ vì có nhiều mốc thời gian.
+        Nhưng bộ sách này trình bày bằng hình ảnh và sơ đồ nên dễ tiếp cận hơn rất nhiều.
+        Đặc biệt phần infographic giúp mình ghi nhớ nhanh hơn khi ôn tập.”
+    </p>
+
+    <p>
+        Không chỉ phục vụ nhu cầu đọc giải trí và tìm hiểu lịch sử,
+        bộ sách còn được đánh giá là nguồn tài liệu tham khảo hữu ích
+        cho các môn học liên quan đến lịch sử, văn hóa và giáo dục công dân.
+    </p>
+
+    <h3>Vai trò của thư viện trong phát triển văn hóa đọc</h3>
+
+    <p>
+        Trong những năm gần đây, Thư viện PTIT liên tục đổi mới không gian học tập,
+        bổ sung nhiều nguồn tài nguyên số và tổ chức các hoạt động khuyến đọc
+        nhằm xây dựng môi trường học thuật hiện đại cho sinh viên.
+    </p>
+
+    <p>
+        Các chương trình giới thiệu sách chuyên đề, tuần lễ văn hóa đọc,
+        workshop kỹ năng nghiên cứu và triển lãm tư liệu lịch sử đã góp phần
+        nâng cao thói quen đọc sách và tự học trong cộng đồng sinh viên.
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>
+            Mở rộng không gian đọc sách và khu tự học hiện đại.
+        </li>
+
+        <li>
+            Đẩy mạnh chuyển đổi số trong quản lý và tra cứu tài liệu.
+        </li>
+
+        <li>
+            Tăng cường hợp tác với các nhà xuất bản và đơn vị giáo dục.
+        </li>
+
+        <li>
+            Phát triển nguồn học liệu mở phục vụ nghiên cứu khoa học.
+        </li>
+
+    </ul>
+
+    <p>
+        Đại diện Trung tâm Thông tin - Thư viện cho biết trong thời gian tới,
+        đơn vị sẽ tiếp tục triển khai thêm nhiều hoạt động học thuật và sự kiện văn hóa
+        nhằm tạo môi trường học tập năng động, sáng tạo và truyền cảm hứng cho sinh viên.
+    </p>
+
+    <p>
+        Bộ sách “Lịch sử Việt Nam bằng hình” hiện đã có mặt tại khu vực đọc mở
+        và hệ thống thư viện số của PTIT để phục vụ bạn đọc trong và ngoài trường.
+    </p>
+
+</div>
+
+        <!-- SIDEBAR -->
+        <div class="article-sidebar">
+
+           <div class="related-news">
+
+    <h3 class="related-title">
+        <i class="fas fa-newspaper"></i>
+        Tin tức liên quan
+    </h3>
+
+    <div class="related-grid">
+
+        <!-- CARD 1 -->
+        <a href="chi-tiet-tin5.html" class="related-card">
+
+            <img src="tai-nguyen/news4.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Tập huấn sử dụng nguồn tài nguyên điện tử 2026
+                </h4>
+
+                <span>15/05/2026</span>
+
+            </div>
+
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="chi-tiet-tin4.html" class="related-card">
+
+            <img src="tai-nguyen/slide2.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Thông báo lịch phục vụ Thư viện dịp hè 2026
+                </h4>
+
+                <span>05/05/2026</span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+    <div id="chan-trang"></div>
+
+    <script src="js/tai-thanh-phan.js"></script>
+
+</body>
+</html>

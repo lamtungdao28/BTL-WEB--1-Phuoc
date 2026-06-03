@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mượn Sách Online - PTIT Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --red:        #c8102e;
+      --red-dark:   #a00d24;
+      --red-deeper: #7a0a1b;
+      --red-light:  #fde8ec;
+      --green:      #16a34a;
+      --green-bg:   #dcfce7;
+      --orange:     #ea580c;
+      --orange-bg:  #fff7ed;
+      --gray-50:    #f9fafb;
+      --gray-100:   #f3f4f6;
+      --gray-200:   #e5e7eb;
+      --gray-300:   #d1d5db;
+      --gray-400:   #9ca3af;
+      --gray-500:   #6b7280;
+      --gray-700:   #374151;
+      --gray-900:   #111827;
+      --white:      #ffffff;
+      --shadow:     0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md:  0 4px 12px rgba(0,0,0,.1);
+      --shadow-lg:  0 10px 30px rgba(0,0,0,.12);
+      --radius:     14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: linear-gradient(135deg, var(--red-deeper) 0%, var(--red) 60%, #e8193a 100%);
+      padding: 0 48px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 16px rgba(160,13,36,.35);
+    }
+
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--white);
+    }
+    .nav-logo {
+      width: 50px; height: 50px;
+      background: var(--white);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 16px; color: var(--red);
+      letter-spacing: -1px; flex-shrink: 0;
+    }
+    .nav-brand-text .t1 { font-size: 10.5px; font-weight: 600; opacity: .85; text-transform: uppercase; letter-spacing: .6px; }
+    .nav-brand-text .t2 { font-size: 13.5px; font-weight: 800; }
+    .nav-brand-text .t3 { font-size: 9.5px; opacity: .7; }
+
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
+      font-size: 14.5px; font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all .18s;
+    }
+    .nav-link:hover { background: rgba(255,255,255,.13); color: var(--white); }
+    .nav-link.active {
+      color: var(--white); font-weight: 700;
+      border-bottom: 2px solid rgba(255,255,255,.8);
+      border-radius: 0;
+    }
+
+    .user-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--white);
+      border-radius: 40px;
+      padding: 5px 14px 5px 5px;
+      cursor: pointer;
+      position: relative;
+      transition: box-shadow .2s;
+    }
+    .user-pill:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.28); }
+    .user-av {
+      width: 36px; height: 36px;
+      background: var(--red); color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 15px;
+    }
+    .user-pill .uname { font-size: 13px; font-weight: 700; color: var(--gray-900); line-height: 1.2; }
+    .user-pill .urole { font-size: 11px; color: var(--gray-500); }
+    .user-pill .udrop { font-size: 10px; color: var(--gray-400); margin-left: 2px; }
+
+    .dropdown {
+      display: none;
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.16);
+      min-width: 190px; z-index: 999; overflow: hidden;
+    }
+    .dropdown.show { display: block; }
+    .dropdown a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 18px;
+      text-decoration: none; color: var(--gray-700);
+      font-size: 13.5px;
+      transition: background .15s;
+    }
+    .dropdown a:hover { background: var(--red-light); color: var(--red); }
+    .dropdown a i { width: 16px; text-align: center; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--red-deeper) 0%, var(--red) 55%, #d4152f 100%);
+      padding: 72px 80px 80px;
+      position: relative; overflow: hidden;
+      color: var(--white);
+    }
+
+    /* geometric decoration */
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 460px; height: 460px;
+      background: rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -80px; right: 200px;
+      width: 260px; height: 260px;
+      background: rgba(255,255,255,.04);
+      border-radius: 50%;
+    }
+
+    .hero-inner {
+      max-width: 680px;
+      position: relative; z-index: 2;
+      animation: fadeUp .55s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 40px;
+      padding: 6px 16px;
+      font-size: 12.5px; font-weight: 600;
+      letter-spacing: .5px; text-transform: uppercase;
+      margin-bottom: 20px;
+      backdrop-filter: blur(6px);
+    }
+    .hero-tag i { font-size: 12px; }
+
+    .hero h1 {
+      font-size: 52px; font-weight: 900;
+      letter-spacing: -1px; line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 15.5px; opacity: .85; line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .hero-search {
+      display: flex; gap: 10px;
+      max-width: 560px;
+    }
+    .hero-search input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14.5px;
+      font-family: inherit;
+      outline: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+      color: var(--gray-900);
+    }
+    .hero-search input::placeholder { color: var(--gray-400); }
+    .hero-search button {
+      background: var(--white);
+      color: var(--red);
+      border: none;
+      padding: 15px 28px;
+      border-radius: 12px;
+      font-size: 14.5px; font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-search button:hover { background: var(--red-light); }
+
+    /* ── FILTER ── */
+    .filter-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 80px;
+      display: flex; align-items: center; gap: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 16px 18px;
+      border: none; background: transparent;
+      font-size: 14px; font-weight: 500;
+      color: var(--gray-500);
+      cursor: pointer; font-family: inherit;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all .18s;
+    }
+    .filter-btn:hover { color: var(--red); }
+    .filter-btn.active {
+      color: var(--red); font-weight: 700;
+      border-bottom-color: var(--red);
+    }
+    .filter-count {
+      background: var(--gray-100);
+      color: var(--gray-500);
+      font-size: 11px; font-weight: 700;
+      padding: 2px 7px; border-radius: 10px;
+    }
+    .filter-btn.active .filter-count {
+      background: var(--red-light); color: var(--red);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+    }
+
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .section-head h2 {
+      font-size: 20px; font-weight: 800; color: var(--gray-900);
+    }
+    .section-head span {
+      font-size: 13px; color: var(--gray-400);
+    }
+
+    /* ── BOOK GRID ── */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 22px;
+    }
+
+    .book-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-100);
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column;
+      transition: transform .22s, box-shadow .22s;
+      cursor: pointer;
+    }
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .book-cover {
+      position: relative;
+      height: 220px; overflow: hidden;
+      background: var(--gray-100);
+    }
+    .book-cover img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s;
+    }
+    .book-card:hover .book-cover img { transform: scale(1.06); }
+
+    .book-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--white);
+      color: var(--red);
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .book-cover-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 50%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .book-card:hover .book-cover-overlay { opacity: 1; }
+
+    .overlay-btn {
+      position: absolute; bottom: 12px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      opacity: 0; transition: all .25s;
+      background: var(--red);
+      color: var(--white);
+      border: none; padding: 9px 22px;
+      border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      white-space: nowrap;
+    }
+    .book-card:hover .overlay-btn {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+    .overlay-btn.disabled-btn {
+      background: var(--gray-400); cursor: not-allowed;
+    }
+
+    .book-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+    .book-cat {
+      font-size: 11.5px; font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    .book-title {
+      font-size: 14.5px; font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .book-author {
+      font-size: 12.5px; color: var(--gray-500);
+    }
+
+    .book-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-100);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .stock-info .stock-label { font-size: 11px; color: var(--gray-400); }
+    .stock-info .stock-num {
+      font-size: 20px; font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+    }
+    .stock-info .stock-num.out { color: var(--gray-400); font-size: 14px; font-weight: 600; }
+
+    .borrow-btn {
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 9px 16px;
+      border-radius: 9px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: background .18s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .borrow-btn:hover { background: var(--red-dark); }
+    .borrow-btn.disabled-btn {
+      background: var(--gray-200); color: var(--gray-400); cursor: not-allowed;
+    }
+    .borrow-btn.disabled-btn:hover { background: var(--gray-200); }
+
+    /* empty */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center; padding: 80px 24px;
+      color: var(--gray-400);
+    }
+    .empty i { font-size: 52px; margin-bottom: 16px; display: block; }
+    .empty p { font-size: 15px; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px) {
+      .hero { padding: 48px 24px 56px; }
+      .hero h1 { font-size: 34px; }
+      .filter-bar { padding: 0 16px; }
+      .main { padding: 24px 16px 48px; }
+      .navbar { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="trang-chu.html" class="nav-brand">
+    <div class="nav-logo">PTIT</div>
+    <div class="nav-brand-text">
+      <div class="t1">Học Viện</div>
+      <div class="t2">CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</div>
+      <div class="t3">Posts and Telecommunications Institute of Technology</div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="trang-chu.html" class="nav-link">Trang chủ</a>
+    <a href="muon-sach.html" class="nav-link active">Mượn sách</a>
+    <a href="sach-cua-toi.html" class="nav-link">Sách của tôi</a>
+  </div>
+
+  <div class="user-pill" onclick="toggleDropdown()">
+    <div class="user-av">N</div>
+    <div>
+      <div class="uname" id="userName">Nguyễn Văn A</div>
+      <div class="urole" id="userRole">Sinh viên</div>
+    </div>
+    <i class="fa-solid fa-chevron-down udrop"></i>
+    <div class="dropdown" id="dropdownMenu">
+      <a href="sach-cua-toi.html"><i class="fa-regular fa-bookmark"></i> Sách của tôi</a>
+      <a href="trang-chu.html"><i class="fa-solid fa-house"></i> Trang chủ</a>
+      <a href="dang-nhap.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <i class="fa-solid fa-book-open-reader"></i>
+      Hệ thống thư viện thông minh
+    </div>
+    <h1><span>MƯỢN SÁCH</span><br>ONLINE</h1>
+    <p>Tìm kiếm và đăng ký mượn sách trực tuyến dành cho sinh viên PTIT.<br>Nhanh chóng, tiện lợi, mọi lúc mọi nơi.</p>
+    <div class="hero-search">
+      <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên sách, tác giả..." />
+      <button onclick="doSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar" id="filterBar">
+  <!-- Rendered by JS -->
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="section-head">
+    <h2 id="sectionTitle">Tất cả tài liệu</h2>
+    <span id="resultCount">6 kết quả</span>
+  </div>
+  <div class="book-grid" id="bookGrid">
+    <!-- Rendered by JS -->
+  </div>
+</main>
+
+<script>
+/* ================================================================
+   DATA & STATE
+   Backend: thay allBooks bằng fetch('/api/tailieu') khi sẵn sàng
+   ================================================================ */
+const currentUser = {
+  maNguoiDung: 1,
+  taiKhoan: "B22DCCN001",
+  hoTen: "Nguyễn Văn A",
+  vaiTro: "SinhVien",
+  trangThai: "HoatDong"
+};
+
+const danhMucList = [
+  { id: 1, ten: "Công nghệ thông tin" },
+  { id: 2, ten: "Mạng máy tính"       },
+  { id: 3, ten: "Khoa học dữ liệu"    },
+  { id: 4, ten: "Kỹ thuật phần mềm"   }
+];
+
+const allBooks = [
+  {
+    maTaiLieu: 1, tenTaiLieu: "Lập trình Python cơ bản",
+    tacGia: "Nguyễn Văn A", nxb: "NXB CNTT", namXuatBan: 2024,
+    maDanhMuc: 1, tenDanhMuc: "Công nghệ thông tin",
+    soLuong: 83, soLuongCon: 71,
+    hinhAnh: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&q=80",
+    moTa: "Giáo trình lập trình Python từ cơ bản đến nâng cao dành cho sinh viên CNTT."
+  },
+  {
+    maTaiLieu: 2, tenTaiLieu: "Mạng máy tính và truyền dữ liệu",
+    tacGia: "Trần Thị B", nxb: "NXB Giáo Dục", namXuatBan: 2022,
+    maDanhMuc: 2, tenDanhMuc: "Mạng máy tính",
+    soLuong: 59, soLuongCon: 10,
+    hinhAnh: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80",
+    moTa: "Kiến thức nền tảng về mô hình OSI, TCP/IP và các giao thức mạng."
+  },
+  {
+    maTaiLieu: 3, tenTaiLieu: "Phân tích dữ liệu lớn với Spark",
+    tacGia: "Lê Văn C", nxb: "NXB Khoa Học", namXuatBan: 2023,
+    maDanhMuc: 3, tenDanhMuc: "Khoa học dữ liệu",
+    soLuong: 41, soLuongCon: 0,
+    hinhAnh: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80",
+    moTa: "Xử lý và phân tích tập dữ liệu hàng triệu bản ghi với Apache Spark."
+  },
+  {
+    maTaiLieu: 4, tenTaiLieu: "Kỹ nghệ phần mềm hiện đại",
+    tacGia: "Nguyễn Thị D", nxb: "NXB Bách Khoa", namXuatBan: 2021,
+    maDanhMuc: 4, tenDanhMuc: "Kỹ thuật phần mềm",
+    soLuong: 69, soLuongCon: 33,
+    hinhAnh: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
+    moTa: "Quy trình phát triển Agile, thiết kế hướng đối tượng và kiểm thử phần mềm."
+  },
+  {
+    maTaiLieu: 5, tenTaiLieu: "Cơ sở dữ liệu SQL Server",
+    tacGia: "Trần Văn D", nxb: "NXB ĐHQG", namXuatBan: 2023,
+    maDanhMuc: 1, tenDanhMuc: "Công nghệ thông tin",
+    soLuong: 86, soLuongCon: 55,
+    hinhAnh: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
+    moTa: "Thiết kế, quản trị và tối ưu hóa cơ sở dữ liệu trên SQL Server."
+  },
+  {
+    maTaiLieu: 6, tenTaiLieu: "An toàn và bảo mật mạng",
+    tacGia: "Lê Thị A", nxb: "NXB CNTT", namXuatBan: 2022,
+    maDanhMuc: 2, tenDanhMuc: "Mạng máy tính",
+    soLuong: 54, soLuongCon: 8,
+    hinhAnh: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=80",
+    moTa: "Các kỹ thuật tấn công mạng phổ biến và phương pháp phòng chống hiệu quả."
+  }
+];
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+/* ── User display ── */
+document.getElementById('userName').textContent = currentUser.hoTen;
+document.getElementById('userRole').textContent = currentUser.vaiTro === 'SinhVien' ? 'Sinh viên' : currentUser.vaiTro;
+
+/* ── Dropdown ── */
+function toggleDropdown() {
+  document.getElementById('dropdownMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.user-pill')) {
+    document.getElementById('dropdownMenu').classList.remove('show');
+  }
+});
+
+/* ── Filter bar ── */
+function buildFilters() {
+  const bar = document.getElementById('filterBar');
+  const counts = { all: allBooks.length };
+  danhMucList.forEach(d => {
+    counts[d.id] = allBooks.filter(b => b.maDanhMuc === d.id).length;
+  });
+
+  const allBtn = `<button class="filter-btn active" data-id="all" onclick="setFilter('all', this)">
+    <i class="fa-solid fa-grid-2" style="font-size:13px"></i> Tất cả
+    <span class="filter-count">${counts.all}</span>
+  </button>`;
+
+  const catBtns = danhMucList.map(d => `
+    <button class="filter-btn" data-id="${d.id}" onclick="setFilter(${d.id}, this)">
+      ${d.ten} <span class="filter-count">${counts[d.id]}</span>
+    </button>
+  `).join('');
+
+  bar.innerHTML = allBtn + catBtns;
+}
+
+function setFilter(id, el) {
+  currentFilter = id;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+/* ── Search ── */
+function doSearch() {
+  currentSearch = document.getElementById('searchInput').value.trim();
+  applyFilters();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('searchInput');
+  if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+});
+
+/* ── Filters ── */
+function applyFilters() {
+  const results = allBooks.filter(b => {
+    const matchCat = currentFilter === 'all' || b.maDanhMuc === parseInt(currentFilter);
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q || b.tenTaiLieu.toLowerCase().includes(q) || b.tacGia.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  // update section title
+  const catName = currentFilter === 'all'
+    ? 'Tất cả tài liệu'
+    : danhMucList.find(d => d.id === parseInt(currentFilter))?.ten || 'Tài liệu';
+  document.getElementById('sectionTitle').textContent = catName;
+  document.getElementById('resultCount').textContent = results.length + ' kết quả';
+  renderBooks(results);
+}
+
+/* ── Render books ── */
+function renderBooks(books) {
+  const grid = document.getElementById('bookGrid');
+
+  if (books.length === 0) {
+    grid.innerHTML = `<div class="empty">
+      <i class="fa-regular fa-folder-open"></i>
+      <p>Không tìm thấy tài liệu phù hợp</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = books.map(b => {
+    const hasStock = b.soLuongCon > 0;
+    return `
+    <div class="book-card" onclick="goToDetail(${b.maTaiLieu})">
+      <div class="book-cover">
+        <img src="${b.hinhAnh}" alt="${b.tenTaiLieu}"
+             onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80'" />
+        <span class="book-badge">${b.tenDanhMuc}</span>
+        <div class="book-cover-overlay"></div>
+        <button class="overlay-btn ${hasStock ? '' : 'disabled-btn'}"
+                onclick="event.stopPropagation(); ${hasStock ? 'goToBorrow(' + b.maTaiLieu + ')' : ''}">
+          ${hasStock ? '<i class="fa-solid fa-bookmark"></i> Đăng ký mượn' : 'Hết sách'}
+        </button>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">${b.tenDanhMuc}</div>
+        <div class="book-title">${b.tenTaiLieu}</div>
+        <div class="book-author">${b.tacGia} · ${b.namXuatBan}</div>
+        <div class="book-footer">
+          <div class="stock-info">
+            <div class="stock-label">Còn có thể mượn</div>
+            <div class="stock-num ${hasStock ? '' : 'out'}">${hasStock ? b.soLuongCon : 'Hết sách'}</div>
+          </div>
+          <button class="borrow-btn ${hasStock ? '' : 'disabled-btn'}"
+                  onclick="event.stopPropagation(); ${hasStock ? 'goToBorrow(' + b.maTaiLieu + ')' : ''}">
+            ${hasStock ? '<i class="fa-solid fa-book-bookmark"></i> Mượn' : '<i class="fa-solid fa-ban"></i> Hết'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveToSession(maTaiLieu) {
+  const book = allBooks.find(b => b.maTaiLieu === maTaiLieu);
+  if (book) sessionStorage.setItem('selectedBook', JSON.stringify(book));
+}
+
+function goToDetail(id) {
+  saveToSession(id);
+  window.location.href = `chi-tiet-sach.html?id=${id}`;
+}
+
+function goToBorrow(id) {
+  saveToSession(id);
+  window.location.href = `dang-ky-muon.html?maTaiLieu=${id}`;
+}
+
+/* ── Init ── */
+buildFilters();
+renderBooks(allBooks);
+</script>
+</body>
+</html>

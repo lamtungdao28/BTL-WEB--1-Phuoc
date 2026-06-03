@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thư viện PTIT</title>
+<link rel="stylesheet" href="css/giao-dien.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* Override nút header theo vai trò */
+.btn-admin-qly {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.btn-admin-qly:hover { background: #0f172a; }
+.btn-admin-qly i { font-size: 14px; }
+
+/* Badge admin ở topbar */
+.admin-badge-topbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<div id="dau-trang"></div>
+<section class="slider">
+    <div class="slides">
+        <div class="slide active" style="background-image: url('tai-nguyen/slide1.jpg')"></div>
+        <div class="slide" style="background-image: url('tai-nguyen/slide2.jpg')"></div>
+        <div class="slide" style="background-image: url('tai-nguyen/slide3.jpg')"></div>
+        <div class="slide" style="background-image: url('tai-nguyen/slide4.jpg')"></div>
+    </div>
+
+    <button class="prev" onclick="prevSlide()">❮</button>
+    <button class="next" onclick="nextSlide()">❯</button>
+
+    <div class="dots">
+        <span onclick="goToSlide(0)"></span>
+        <span onclick="goToSlide(1)"></span>
+        <span onclick="goToSlide(2)"></span>
+        <span onclick="goToSlide(3)"></span>
+    </div>
+</section>
+
+<div id="tinh-nang"></div>
+<div id="chi-dan"></div>
+<section class="thu-vien-media">
+    <div class="media-left">
+        <img src="tai-nguyen/video.jpg" alt="">
+        <div class="play-btn"></div>
+    </div>
+    <div class="media-right">
+        <img src="tai-nguyen/anh1.jpg" alt="">
+        <img src="tai-nguyen/anh2.jpg" alt="">
+    </div>
+</section>
+<div id="chan-trang"></div>
+
+<script src="js/tai-thanh-phan.js"></script>
+<script src="js/slider.js"></script>
+<script>
+    // ===== STICKY HEADER =====
+    window.addEventListener("scroll", function() {
+        var header = document.querySelector(".header");
+        if (header) {
+            if (window.scrollY > 100) {
+                header.classList.add("sticky-active");
+            } else {
+                header.classList.remove("sticky-active");
+            }
+        }
+    });
+
+    // ===== PHÂN QUYỀN GIAO DIỆN =====
+    const vaiTro = localStorage.getItem('vaiTro') || '';
+    const hoTen = localStorage.getItem('hoTen') || '';
+
+    function capNhatGiaoDien() {
+        // Cập nhật tên người dùng trong topbar (nếu có element)
+        const userNameEl = document.querySelector('#ten-nguoi-dung, .user-name, #btn-login-header');
+        if (userNameEl && hoTen) {
+            // Giữ nguyên nếu component tự xử lý
+        }
+
+        // === ADMIN: thay nút "Mượn sách" → "Quản lý sách" ===
+        if (vaiTro === 'Admin') {
+            // Tìm nút mượn sách trong header (class phổ biến)
+            setTimeout(() => {
+                const btnMuon = document.querySelector('.btn-header-muon, a[href="muon-sach.html"]');
+                if (btnMuon) {
+                    // Thay nút
+                    btnMuon.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Quản lý sách';
+                    btnMuon.href = 'quan-ly-sach.html';
+                    btnMuon.style.background = '#1e293b';
+                    btnMuon.style.color = 'white';
+                }
+
+                // Thêm badge admin vào topbar
+                const topbarRight = document.querySelector('.topbar .right, .topbar-right');
+                if (topbarRight) {
+                    const badge = document.createElement('span');
+                    badge.className = 'admin-badge-topbar';
+                    badge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ADMIN';
+                    topbarRight.prepend(badge);
+                }
+
+                // Thêm menu "Quản lý" vào nav nếu chưa có
+                const nav = document.querySelector('nav, .nav-menu');
+                if (nav && !document.querySelector('#nav-quanly')) {
+                    const li = document.createElement('a');
+                    li.id = 'nav-quanly';
+                    li.href = 'quan-ly-sach.html';
+                    li.style.cssText = 'color:#c8102e; font-weight:bold;';
+                    li.innerHTML = '<i class="fa-solid fa-gear"></i> Quản lý';
+                    nav.appendChild(li);
+                }
+            }, 300); // Đợi tai-thanh-phan.js load xong
+        } else if (vaiTro === 'SinhVien') {
+            // SinhVien: đảm bảo nút mượn sách vẫn link đúng
+            setTimeout(() => {
+                const btnMuon = document.querySelector('.btn-header-muon');
+                if (btnMuon) {
+                    btnMuon.href = 'muon-sach.html';
+                }
+            }, 300);
+        }
+    }
+
+    // Chạy sau khi DOM + components đã load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', capNhatGiaoDien);
+    } else {
+        capNhatGiaoDien();
+    }
+
+    // Cũng chạy sau 500ms để chắc chắn thanh-phan đã render
+    setTimeout(capNhatGiaoDien, 500);
+</script>
+</body>
+</html>

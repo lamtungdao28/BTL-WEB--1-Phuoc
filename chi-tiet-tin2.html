@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết tin tức - PTIT Library</title>
+
+    <link rel="stylesheet" href="css/giao-dien.css">
+    <link rel="stylesheet" href="css/tin-tuc.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .article-breadcrumb span{
+    position: relative;
+    font-weight: bold;
+}
+.related-news{
+    margin-top: 60px;
+}
+
+.related-title{
+    color: #c8102e;
+    font-size: 18px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+
+.related-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.related-card{
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.related-card:hover{
+    transform: translateY(-5px);
+}
+
+.related-card img{
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.related-content{
+    padding: 16px;
+}
+
+.related-content h4{
+    color: #0d2a5c;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.related-content span{
+    color: #888;
+    font-size: 13px;
+}
+
+@media(max-width:768px){
+
+    .related-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.article-breadcrumb span::after{
+    content: "";
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 3px;
+
+    background: #c8102e;
+}
+
+        .article-banner{
+            background:
+            linear-gradient(rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)),
+            url("tai-nguyen/banner-tin-tuc.jpg")
+            center/cover no-repeat;
+
+            padding: 90px 0;
+            color: white;
+        }
+
+        .article-banner h1{
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .article-breadcrumb a{
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .article-wrapper{
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+
+            display: flex;
+            gap: 40px;
+        }
+
+        .article-main{
+            flex: 2.5;
+        }
+
+        .article-sidebar{
+            flex: 1;
+        }
+
+        .article-main img{
+            width: 100%;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .article-meta{
+            display: flex;
+            gap: 20px;
+            color: #777;
+            margin: 15px 0 25px;
+            font-size: 14px;
+        }
+
+        .article-meta i{
+            color: #c8102e;
+        }
+
+        .article-title{
+            font-size: 38px;
+            color: #0d2a5c;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .article-content p{
+            font-size: 17px;
+            line-height: 1.9;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 22px;
+        }
+
+        .article-content h3{
+            color: #0d2a5c;
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        .sidebar-box{
+            background: #f8f8f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-box h3{
+            border-left: 4px solid #c8102e;
+            padding-left: 12px;
+            color: #0d2a5c;
+            margin-bottom: 20px;
+        }
+
+        .related-item{
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .related-item img{
+            width: 90px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .related-item a{
+            text-decoration: none;
+            color: #0d2a5c;
+            font-weight: bold;
+            line-height: 1.5;
+            transition: 0.3s;
+        }
+
+        .related-item a:hover{
+            color: #c8102e;
+        }
+
+        @media(max-width: 768px){
+
+            .article-wrapper{
+                flex-direction: column;
+                padding: 0 18px;
+            }
+
+            .article-title{
+                font-size: 28px;
+            }
+
+            .article-banner h1{
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="dau-trang"></div>
+
+    <!-- BANNER -->
+    <section class="article-banner">
+        <div class="container-news">
+
+            <h1>TIN TỨC</h1>
+
+            <div class="article-breadcrumb">
+                <a href="trang-chu.html">Trang chủ</a> /
+                <a href="tin-tuc.html">Tin tức</a> /
+                <span>Bài viết</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NỘI DUNG -->
+    <section class="article-wrapper">
+
+        <div class="article-main">
+
+            <h1 class="article-title">
+                Bộ Thông tin và Truyền thông sắp phát động cuộc thi sáng tác biểu trưng “Chuyển đổi số quốc gia”
+            </h1>
+
+            <div class="article-meta">
+
+                <span>
+                    <i class="fas fa-calendar-alt"></i>
+                    10/05/2026
+                </span>
+
+                <span>
+                    <i class="fas fa-folder"></i>
+                    Hướng dẫn
+                </span>
+
+            </div>
+
+            <img src="tai-nguyen/news2.jpg" alt="">
+
+           <div class="article-content">
+
+    <p>
+        <strong>
+            Bộ Thông tin và Truyền thông dự kiến phát động cuộc thi sáng tác biểu trưng
+            “Chuyển đổi số quốc gia” nhằm tìm kiếm hình ảnh đại diện chính thức cho
+            chương trình chuyển đổi số trên phạm vi toàn quốc.
+        </strong>
+    </p>
+
+    <p>
+        Cuộc thi được tổ chức với mong muốn lan tỏa tinh thần đổi mới sáng tạo,
+        thúc đẩy ứng dụng công nghệ số trong mọi lĩnh vực của đời sống xã hội,
+        đồng thời tạo cơ hội cho cộng đồng thiết kế, sinh viên và các cá nhân yêu thích
+        sáng tạo thể hiện ý tưởng của mình.
+    </p>
+
+    
+    <h3>Ý nghĩa của cuộc thi</h3>
+
+    <p>
+        Chuyển đổi số đang trở thành xu hướng tất yếu trong thời đại công nghệ 4.0.
+        Việc xây dựng một biểu trưng mang tính nhận diện cao sẽ góp phần:
+    </p>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>
+            <strong>Tăng khả năng nhận diện thương hiệu</strong> cho chương trình
+            Chuyển đổi số quốc gia.
+        </li>
+
+        <li>
+            <strong>Khuyến khích tinh thần đổi mới sáng tạo</strong> trong cộng đồng
+            sinh viên, nhà thiết kế và giới trẻ.
+        </li>
+
+        <li>
+            <strong>Lan tỏa thông điệp ứng dụng công nghệ</strong> vào học tập,
+            nghiên cứu và phát triển kinh tế - xã hội.
+        </li>
+
+        <li>
+            <strong>Góp phần xây dựng hình ảnh Việt Nam hiện đại</strong>,
+            sáng tạo và hội nhập quốc tế.
+        </li>
+
+    </ul>
+
+    <blockquote style="
+        border-left:4px solid #c8102e;
+        padding:15px 20px;
+        background:#f8f8f8;
+        font-style:italic;
+        color:#555;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Chuyển đổi số không chỉ là xu hướng công nghệ mà còn là động lực
+        quan trọng giúp nâng cao chất lượng cuộc sống, hiệu quả học tập
+        và năng lực cạnh tranh quốc gia trong tương lai.”
+    </blockquote>
+
+    <h3>Đối tượng tham gia</h3>
+
+    <p>
+        Cuộc thi mở rộng cho tất cả công dân Việt Nam trong và ngoài nước,
+        không giới hạn độ tuổi hay ngành nghề. Thí sinh có thể tham gia cá nhân
+        hoặc theo nhóm và được phép gửi nhiều tác phẩm dự thi.
+    </p>
+
+    <p>
+        Các bài dự thi cần đảm bảo tính sáng tạo, chưa từng công bố trước đây,
+        đồng thời thể hiện rõ tinh thần công nghệ, hiện đại và phát triển bền vững.
+    </p>
+
+    <h3>Tiêu chí đánh giá</h3>
+
+    <ul style="line-height:2; color:#444; padding-left:25px;">
+
+        <li>Tính sáng tạo và độc đáo trong ý tưởng thiết kế.</li>
+
+        <li>Khả năng ứng dụng thực tế trên nhiều nền tảng truyền thông.</li>
+
+        <li>Khả năng truyền tải thông điệp về chuyển đổi số quốc gia.</li>
+
+        <li>Tính thẩm mỹ, hiện đại và phù hợp với xu hướng thiết kế mới.</li>
+
+    </ul>
+
+    <p>
+        Dự kiến cuộc thi sẽ chính thức được phát động trong thời gian tới và kéo dài
+        trong vòng 2 tháng. Những tác phẩm xuất sắc nhất sẽ được trao giải thưởng
+        giá trị và có cơ hội trở thành biểu trưng chính thức của chương trình.
+    </p>
+
+    <p>
+        Thông tin chi tiết về thể lệ, cơ cấu giải thưởng và thời gian nộp bài sẽ được
+        cập nhật trên Cổng thông tin điện tử của Bộ Thông tin và Truyền thông.
+    </p>
+
+</div>
+
+        <!-- SIDEBAR -->
+        <div class="article-sidebar">
+
+           <div class="related-news">
+
+    <h3 class="related-title">
+        <i class="fas fa-newspaper"></i>
+        Tin tức liên quan
+    </h3>
+
+    <div class="related-grid">
+
+        <!-- CARD 1 -->
+        <a href="chi-tiet-tin.html" class="related-card">
+
+            <img src="tai-nguyen/news1.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Giới thiệu 6 CSDL luận văn, luận án miễn phí trên thế giới
+                </h4>
+
+                <span>15/05/2026</span>
+
+            </div>
+
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="chi-tiet-tin3.html" class="related-card">
+
+            <img src="tai-nguyen/news3.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Ra mắt sách "Lịch sử Việt Nam bằng hình"
+                </h4>
+
+                <span>28/09/2025</span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+    <div id="chan-trang"></div>
+
+    <script src="js/tai-thanh-phan.js"></script>
+
+</body>
+</html>

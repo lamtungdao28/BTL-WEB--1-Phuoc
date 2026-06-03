@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quản lý sách - PTIT Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ===== RESET & BASE ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --red: #c8102e;
+    --red-dark: #a00d25;
+    --red-light: #fff0f2;
+    --sidebar-w: 240px;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+}
+body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gray-100); color: var(--gray-800); }
+
+/* ===== TOPBAR ===== */
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 48px;
+    background: var(--red); color: white;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; z-index: 100;
+    font-size: 13px;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar a { color: rgba(255,255,255,0.85); text-decoration: none; }
+.topbar a:hover { color: white; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    position: fixed; top: 48px; left: 0; bottom: 0;
+    width: var(--sidebar-w); background: white;
+    border-right: 1px solid var(--gray-200);
+    overflow-y: auto; z-index: 90;
+}
+.sidebar-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 16px; border-bottom: 1px solid var(--gray-200);
+}
+.sidebar-brand img { height: 36px; }
+.sidebar-brand-text { font-size: 13px; line-height: 1.3; }
+.sidebar-brand-text strong { color: var(--red); display: block; }
+
+.sidebar-section { padding: 8px 0; }
+.sidebar-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #94a3b8; padding: 8px 16px 4px;
+}
+.sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 16px; font-size: 14px; color: var(--gray-600);
+    cursor: pointer; border-left: 3px solid transparent;
+    transition: all 0.15s; text-decoration: none;
+}
+.sidebar-item:hover { background: var(--gray-50); color: var(--red); }
+.sidebar-item.active {
+    background: var(--red-light); color: var(--red);
+    border-left-color: var(--red); font-weight: 600;
+}
+.sidebar-item i { width: 16px; text-align: center; }
+.sidebar-badge {
+    margin-left: auto; background: var(--red); color: white;
+    font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 10px;
+}
+
+/* ===== MAIN ===== */
+.main {
+    margin-left: var(--sidebar-w);
+    margin-top: 48px;
+    padding: 24px;
+    min-height: calc(100vh - 48px);
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+}
+.page-title { font-size: 22px; font-weight: 700; }
+.page-subtitle { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+.btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 6px; font-size: 14px;
+    font-weight: 600; cursor: pointer; border: none; transition: 0.2s;
+    text-decoration: none;
+}
+.btn-primary { background: var(--red); color: white; }
+.btn-primary:hover { background: var(--red-dark); }
+.btn-outline { background: white; color: var(--gray-600); border: 1px solid var(--gray-200); }
+.btn-outline:hover { border-color: var(--red); color: var(--red); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-danger { background: #fee2e2; color: #dc2626; }
+.btn-danger:hover { background: #fecaca; }
+.btn-success { background: #dcfce7; color: #16a34a; }
+.btn-success:hover { background: #bbf7d0; }
+
+/* ===== STATS CARDS ===== */
+.stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 24px;
+}
+.stat-card {
+    background: white; border-radius: 10px; padding: 18px;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px;
+}
+.stat-icon {
+    width: 46px; height: 46px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+}
+.stat-icon.red { background: var(--red-light); color: var(--red); }
+.stat-icon.blue { background: #eff6ff; color: #3b82f6; }
+.stat-icon.green { background: #f0fdf4; color: #22c55e; }
+.stat-icon.orange { background: #fff7ed; color: #f97316; }
+.stat-val { font-size: 22px; font-weight: 700; }
+.stat-lbl { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+/* ===== TABLE CARD ===== */
+.card {
+    background: white; border-radius: 10px;
+    box-shadow: var(--shadow); overflow: hidden;
+}
+.card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
+}
+.card-title { font-size: 15px; font-weight: 700; }
+
+/* ===== TOOLBAR ===== */
+.toolbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+.search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: white; border: 1px solid var(--gray-200);
+    border-radius: 6px; padding: 7px 12px; flex: 1; max-width: 320px;
+}
+.search-box input {
+    border: none; outline: none; font-size: 14px; width: 100%;
+    background: transparent;
+}
+.search-box i { color: #94a3b8; font-size: 13px; }
+.filter-select {
+    padding: 7px 12px; border: 1px solid var(--gray-200); border-radius: 6px;
+    font-size: 14px; background: white; color: var(--gray-600); cursor: pointer;
+    outline: none;
+}
+.filter-select:focus { border-color: var(--red); }
+
+/* ===== DATA TABLE ===== */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th {
+    background: var(--gray-50); padding: 10px 16px;
+    text-align: left; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-600);
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+}
+tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.1s; }
+tbody tr:hover { background: var(--gray-50); }
+tbody td { padding: 12px 16px; vertical-align: middle; }
+.badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.badge-green { background: #dcfce7; color: #15803d; }
+.badge-red { background: #fee2e2; color: #dc2626; }
+.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-orange { background: #fff7ed; color: #c2410c; }
+.badge-gray { background: var(--gray-100); color: var(--gray-600); }
+.book-img {
+    width: 36px; height: 48px; object-fit: cover;
+    border-radius: 4px; background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; overflow: hidden;
+}
+.book-thumb-cell { display: flex; align-items: center; gap: 10px; }
+.book-title { font-weight: 600; color: var(--gray-800); }
+.book-author { font-size: 12px; color: var(--gray-600); }
+
+/* ===== PAGINATION ===== */
+.pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-top: 1px solid var(--gray-200);
+    font-size: 13px; color: var(--gray-600);
+}
+.page-btns { display: flex; gap: 4px; }
+.page-btn {
+    width: 30px; height: 30px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 1px solid var(--gray-200); font-size: 13px;
+    background: white; transition: 0.15s;
+}
+.page-btn:hover { border-color: var(--red); color: var(--red); }
+.page-btn.active { background: var(--red); color: white; border-color: var(--red); }
+
+/* ===== TABS ===== */
+.tabs { display: flex; border-bottom: 2px solid var(--gray-200); margin-bottom: 20px; }
+.tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 600;
+    cursor: pointer; color: var(--gray-600); position: relative;
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: 0.15s; white-space: nowrap;
+}
+.tab:hover { color: var(--red); }
+.tab.active { color: var(--red); border-bottom-color: var(--red); }
+.tab .count {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gray-200); color: var(--gray-600);
+    font-size: 11px; width: 20px; height: 20px; border-radius: 50%;
+    margin-left: 6px;
+}
+.tab.active .count { background: var(--red); color: white; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.45); align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+    background: white; border-radius: 12px; width: 520px; max-height: 85vh;
+    overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    animation: slideUp 0.2s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } }
+.modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px; border-bottom: 1px solid var(--gray-200);
+}
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-close {
+    width: 30px; height: 30px; border-radius: 50%; border: none;
+    background: var(--gray-100); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-600); transition: 0.15s;
+}
+.modal-close:hover { background: #fee2e2; color: var(--red); }
+.modal-body { padding: 20px; }
+.modal-footer {
+    padding: 14px 20px; border-top: 1px solid var(--gray-200);
+    display: flex; justify-content: flex-end; gap: 10px;
+}
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; }
+.form-input {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--gray-200);
+    border-radius: 6px; font-size: 14px; outline: none; transition: 0.15s;
+}
+.form-input:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(200,16,46,0.1); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-select {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--gray-200);
+    border-radius: 6px; font-size: 14px; outline: none; background: white;
+}
+.form-select:focus { border-color: var(--red); }
+
+/* ===== ADMIN INFO ===== */
+.admin-info {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.admin-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+}
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-left">
+        <i class="fa-solid fa-globe"></i>
+        <span>Cổng thông tin điện tử – Học viện Công nghệ Bưu chính Viễn thông</span>
+    </div>
+    <div class="topbar-right">
+        <a href="#"><i class="fa-regular fa-clock"></i> 7h30 – 21h30</a>
+        <a href="#">ilc@ptit.edu.vn</a>
+        <div class="admin-info">
+            <div class="admin-avatar">A</div>
+            <span id="admin-name">Admin</span>
+            <i class="fa-solid fa-caret-down" style="font-size:11px"></i>
+        </div>
+        <a href="dang-nhap.html" style="color:rgba(255,255,255,0.7); font-size:12px;">
+            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+        </a>
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <img src="tai-nguyen/logo.png" alt="Logo" onerror="this.style.display='none'">
+        <div class="sidebar-brand-text">
+            <strong>PTIT Library</strong>
+            <span style="color:#64748b; font-size:11px;">Quản trị hệ thống</span>
+        </div>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">Tổng quan</div>
+        <a class="sidebar-item active" onclick="showSection('dashboard')">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard
+        </a>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">Quản lý</div>
+        <a class="sidebar-item" onclick="showSection('sach')">
+            <i class="fa-solid fa-book"></i> Quản lý sách
+            <span class="sidebar-badge">2000</span>
+        </a>
+        <a class="sidebar-item" onclick="showSection('sinhvien')">
+            <i class="fa-solid fa-users"></i> Quản lý sinh viên
+            <span class="sidebar-badge">10k</span>
+        </a>
+        <a class="sidebar-item" onclick="showSection('muon')">
+            <i class="fa-solid fa-book-open"></i> Lịch sử mượn
+        </a>
+        <a class="sidebar-item" onclick="showSection('phat')">
+            <i class="fa-solid fa-triangle-exclamation"></i> Phạt & vi phạm
+        </a>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">Hệ thống</div>
+        <a class="sidebar-item" href="dang-nhap.html">
+            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+        </a>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="section-dashboard" class="content-section active">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Dashboard</div>
+                <div class="page-subtitle">Tổng quan hệ thống thư viện PTIT</div>
+            </div>
+            <div style="font-size:13px; color:var(--gray-600)">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="current-date"></span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fa-solid fa-book"></i></div>
+                <div>
+                    <div class="stat-val">2,000</div>
+                    <div class="stat-lbl">Tổng số sách</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <div class="stat-val">10,000</div>
+                    <div class="stat-lbl">Sinh viên đăng ký</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fa-solid fa-book-open"></i></div>
+                <div>
+                    <div class="stat-val">3,842</div>
+                    <div class="stat-lbl">Lượt mượn sách</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <div class="stat-val">127</div>
+                    <div class="stat-lbl">Quá hạn chưa trả</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--red)"></i> Mượn sách gần đây</span>
+                    <a onclick="showSection('muon')" class="btn btn-outline btn-sm">Xem tất cả</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sinh viên</th>
+                            <th>Sách</th>
+                            <th>Ngày mượn</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Dương Thị Nam</td><td>CNTT Tập 1</td><td>10/05/2026</td><td><span class="badge badge-blue">Đang mượn</span></td></tr>
+                        <tr><td>Vũ Quang Phong</td><td>Mạng máy tính</td><td>09/05/2026</td><td><span class="badge badge-green">Đã trả</span></td></tr>
+                        <tr><td>Phạm Ngọc Lan</td><td>CSDL Tập 3</td><td>07/05/2026</td><td><span class="badge badge-orange">Quá hạn</span></td></tr>
+                        <tr><td>Trần Tuấn Anh</td><td>Giải tích 2</td><td>05/05/2026</td><td><span class="badge badge-blue">Đang mượn</span></td></tr>
+                        <tr><td>Lê Minh Linh</td><td>Kỹ thuật phần mềm</td><td>03/05/2026</td><td><span class="badge badge-green">Đã trả</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title"><i class="fa-solid fa-fire" style="color:var(--red)"></i> Sách được mượn nhiều nhất</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>Tên sách</th><th>Danh mục</th><th>Lượt mượn</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td>Mạng máy tính Tập 1</td><td><span class="badge badge-blue">MMT</span></td><td>48</td></tr>
+                        <tr><td><strong>2</strong></td><td>Lập trình C++ cơ bản</td><td><span class="badge badge-green">CNTT</span></td><td>45</td></tr>
+                        <tr><td><strong>3</strong></td><td>Cơ sở dữ liệu Tập 2</td><td><span class="badge badge-orange">CSDL</span></td><td>41</td></tr>
+                        <tr><td><strong>4</strong></td><td>Giải tích A1</td><td><span class="badge badge-gray">Toán</span></td><td>38</td></tr>
+                        <tr><td><strong>5</strong></td><td>Kỹ thuật phần mềm</td><td><span class="badge badge-blue">KT PM</span></td><td>35</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QUẢN LÝ SÁCH ===== -->
+    <div id="section-sach" class="content-section">
+        <div class="page-header">
+            <div>
+                <div class="page-title"><i class="fa-solid fa-book" style="color:var(--red)"></i> Quản lý sách</div>
+                <div class="page-subtitle">Danh sách tài liệu trong thư viện PTIT</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn btn-outline" onclick="xuatExcel()">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+                <button class="btn btn-primary" onclick="openModal('them-sach')">
+                    <i class="fa-solid fa-plus"></i> Thêm sách
+                </button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="filterSach('all', this)">Tất cả <span class="count">6</span></div>
+            <div class="tab" onclick="filterSach('1', this)">Công nghệ thông tin <span class="count">2</span></div>
+            <div class="tab" onclick="filterSach('2', this)">Mạng máy tính <span class="count">2</span></div>
+            <div class="tab" onclick="filterSach('3', this)">Khoa học dữ liệu <span class="count">1</span></div>
+            <div class="tab" onclick="filterSach('4', this)">Kỹ thuật phần mềm <span class="count">1</span></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Danh sách sách (<span id="sach-count">6</span>)</span>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-sach" placeholder="Tìm theo tên sách, tác giả..." oninput="timKiemSach()">
+                </div>
+                <select class="filter-select" onchange="filterNXB(this.value)">
+                    <option value="">Tất cả NXB</option>
+                    <option>NXB Giáo Dục</option>
+                    <option>NXB Khoa Học</option>
+                    <option>NXB ĐHQG</option>
+                    <option>NXB CNTT</option>
+                    <option>NXB Bách Khoa</option>
+                </select>
+                <select class="filter-select" onchange="filterNam(this.value)">
+                    <option value="">Tất cả năm</option>
+                    <option>2024</option><option>2023</option><option>2022</option>
+                    <option>2021</option><option>2020</option>
+                </select>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px"><input type="checkbox" id="check-all" onchange="checkAll(this)"></th>
+                        <th>Tên sách</th>
+                        <th>Tác giả</th>
+                        <th>NXB</th>
+                        <th>Năm</th>
+                        <th>Danh mục</th>
+                        <th>Tổng SL</th>
+                        <th>Còn lại</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="sach-tbody">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span id="page-info">Hiển thị 1–6 / 2000 bản ghi</span>
+                <div class="page-btns">
+                    <div class="page-btn"><i class="fa-solid fa-chevron-left"></i></div>
+                    <div class="page-btn active">1</div>
+                    <div class="page-btn">2</div>
+                    <div class="page-btn">3</div>
+                    <div class="page-btn">...</div>
+                    <div class="page-btn">200</div>
+                    <div class="page-btn"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QUẢN LÝ SINH VIÊN ===== -->
+    <div id="section-sinhvien" class="content-section">
+        <div class="page-header">
+            <div>
+                <div class="page-title"><i class="fa-solid fa-users" style="color:var(--red)"></i> Quản lý sinh viên</div>
+                <div class="page-subtitle">Danh sách người dùng đăng ký hệ thống</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn btn-outline" onclick="xuatExcel()">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+                <button class="btn btn-primary" onclick="openModal('them-sv')">
+                    <i class="fa-solid fa-user-plus"></i> Thêm sinh viên
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Danh sách sinh viên (<span id="sv-count">10,000</span>)</span>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-sv" placeholder="Tìm theo tên, mã tài khoản..." oninput="timKiemSV()">
+                </div>
+                <select class="filter-select" onchange="filterTrangThai(this.value)">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="HoatDong">Hoạt động</option>
+                    <option value="Khoa">Bị khoá</option>
+                </select>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px"><input type="checkbox"></th>
+                        <th>Tài khoản</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Trạng thái</th>
+                        <th>Sách đang mượn</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="sv-tbody">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span>Hiển thị 1–10 / 10,000 sinh viên</span>
+                <div class="page-btns">
+                    <div class="page-btn"><i class="fa-solid fa-chevron-left"></i></div>
+                    <div class="page-btn active">1</div>
+                    <div class="page-btn">2</div>
+                    <div class="page-btn">3</div>
+                    <div class="page-btn">...</div>
+                    <div class="page-btn">1000</div>
+                    <div class="page-btn"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LỊCH SỬ MƯỢN ===== -->
+    <div id="section-muon" class="content-section">
+        <div class="page-header">
+            <div>
+                <div class="page-title"><i class="fa-solid fa-book-open" style="color:var(--red)"></i> Lịch sử mượn sách</div>
+                <div class="page-subtitle">Toàn bộ giao dịch mượn – trả trong hệ thống</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-box" style="max-width:280px">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Tìm theo SV, sách...">
+                </div>
+                <select class="filter-select">
+                    <option>Tất cả trạng thái</option>
+                    <option>Đang mượn</option>
+                    <option>Đã trả</option>
+                    <option>Quá hạn</option>
+                    <option>Mất sách</option>
+                </select>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã giao dịch</th>
+                        <th>Sinh viên</th>
+                        <th>Sách</th>
+                        <th>Ngày mượn</th>
+                        <th>Hạn trả</th>
+                        <th>Ngày trả</th>
+                        <th>Tiền phạt</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#MT001</td><td>Dương Thị Nam</td><td>Mạng máy tính T1</td>
+                        <td>10/05/2026</td><td>24/05/2026</td><td>—</td><td>0</td>
+                        <td><span class="badge badge-blue">Đang mượn</span></td>
+                        <td><button class="btn btn-success btn-sm" onclick="xacNhanTra()"><i class="fa-solid fa-check"></i> Xác nhận trả</button></td>
+                    </tr>
+                    <tr>
+                        <td>#MT002</td><td>Phạm Ngọc Lan</td><td>CSDL Tập 3</td>
+                        <td>01/05/2026</td><td>15/05/2026</td><td>—</td><td>0</td>
+                        <td><span class="badge badge-orange">Quá hạn</span></td>
+                        <td><button class="btn btn-danger btn-sm"><i class="fa-solid fa-triangle-exclamation"></i> Nhắc nhở</button></td>
+                    </tr>
+                    <tr>
+                        <td>#MT003</td><td>Vũ Quang Phong</td><td>Lập trình C++</td>
+                        <td>01/04/2026</td><td>15/04/2026</td><td>14/04/2026</td><td>0</td>
+                        <td><span class="badge badge-green">Đã trả</span></td>
+                        <td><button class="btn btn-outline btn-sm"><i class="fa-solid fa-eye"></i> Chi tiết</button></td>
+                    </tr>
+                    <tr>
+                        <td>#MT004</td><td>Trần Tuấn Anh</td><td>Giải tích A1</td>
+                        <td>18/11/2024</td><td>02/12/2024</td><td>—</td><td>150,000đ</td>
+                        <td><span class="badge badge-red">Mất sách</span></td>
+                        <td><button class="btn btn-outline btn-sm"><i class="fa-solid fa-eye"></i> Chi tiết</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span>Hiển thị 1–4 / 3,842 giao dịch</span>
+                <div class="page-btns">
+                    <div class="page-btn active">1</div>
+                    <div class="page-btn">2</div>
+                    <div class="page-btn">...</div>
+                    <div class="page-btn">385</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PHẠT ===== -->
+    <div id="section-phat" class="content-section">
+        <div class="page-header">
+            <div>
+                <div class="page-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--red)"></i> Vi phạm & Tiền phạt</div>
+                <div class="page-subtitle">Danh sách các trường hợp vi phạm nội quy thư viện</div>
+            </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: repeat(3,1fr)">
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
+                <div><div class="stat-val">127</div><div class="stat-lbl">Quá hạn chưa trả</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fa-solid fa-book-skull"></i></div>
+                <div><div class="stat-val">23</div><div class="stat-lbl">Mất sách</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fa-solid fa-money-bill"></i></div>
+                <div><div class="stat-val">4.2M</div><div class="stat-lbl">Tổng tiền phạt (VND)</div></div>
+            </div>
+        </div>
+        <div class="card" style="padding:40px; text-align:center; color:var(--gray-600)">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size:40px; color:#fbbf24; margin-bottom:12px; display:block"></i>
+            <div>Chức năng quản lý vi phạm đang được phát triển.</div>
+            <div style="font-size:13px; margin-top:4px">Xem tạm tại mục <strong>Lịch sử mượn</strong></div>
+        </div>
+    </div>
+
+</div><!-- /main -->
+
+<!-- ===== MODAL THÊM SÁCH ===== -->
+<div class="modal-overlay" id="modal-them-sach">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fa-solid fa-plus" style="color:var(--red)"></i> Thêm sách mới</span>
+            <button class="modal-close" onclick="closeModal('them-sach')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Tên tài liệu *</label>
+                <input class="form-input" type="text" placeholder="Nhập tên sách...">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Tác giả *</label>
+                    <input class="form-input" type="text" placeholder="Tên tác giả">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nhà xuất bản</label>
+                    <select class="form-select">
+                        <option>NXB Giáo Dục</option>
+                        <option>NXB Khoa Học</option>
+                        <option>NXB ĐHQG</option>
+                        <option>NXB CNTT</option>
+                        <option>NXB Bách Khoa</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Năm xuất bản</label>
+                    <input class="form-input" type="number" value="2024">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Danh mục</label>
+                    <select class="form-select">
+                        <option>Công nghệ thông tin</option>
+                        <option>Mạng máy tính</option>
+                        <option>Khoa học dữ liệu</option>
+                        <option>Kỹ thuật phần mềm</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Số lượng tổng</label>
+                    <input class="form-input" type="number" value="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Số lượng còn</label>
+                    <input class="form-input" type="number" value="10">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mô tả</label>
+                <textarea class="form-input" rows="3" placeholder="Mô tả ngắn về sách..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('them-sach')">Hủy</button>
+            <button class="btn btn-primary" onclick="themSach()"><i class="fa-solid fa-save"></i> Lưu sách</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL THÊM SINH VIÊN ===== -->
+<div class="modal-overlay" id="modal-them-sv">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fa-solid fa-user-plus" style="color:var(--red)"></i> Thêm sinh viên</span>
+            <button class="modal-close" onclick="closeModal('them-sv')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Tài khoản *</label>
+                <input class="form-input" type="text" placeholder="vd: nguyenvana.b22.tc001_1">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Họ tên *</label>
+                    <input class="form-input" type="text" placeholder="Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu *</label>
+                    <input class="form-input" type="password" placeholder="123456">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" placeholder="abc@stu.ptit.edu.vn">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Số điện thoại</label>
+                    <input class="form-input" type="text" placeholder="09xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Trạng thái</label>
+                    <select class="form-select">
+                        <option value="HoatDong">Hoạt động</option>
+                        <option value="Khoa">Khoá tài khoản</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('them-sv')">Hủy</button>
+            <button class="btn btn-primary" onclick="themSV()"><i class="fa-solid fa-save"></i> Lưu</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL SỬA SÁCH ===== -->
+<div class="modal-overlay" id="modal-sua-sach">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title"><i class="fa-solid fa-pen" style="color:var(--red)"></i> Sửa thông tin sách</span>
+            <button class="modal-close" onclick="closeModal('sua-sach')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Tên tài liệu *</label>
+                <input class="form-input" type="text" id="edit-ten">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Tác giả</label>
+                    <input class="form-input" type="text" id="edit-tacgia">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nhà xuất bản</label>
+                    <input class="form-input" type="text" id="edit-nxb">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Số lượng tổng</label>
+                    <input class="form-input" type="number" id="edit-sl">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Số lượng còn</label>
+                    <input class="form-input" type="number" id="edit-slcon">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('sua-sach')">Hủy</button>
+            <button class="btn btn-primary"><i class="fa-solid fa-save"></i> Cập nhật</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== CHECK AUTH =====
+const hoTen = localStorage.getItem('hoTen') || 'Admin';
+const vaiTro = localStorage.getItem('vaiTro') || 'Admin';
+document.getElementById('admin-name').textContent = hoTen;
+
+if (vaiTro !== 'Admin') {
+    alert('Bạn không có quyền truy cập trang này!');
+    window.location.href = 'dang-nhap.html';
+}
+
+// ===== DATE =====
+const d = new Date();
+document.getElementById('current-date').textContent = 
+    d.toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
+
+// ===== DATA =====
+const danhMuc = {1:'Công nghệ thông tin', 2:'Mạng máy tính', 3:'Khoa học dữ liệu', 4:'Kỹ thuật phần mềm'};
+let sachData = [
+    {id:1, ten:'Sách tham khảo chuyên ngành 1 Tập 1', tacGia:'Trần Văn D', nxb:'NXB Khoa Học', nam:2022, maDanhMuc:4, soLuong:83, soLuongCon:71},
+    {id:2, ten:'Sách tham khảo chuyên ngành 2 Tập 3', tacGia:'Trần Văn A', nxb:'NXB Khoa Học', nam:2024, maDanhMuc:1, soLuong:91, soLuongCon:76},
+    {id:3, ten:'Sách tham khảo chuyên ngành 3 Tập 1', tacGia:'Nguyễn Văn A', nxb:'NXB Giáo Dục', nam:2002, maDanhMuc:2, soLuong:69, soLuongCon:51},
+    {id:4, ten:'Sách tham khảo chuyên ngành 5 Tập 2', tacGia:'Nguyễn Văn C', nxb:'NXB CNTT', nam:2013, maDanhMuc:2, soLuong:59, soLuongCon:10},
+    {id:5, ten:'Sách tham khảo chuyên ngành 9 Tập 5', tacGia:'Nguyễn Thị B', nxb:'NXB Giáo Dục', nam:2010, maDanhMuc:3, soLuong:74, soLuongCon:60},
+    {id:6, ten:'Sách tham khảo chuyên ngành 15 Tập 5', tacGia:'Nguyễn Thị D', nxb:'NXB ĐHQG', nam:2018, maDanhMuc:4, soLuong:20, soLuongCon:8},
+];
+let sachFilter = [...sachData];
+
+const svData = [
+    {tk:'namdt.b21.tc603_1', hoTen:'Dương Thị Nam', email:'namdt.b21.tc603_1@stu.ptit.edu.vn', sdt:'0912600458', trangThai:'HoatDong', dangMuon:1},
+    {tk:'phongvq.b21.tc873_2', hoTen:'Vũ Quang Phong', email:'phongvq.b21.tc873_2@stu.ptit.edu.vn', sdt:'0937834065', trangThai:'HoatDong', dangMuon:0},
+    {tk:'phucdt.b20.tc317_3', hoTen:'Đặng Thị Phúc', email:'phucdt.b20.tc317_3@stu.ptit.edu.vn', sdt:'0936984616', trangThai:'HoatDong', dangMuon:2},
+    {tk:'lanpn.b22.tc248_5', hoTen:'Phạm Ngọc Lan', email:'lanpn.b22.tc248_5@stu.ptit.edu.vn', sdt:'0993647580', trangThai:'HoatDong', dangMuon:1},
+    {tk:'duchm.b24.tc422_7', hoTen:'Hồ Minh Đức', email:'duchm.b24.tc422_7@stu.ptit.edu.vn', sdt:'0900476409', trangThai:'HoatDong', dangMuon:0},
+    {tk:'khanhvm.b21.tc874_56', hoTen:'Vũ Minh Khánh', email:'khanhvm.b21.tc874_56@stu.ptit.edu.vn', sdt:'0934100309', trangThai:'Khoa', dangMuon:0},
+    {tk:'anhtt.b18.tc859_45', hoTen:'Trần Tuấn Anh', email:'anhtt.b18.tc859_45@stu.ptit.edu.vn', sdt:'0975802277', trangThai:'HoatDong', dangMuon:3},
+    {tk:'linhlm.b23.tc725_50', hoTen:'Lê Minh Linh', email:'linhlm.b23.tc725_50@stu.ptit.edu.vn', sdt:'0942727389', trangThai:'HoatDong', dangMuon:1},
+    {tk:'dungvx.b18.tc962_173', hoTen:'Vũ Xuân Dũng', email:'dungvx.b18.tc962_173@stu.ptit.edu.vn', sdt:'0935950219', trangThai:'HoatDong', dangMuon:0},
+    {tk:'baond.b18.tc048_106', hoTen:'Nguyễn Đức Bảo', email:'baond.b18.tc048_106@stu.ptit.edu.vn', sdt:'0996338763', trangThai:'Khoa', dangMuon:0},
+];
+
+// ===== RENDER SÁCH =====
+function renderSach(data) {
+    const tbody = document.getElementById('sach-tbody');
+    if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:30px; color:#94a3b8">Không tìm thấy kết quả</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(s => {
+        const conLai = s.soLuongCon;
+        const tongSl = s.soLuong;
+        const badge = conLai === 0 ? '<span class="badge badge-red">Hết sách</span>'
+                    : conLai < 10 ? '<span class="badge badge-orange">Sắp hết</span>'
+                    : '<span class="badge badge-green">Còn sách</span>';
+        const dm = danhMuc[s.maDanhMuc] || '—';
+        return `<tr>
+            <td><input type="checkbox"></td>
+            <td>
+                <div class="book-thumb-cell">
+                    <div class="book-img" style="background:var(--red-light); color:var(--red)">📚</div>
+                    <div>
+                        <div class="book-title">${s.ten}</div>
+                    </div>
+                </div>
+            </td>
+            <td style="color:var(--gray-600)">${s.tacGia}</td>
+            <td style="color:var(--gray-600); font-size:13px">${s.nxb}</td>
+            <td style="color:var(--gray-600)">${s.nam}</td>
+            <td><span class="badge badge-blue">${dm}</span></td>
+            <td style="text-align:center; font-weight:600">${tongSl}</td>
+            <td style="text-align:center; font-weight:600; color:${conLai < 10 ? '#f97316' : '#22c55e'}">${conLai}</td>
+            <td>${badge}</td>
+            <td>
+                <div style="display:flex; gap:4px;">
+                    <button class="btn btn-outline btn-sm" onclick="suaSach(${s.id})" title="Sửa"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="xoaSach(${s.id})" title="Xoá"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+    document.getElementById('sach-count').textContent = sachData.length.toLocaleString();
+}
+
+// ===== RENDER SINH VIÊN =====
+function renderSV(data) {
+    const tbody = document.getElementById('sv-tbody');
+    if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8">Không tìm thấy kết quả</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(sv => {
+        const badge = sv.trangThai === 'HoatDong'
+            ? '<span class="badge badge-green">Hoạt động</span>'
+            : '<span class="badge badge-red">Bị khoá</span>';
+        return `<tr>
+            <td><input type="checkbox"></td>
+            <td style="font-family:monospace; font-size:12px; color:var(--gray-600)">${sv.tk}</td>
+            <td><strong>${sv.hoTen}</strong></td>
+            <td style="font-size:13px; color:var(--gray-600)">${sv.email}</td>
+            <td style="color:var(--gray-600)">${sv.sdt}</td>
+            <td>${badge}</td>
+            <td style="text-align:center">
+                ${sv.dangMuon > 0 ? `<span class="badge badge-blue">${sv.dangMuon} quyển</span>` : '<span style="color:#94a3b8">—</span>'}
+            </td>
+            <td>
+                <div style="display:flex; gap:4px;">
+                    <button class="btn btn-outline btn-sm" title="Xem chi tiết"><i class="fa-solid fa-eye"></i></button>
+                    ${sv.trangThai === 'HoatDong'
+                        ? `<button class="btn btn-danger btn-sm" onclick="khoaSV('${sv.tk}')" title="Khoá"><i class="fa-solid fa-lock"></i></button>`
+                        : `<button class="btn btn-success btn-sm" onclick="moKhoaSV('${sv.tk}')" title="Mở khoá"><i class="fa-solid fa-lock-open"></i></button>`
+                    }
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ===== SECTION NAVIGATION =====
+function showSection(id) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
+
+// ===== FILTER SÁCH =====
+function filterSach(cat, el) {
+    document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    sachFilter = cat === 'all' ? [...sachData] : sachData.filter(s => String(s.maDanhMuc) === cat);
+    renderSach(sachFilter);
+}
+
+function timKiemSach() {
+    const q = document.getElementById('search-sach').value.toLowerCase();
+    const filtered = sachFilter.filter(s => s.ten.toLowerCase().includes(q) || s.tacGia.toLowerCase().includes(q));
+    renderSach(filtered);
+}
+
+function timKiemSV() {
+    const q = document.getElementById('search-sv').value.toLowerCase();
+    const filtered = svData.filter(sv => sv.hoTen.toLowerCase().includes(q) || sv.tk.toLowerCase().includes(q));
+    renderSV(filtered);
+}
+
+function filterTrangThai(val) {
+    const filtered = val ? svData.filter(sv => sv.trangThai === val) : [...svData];
+    renderSV(filtered);
+}
+
+function filterNXB(val) {
+    const filtered = val ? sachData.filter(s => s.nxb === val) : [...sachData];
+    sachFilter = filtered;
+    renderSach(filtered);
+}
+
+function filterNam(val) {
+    const filtered = val ? sachData.filter(s => String(s.nam) === val) : [...sachData];
+    sachFilter = filtered;
+    renderSach(filtered);
+}
+
+// ===== MODAL =====
+function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+}
+function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('open');
+}
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', function(e) {
+        if (e.target === el) el.classList.remove('open');
+    });
+});
+
+// ===== ACTIONS =====
+function suaSach(id) {
+    const s = sachData.find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('edit-ten').value = s.ten;
+    document.getElementById('edit-tacgia').value = s.tacGia;
+    document.getElementById('edit-nxb').value = s.nxb;
+    document.getElementById('edit-sl').value = s.soLuong;
+    document.getElementById('edit-slcon').value = s.soLuongCon;
+    openModal('sua-sach');
+}
+
+function xoaSach(id) {
+    if (confirm('Bạn có chắc muốn xoá sách này không?')) {
+        sachData = sachData.filter(s => s.id !== id);
+        sachFilter = sachFilter.filter(s => s.id !== id);
+        renderSach(sachFilter);
+    }
+}
+
+function themSach() {
+    alert('Đã lưu sách thành công! (Kết nối DB để lưu thực tế)');
+    closeModal('them-sach');
+}
+
+function themSV() {
+    alert('Đã thêm sinh viên thành công!');
+    closeModal('them-sv');
+}
+
+function khoaSV(tk) {
+    if (confirm(`Khoá tài khoản "${tk}"?`)) {
+        const sv = svData.find(s => s.tk === tk);
+        if (sv) { sv.trangThai = 'Khoa'; renderSV(svData); }
+    }
+}
+
+function moKhoaSV(tk) {
+    const sv = svData.find(s => s.tk === tk);
+    if (sv) { sv.trangThai = 'HoatDong'; renderSV(svData); }
+}
+
+function xacNhanTra() {
+    alert('Đã xác nhận trả sách thành công!');
+}
+
+function xuatExcel() {
+    alert('Chức năng xuất Excel sẽ kết nối API thực tế.');
+}
+
+function checkAll(el) {
+    document.querySelectorAll('#sach-tbody input[type=checkbox]').forEach(c => c.checked = el.checked);
+}
+
+// ===== INIT =====
+renderSach(sachData);
+renderSV(svData);
+</script>
+</body>
+</html>

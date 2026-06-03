@@ -1,0 +1,68 @@
+<!-- File: dau-trang.html -->
+<div class="topbar">
+    <!-- Phía bên trái: Thông tin cổng thông tin -->
+    <div class="left">
+        <i class="fas fa-globe"></i>
+        Cổng thông tin điện tử Học viện Công nghệ Bưu chính Viễn thông
+    </div>
+
+    <!-- Phía bên phải: Giờ, Mail và Nút Đăng nhập -->
+    <div class="right" style="display: flex; align-items: center; gap: 15px;">
+    <span><i class="fas fa-clock"></i> 7h30 - 21h30</span>
+    <span><i class="fas fa-envelope"></i> ilc@ptit.edu.vn</span>
+    
+    <a href="dang-nhap.html" id="btn-login-header" style="color: white; text-decoration: none; font-weight: bold; background: #0d2a5c; padding: 4px 12px; border-radius: 4px; transition: 0.3s;">
+        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+    </a>
+
+    <div class="user-dropdown" id="user-logged-in" style="display: none;">
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i> <span id="display-name">Nguyen Van A</span> <i class="fas fa-caret-down"></i> 
+        </div>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="cai-dat.html"><i class="fas fa-cog"></i> Cài đặt</a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="dangXuat()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<header class="header">
+
+    <!-- BÊN TRÁI -->
+    <div class="left">
+        <img src="../tai-nguyen/logo.png" class="logo">
+
+        <div class="title">
+        <p class="highlight-title">THƯ VIỆN ĐIỆN TỬ</p>
+        <p>HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</p>
+        </div>  
+    </div>
+
+    <!-- MENU Ở GIỮA -->
+<!-- File: dau-trang.html -->
+<nav>
+    <a href="trang-chu.html" class="menu-home">TRANG CHỦ</a>
+    <a href="gioi-thieu.html" class="menu-about">GIỚI THIỆU</a>
+    <a href="noi-quy-thu-vien.html" class="menu-rules">NỘI QUY THƯ VIỆN</a>
+    <div class="dropdown">
+        <a href="#" class="menu-news ">BẢN TIN▾</a>
+        <div class="dropdown-menu">
+            <a href="tin-tuc.html">Tin tức</a>
+<a href="su-kien.html">Sự kiện</a>
+<hr>
+<a href="thong-bao.html">Thông báo</a>
+            
+        </div>
+    </div>
+</nav>
+
+    <!-- Mượn sách -->
+  <div>
+    <a href="muon-sach.html" class="btn-header-muon">
+        <i class="fas fa-book-reader"></i> Mượn sách
+    </a>
+</div>
+</header>

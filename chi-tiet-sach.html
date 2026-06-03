@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sách - PTIT Library</title>
+    <link rel="stylesheet" href="css/chi-tiet-sach.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <img src="tai-nguyen/logo-ptit.png" alt="">
+            <div class="logo-text">
+                <h3>HỌC VIỆN<br>CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</h3>
+                <p>Posts and Telecommunications Institute of Technology</p>
+            </div>
+        </div>
+
+        <div class="user-box">
+            <div class="user-avatar" id="userAvatar">N</div>
+            <div class="user-info">
+                <p id="userName">Nguyễn Văn A</p>
+                <span id="userRole">Sinh viên</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- BOOK DETAIL -->
+    <!-- ============================================================
+         API CONTRACT - Dành cho Backend
+         Endpoint : GET /api/books/:id
+         Table    : Sach JOIN TheLoai ON Sach.MaTheLoai = TheLoai.MaTheLoai
+         Param    : id = MaSach (lấy từ URL ?id=1)
+         Columns  : MaSach, TenSach, TacGia, SoLuong, AnhBia, MoTa,
+                    NhaXuatBan, NamXuatBan, ViTriKe, TenTheLoai
+         Response : object JSON 1 cuốn sách (xem cấu trúc trong books.js)
+         ============================================================ -->
+    <section class="book-detail">
+
+        <!-- LEFT: ảnh bìa — Sach.AnhBia -->
+        <div class="book-image">
+            <img id="bookImage" src="" alt="">
+        </div>
+
+        <!-- RIGHT: thông tin -->
+        <div class="book-info">
+
+            <!-- TheLoai.TenTheLoai -->
+            <span class="book-category" id="bookCategory"></span>
+
+            <!-- Sach.TenSach -->
+            <h1 id="bookTitle"></h1>
+
+            <!-- Sach.TacGia -->
+            <p class="author">Tác giả: <span id="bookAuthor"></span></p>
+
+            <!-- META -->
+            <div class="book-meta">
+                <div>
+                    <strong>Nhà xuất bản</strong>
+                    <!-- Sach.NhaXuatBan -->
+                    <p id="bookNXB"></p>
+                </div>
+                <div>
+                    <strong>Năm xuất bản</strong>
+                    <!-- Sach.NamXuatBan -->
+                    <p id="bookNam"></p>
+                </div>
+                <div>
+                    <strong>Vị trí kệ</strong>
+                    <!-- Sach.ViTriKe -->
+                    <p id="bookViTri"></p>
+                </div>
+                <div>
+                    <strong>Số lượng còn</strong>
+                    <!-- Sach.SoLuong -->
+                    <p class="stock" id="bookSoLuong"></p>
+                </div>
+            </div>
+
+            <!-- Sach.MoTa -->
+            <div class="description">
+                <h3>Mô tả sách</h3>
+                <p id="bookMoTa"></p>
+            </div>
+
+            <!-- BUTTON -->
+            <div class="book-actions">
+                <!-- ============================================================
+                     API CONTRACT - Dành cho Backend
+                     Endpoint : POST /api/borrow
+                     Tables   : INSERT MuonSach + UPDATE Sach SET SoLuong = SoLuong - 1
+                     Body     : {
+                                  "maSach"      : id,             -- Sach.MaSach
+                                  "maNguoiDung" : "B22DCCN001"   -- NguoiDung.TaiKhoan (từ JWT)
+                                }
+                     Response : { "success": true, "maPhieu": 123, "hanTra": "2025-05-28" }
+                     ============================================================ -->
+                <button class="borrow-btn" id="borrowBtn" onclick="handleBorrow()">
+                    Mượn sách
+                </button>
+
+                <button class="save-btn" onclick="history.back()">
+                    ← Quay lại
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // ---- ĐỌC DATA TỪ SESSION (do books.js lưu khi click card) ----
+        // Backend sau này sẽ thay bằng:
+        //   const id = new URLSearchParams(location.search).get('id');
+        //   const book = await fetch(`/api/books/${id}`).then(r => r.json());
+
+        const book = JSON.parse(sessionStorage.getItem("selectedBook"));
+
+        if (!book) {
+            // Không có data → quay lại trang danh sách
+            window.location.href = "muon-sach.html";
+        } else {
+            // Gán data vào các element
+            document.getElementById("bookImage").src      = book.image;
+            document.getElementById("bookImage").alt      = book.tenSach;
+            document.getElementById("bookCategory").textContent = book.theLoai;
+            document.getElementById("bookTitle").textContent    = book.tenSach;
+            document.getElementById("bookAuthor").textContent   = book.tacGia;
+            document.getElementById("bookNXB").textContent      = book.nxb        || "—";
+            document.getElementById("bookNam").textContent      = book.namXuatBan || "—";
+            document.getElementById("bookViTri").textContent    = book.viTriKe    || "—";
+            document.getElementById("bookSoLuong").textContent  = book.soLuong;
+            document.getElementById("bookMoTa").textContent     = book.moTa       || "Chưa có mô tả.";
+            document.title = book.tenSach + " - PTIT Library";
+
+            // Disable nút nếu hết sách
+            if (book.soLuong === 0) {
+                const btn = document.getElementById("borrowBtn");
+                btn.textContent = "Hết sách";
+                btn.disabled = true;
+                btn.style.background = "gray";
+                btn.style.cursor = "not-allowed";
+            }
+        }
+
+        // ---- NÚT MƯỢN SÁCH ----
+        // TẠM THỜI: alert — REPLACE bằng fetch POST /api/borrow khi có API
+        function handleBorrow() {
+            if (!book || book.soLuong === 0) return;
+            const confirmed = confirm(`Bạn muốn mượn sách:\n"${book.tenSach}"?\n\nHạn trả: 14 ngày kể từ hôm nay.`);
+            if (confirmed) {
+                alert(`Đăng ký mượn thành công!\nSách: ${book.tenSach}\nVui lòng đến quầy thư viện để nhận sách.`);
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sự kiện - Thư viện PTIT</title>
+    <link rel="stylesheet" href="css/giao-dien.css">
+    <link rel="stylesheet" href="css/tin-tuc.css"> 
+    <link rel="stylesheet" href="css/su-kien.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="dau-trang"></div>
+
+    <div class="page-banner">
+        <div class="container-news">
+            <h1>Sự Kiện Thư Viện</h1>
+            <div class="breadcrumb">
+                <a href="trang-chu.html">Trang chủ</a> / <span>Sự kiện</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-container container-news">
+        
+        <div class="news-main">
+            <div class="event-filter">
+                <button class="filter-btn active" data-filter="upcoming">Sắp diễn ra</button>
+                <button class="filter-btn" data-filter="past">Đã diễn ra</button>
+            </div>
+
+            <div class="event-list" id="event-list">
+                
+                <div class="event-card">
+                    <div class="event-date-badge">
+                        <span class="day">20</span>
+                        <span class="month">Tháng 5</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="event-img">
+                        <img src="tai-nguyen/AI.png"alt="Sự kiện 1">
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title"><a href="chi_tiet_sk1.html">Tọa đàm: Kỹ năng tìm kiếm tài liệu số hiệu quả trong kỷ nguyên AI</a></h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-clock"></i> 08:30 - 11:30</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Hội trường A, Tầng 1</span>
+                        </div>
+                        <p class="event-desc">Nhằm hỗ trợ sinh viên trong việc tra cứu và khai thác hiệu quả nguồn tài nguyên thông tin số, Thư viện PTIT phối hợp cùng Khoa Công nghệ Thông tin tổ chức buổi tọa đàm với chủ đề "Kỹ năng tìm kiếm tài liệu số hiệu quả trong kỷ nguyên AI".</p>
+                        <div class="event-actions">
+                            <a href="chi_tiet_sk1.html" class="read-more">Xem chi tiết</a>
+                            <button class="btn-register" onclick="registerEvent()">Đăng ký tham gia</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-date-badge">
+                        <span class="day">05</span>
+                        <span class="month">Tháng 6</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="event-img">
+                        <img src="tai-nguyen/hoi_sach.webp" alt="Sự kiện 2">
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title"><a href="Chi_tiet_sk2.html">Tuần lễ Văn hóa Đọc và Triển lãm sách 2026</a></h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-clock"></i> Cả ngày (05/06 - 10/06)</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Sảnh chính Thư viện</span>
+                        </div>
+                        <p class="event-desc">Sự kiện thường niên nhằm tôn vinh văn hóa đọc. Hàng ngàn đầu sách mới sẽ được trưng bày cùng các gian hàng giao lưu với tác giả nổi tiếng...</p>
+                        <div class="event-actions">
+                            <a href="Chi_tiet_sk2.html" class="read-more">Xem chi tiết</a>
+                            <button class="btn-register" onclick="registerEvent()">Đăng ký tham gia</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="news-sidebar">
+            <div class="sidebar-box">
+                <h3>Phân loại Sự kiện</h3>
+                <ul class="category-list">
+                    <li><a href="#" class="active">Tất cả sự kiện <span>(15)</span></a></li>
+                    <li><a href="#">Hội thảo - Tọa đàm <span>(6)</span></a></li>
+                    <li><a href="#">Tập huấn sử dụng <span>(5)</span></a></li>
+                    <li><a href="#">Triển lãm - Giao lưu <span>(4)</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-box support-box">
+                <h3>Hỗ trợ Trực tuyến</h3>
+                <p>Bạn cần hỗ trợ đăng ký sự kiện?</p>
+                <p><i class="fas fa-phone-alt"></i> Hotline: 0123.456.789</p>
+                <p><i class="fas fa-envelope"></i> Email: thuvien@ptit.edu.vn</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="chan-trang"></div>
+
+    <div id="register-modal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Đăng Ký Tham Gia</h2>
+        <form id="register-form">
+            <div class="form-group">
+                <label>Họ và tên *</label>
+                <input type="text" required placeholder="Nhập họ và tên...">
+            </div>
+            <div class="form-group">
+                <label>Mã sinh viên / Giảng viên *</label>
+                <input type="text" required placeholder="Ví dụ: B21DCCN123...">
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" required placeholder="Nhập email...">
+            </div>
+            <button type="submit" class="btn-submit">XÁC NHẬN ĐĂNG KÝ</button>
+        </form>
+    </div>
+</div>
+
+    <script src="js/tai-thanh-phan.js"></script>
+    <script src="js/su-kien.js"></script>
+   
+</body>
+</html>

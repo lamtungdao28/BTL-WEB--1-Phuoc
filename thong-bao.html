@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo - Thư viện PTIT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/giao-dien.css"> 
+    <link rel="stylesheet" href="css/thong-bao.css">
+</head>
+<body>
+
+    <div id="dau-trang"></div>
+
+    <div class="page-banner">
+    <div class="container-news"> <h1>Thông Báo Thư Viện</h1>
+        <div class="breadcrumb">
+            <a href="trang-chu.html">Trang chủ</a> / <span>Thông báo</span>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="tb-wrapper">
+            <div class="tb-main">
+                <div class="tb-filter-bar">
+                    <button class="tb-filter-btn active" onclick="filterCards(this,'all')">Tất cả</button>
+                    <button class="tb-filter-btn" onclick="filterCards(this,'important')">Quan trọng</button>
+                    <button class="tb-filter-btn" onclick="filterCards(this,'muon')">Mượn - Trả sách</button>
+                    <button class="tb-filter-btn" onclick="filterCards(this,'event')">Sự kiện & Hoạt động</button>
+                    <button class="tb-filter-btn" onclick="filterCards(this,'digital')">Tài nguyên số</button>
+                </div>
+
+                <div class="tb-card important" data-cat="important" onclick="openArticle('nghi-le')">
+                    <div class="tb-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="tb-body">
+                        <div class="tb-tags">
+                            <span class="tb-tag tag-important">Quan trọng</span>
+                            <span class="tb-tag tag-new">Mới</span>
+                        </div>
+                        <h3 class="tb-title">Thông báo lịch nghỉ lễ và điều chỉnh giờ phục vụ dịp Giỗ Tổ Hùng Vương, 30/4 - 1/5/2026</h3>
+                        <p class="tb-desc">Thư viện PTIT thông báo lịch nghỉ và điều chỉnh giờ mở cửa phục vụ bạn đọc trong dịp nghỉ lễ theo quy định. Bạn đọc lưu ý sắp xếp việc mượn trả tài liệu trước các ngày nghỉ.</p>
+                        <div class="tb-meta">
+                            <span><i class="fas fa-calendar-alt"></i> 14/04/2026</span>
+                            <span><i class="fas fa-user"></i> Ban Giám đốc Thư viện</span>
+                            <span><i class="fas fa-eye"></i> 1.240 lượt xem</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tb-card important" data-cat="important" onclick="openArticle('nghi-le')">
+    <div class="tb-img"> <div class="tb-icon-box">
+    <i class="fas fa-bell"></i> </div>
+    </div>
+    <div class="tb-body">
+        <div class="tb-tags">
+            <span class="tb-tag tag-important">Quan trọng</span>
+        </div>
+        <h3 class="tb-title">Thông báo lịch nghỉ lễ và điều chỉnh giờ phục vụ...</h3>
+        <p class="tb-desc">Thư viện PTIT thông báo lịch nghỉ và điều chỉnh giờ mở cửa...</p>
+        <div class="tb-meta">
+            <span><i class="fas fa-calendar-alt"></i> 14/04/2026</span>
+            <span><i class="fas fa-eye"></i> 1.240 lượt xem</span>
+        </div>
+    </div>
+</div>
+
+                <div class="tb-card" data-cat="muon" onclick="openArticle('muon-sach')">
+                    <div class="tb-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="tb-body">
+                        <div class="tb-tags">
+                            <span class="tb-tag tag-muon">Mượn - Trả sách</span>
+                        </div>
+                        <h3 class="tb-title">Quy định mới về thời hạn mượn sách và gia hạn tài liệu áp dụng từ học kỳ II/2025-2026</h3>
+                        <p class="tb-desc">Kể từ ngày 01/03/2026, Thư viện áp dụng quy định mới về thời hạn mượn tài liệu (tối đa 14 ngày/lần, gia hạn 2 lần) và mức phí trả chậm. Bạn đọc vui lòng cập nhật.</p>
+                        <div class="tb-meta">
+                            <span><i class="fas fa-calendar-alt"></i> 25/02/2026</span>
+                            <span><i class="fas fa-eye"></i> 2.103 lượt xem</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tb-sidebar">
+                <div class="sb-box">
+                    <h3>Danh mục Thông báo</h3>
+                    <ul>
+                        <li><a href="#" class="active">Tất cả thông báo <span>(48)</span></a></li>
+                        <li><a href="#">Quan trọng <span>(12)</span></a></li>
+                        <li><a href="#">Mượn - Trả sách <span>(15)</span></a></li>
+                        <li><a href="#">Tài nguyên số <span>(11)</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="sb-box">
+                    <h3>Thống kê Thư viện</h3>
+                    <div class="stat-grid">
+                        <div class="stat-item"><div class="num">48</div><div class="lbl">Thông báo</div></div>
+                        <div class="stat-item"><div class="num">50K+</div><div class="lbl">Đầu sách</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="articleModal" onclick="closeOnBg(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-header" id="modalHeader">
+                <div class="modal-tags" id="modalTags"></div>
+                <h2 id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+            </div>
+            <div class="modal-body">
+                <div class="divider"></div>
+                <div id="modalContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close-modal" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="chan-trang"></div>
+
+    <script src="js/tai-thanh-phan.js"></script>
+    <script src="js/thong-bao.js"></script>
+</body>
+</html>
