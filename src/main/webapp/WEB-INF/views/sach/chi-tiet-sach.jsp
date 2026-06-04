@@ -30,7 +30,7 @@
             <div class="book-meta">
                 <div>
                     <strong>Nhà xuất bản</strong>
-                    <p>${empty taiLieu.nhaXuatBan ? '—' : taiLieu.nhaXuatBan}</p>
+                    <p>${empty taiLieu.nxb ? '—' : taiLieu.nxb}</p>
                 </div>
                 <div>
                     <strong>Năm xuất bản</strong>

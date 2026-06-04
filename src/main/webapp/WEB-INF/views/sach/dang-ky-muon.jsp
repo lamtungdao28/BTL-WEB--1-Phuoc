@@ -168,7 +168,7 @@
                     <div class="book-meta">
                         <h3>${taiLieu.tenTaiLieu}</h3>
                         <div class="meta-row"><i class="fa-regular fa-user"></i> <strong>Tác giả:</strong> <span>${taiLieu.tacGia}</span></div>
-                        <div class="meta-row"><i class="fa-solid fa-building-columns"></i> <strong>NXB:</strong> <span>${taiLieu.nhaXuatBan}</span></div>
+                        <div class="meta-row"><i class="fa-solid fa-building-columns"></i> <strong>NXB:</strong> <span>${taiLieu.nxb}</span></div>
                         <div class="meta-row"><i class="fa-regular fa-calendar"></i> <strong>Năm XB:</strong> <span>${taiLieu.namXuatBan}</span></div>
                         <div class="meta-row"><i class="fa-regular fa-comment"></i> <strong>Thể loại:</strong> <span>${taiLieu.danhMuc.tenDanhMuc}</span></div>
                     </div>

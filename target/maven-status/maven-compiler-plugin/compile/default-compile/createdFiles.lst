@@ -43,6 +43,7 @@ com/ptit/thuvien/service/impl/TinTucServiceImpl.class
 com/ptit/thuvien/model/SuKien$TrangThaiSuKien.class
 com/ptit/thuvien/repository/SuKienRepository.class
 com/ptit/thuvien/controller/SachController.class
+com/ptit/thuvien/config/DatabaseSeeder.class
 com/ptit/thuvien/model/NguoiDung$VaiTro.class
 com/ptit/thuvien/model/TinTuc$TinTucBuilder.class
 com/ptit/thuvien/service/TinTucService.class
