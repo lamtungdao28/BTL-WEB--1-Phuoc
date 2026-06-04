@@ -41,7 +41,7 @@
             background: var(--gray-50);
             color: var(--gray-900);
             min-height: 100vh;
-            margin: 0; padding: 0;
+            margin: 0; padding-top: 120px;
         }
 
         /* ── PAGE HEADER STRIP ── */

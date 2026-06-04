@@ -44,7 +44,7 @@
                     background: var(--gray-50);
                     color: var(--gray-900);
                     margin: 0;
-                    padding: 0;
+                    padding-top: 120px;
                 }
 
                 /* ── HERO ── */

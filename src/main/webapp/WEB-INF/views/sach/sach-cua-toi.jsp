@@ -38,7 +38,7 @@
             --radius-sm:      8px;
         }
 
-        body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; margin: 0; padding: 0; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; margin: 0; padding-top: 120px; }
 
         /* PAGE HEADER */
         .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
