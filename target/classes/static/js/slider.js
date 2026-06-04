@@ -33,7 +33,7 @@ window.addEventListener("load", function () {
     window.goToSlide = goToSlide;
 
     // Auto chạy
-    setInterval(nextSlide, 3000);
+    // setInterval(nextSlide, 3000);
 
     showSlide(index);
 });
