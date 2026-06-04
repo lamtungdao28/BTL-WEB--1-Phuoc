@@ -22,4 +22,8 @@ public interface NguoiDungService {
     boolean dangNhap(String taiKhoan, String matKhau);
 
     boolean tonTaiTaiKhoan(String taiKhoan);
+
+    Optional<NguoiDung> timTheoEmail(String email);
+
+    boolean tonTaiEmail(String email);
 }

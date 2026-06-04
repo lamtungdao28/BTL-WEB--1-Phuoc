@@ -60,5 +60,10 @@
                 <i class="fas fa-book-open"></i> Sách của tôi
             </a>
         </sec:authorize>
+        <sec:authorize access="hasRole('ADMIN')">
+            <a href="${pageContext.request.contextPath}/admin/quan-ly-sach" class="btn-header-muon btn-header-admin">
+                <i class="fas fa-cog"></i> Quản lý
+            </a>
+        </sec:authorize>
     </div>
 </header>

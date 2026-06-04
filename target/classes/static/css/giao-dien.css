@@ -1144,3 +1144,12 @@ nav a.active::after{
     width: 100% !important;
     background: #c8102e !important;
 }
+
+/* NÚT QUẢN LÝ ADMIN */
+.btn-header-admin {
+    background-color: #d97706 !important; /* Màu hổ phách/cam đậm sang trọng */
+}
+
+.btn-header-admin:hover {
+    background-color: #b45309 !important; /* Màu cam tối hơn khi hover */
+}

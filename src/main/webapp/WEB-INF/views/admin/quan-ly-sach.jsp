@@ -578,8 +578,8 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                             <td>#PM${pm.maMuon}</td>
                             <td>${pm.nguoiDung.hoTen}</td>
                             <td>${pm.taiLieu.tenTaiLieu}</td>
-                            <td>${pm.ngayMuon}</td>
-                            <td>${pm.ngayHenTra}</td>
+                            <td><span class="fmt-datetime">${pm.ngayMuon}</span></td>
+                            <td><span class="fmt-datetime">${pm.ngayHenTra}</span></td>
                             <td>
                                 <c:choose>
                                     <c:when test="${pm.trangThai == 'CHO_DUYET'}">
@@ -845,6 +845,24 @@ function suaSach(btn) {
     document.getElementById('form-sua-sach').action = '${pageContext.request.contextPath}/admin/sua-sach/' + id;
     openModal('sua-sach');
 }
+
+// Format LocalDateTime (2026-06-04T17:30) thành dd/MM/yyyy HH:mm
+document.querySelectorAll('.fmt-datetime').forEach(function(el) {
+    var raw = el.textContent.trim();
+    if (raw && raw.length >= 10) {
+        try {
+            var d = new Date(raw);
+            if (!isNaN(d.getTime())) {
+                var day = String(d.getDate()).padStart(2, '0');
+                var month = String(d.getMonth() + 1).padStart(2, '0');
+                var year = d.getFullYear();
+                var hours = String(d.getHours()).padStart(2, '0');
+                var mins = String(d.getMinutes()).padStart(2, '0');
+                el.textContent = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
+            }
+        } catch(e) { /* giữ nguyên nếu parse lỗi */ }
+    }
+});
 </script>
 </body>
 </html>

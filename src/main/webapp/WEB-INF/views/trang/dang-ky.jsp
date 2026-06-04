@@ -85,9 +85,9 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Email</label>
+                    <label>Email *</label>
                     <input type="email" name="email" placeholder="abc@stu.ptit.edu.vn"
-                           value="${email}">
+                           value="${email}" required>
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại</label>

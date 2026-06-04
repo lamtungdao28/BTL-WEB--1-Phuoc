@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Controller xử lý mượn sách (POST đăng ký mượn)
@@ -29,6 +30,8 @@ public class MuonSachController {
      */
     @PostMapping("/dang-ky-muon")
     public String dangKyMuon(@RequestParam Long maTaiLieu,
+                              @RequestParam(required = false) String ngayMuon,
+                              @RequestParam(required = false) String ngayHenTra,
                               @RequestParam(required = false) String ghiChu,
                               HttpSession session,
                               RedirectAttributes redirect) {
@@ -45,12 +48,21 @@ public class MuonSachController {
             return "redirect:/sach/muon-sach";
         }
 
+        // Parse ngày mượn và ngày hẹn trả từ form (datetime-local: yyyy-MM-ddTHH:mm)
+        LocalDateTime ngayMuonDT = (ngayMuon != null && !ngayMuon.isEmpty())
+                ? LocalDateTime.parse(ngayMuon)
+                : LocalDateTime.now();
+        LocalDateTime ngayHenTraDT = (ngayHenTra != null && !ngayHenTra.isEmpty())
+                ? LocalDateTime.parse(ngayHenTra)
+                : ngayMuonDT.plusDays(14);
+
         // Tạo phiếu mượn mới (trạng thái: CHO_DUYET)
         PhieuMuon phieuMuon = PhieuMuon.builder()
                 .nguoiDung(nguoiDung)
                 .taiLieu(taiLieu.get())
                 .ngayDangKy(LocalDate.now())
-                .ngayHenTra(LocalDate.now().plusDays(14))
+                .ngayMuon(ngayMuonDT)
+                .ngayHenTra(ngayHenTraDT)
                 .trangThai(PhieuMuon.TrangThaiMuon.CHO_DUYET)
                 .ghiChu(ghiChu)
                 .tienPhat(0L)
@@ -74,7 +86,7 @@ public class MuonSachController {
 
             // Chỉ gia hạn khi đang mượn và chưa quá hạn
             if (pm.getTrangThai() == PhieuMuon.TrangThaiMuon.DANG_MUON
-                    && pm.getNgayHenTra().isAfter(LocalDate.now())) {
+                    && pm.getNgayHenTra().isAfter(LocalDateTime.now())) {
                 pm.setNgayHenTra(pm.getNgayHenTra().plusDays(14));
                 phieuMuonService.taoPhieuMuon(pm); // lưu lại
                 redirect.addFlashAttribute("success", "Gia hạn thành công! Hạn trả mới: " + pm.getNgayHenTra());

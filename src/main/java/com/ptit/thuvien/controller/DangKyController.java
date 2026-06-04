@@ -27,7 +27,7 @@ public class DangKyController {
     public String xuLyDangKy(@RequestParam String taiKhoan,
                               @RequestParam String matKhau,
                               @RequestParam String hoTen,
-                              @RequestParam(required = false) String email,
+                              @RequestParam String email,
                               @RequestParam(required = false) String soDienThoai,
                               @RequestParam(required = false) String lop,
                               RedirectAttributes redirect) {
@@ -35,6 +35,15 @@ public class DangKyController {
         // Kiểm tra tài khoản đã tồn tại
         if (nguoiDungService.tonTaiTaiKhoan(taiKhoan)) {
             redirect.addFlashAttribute("error", "Tài khoản đã tồn tại!");
+            redirect.addFlashAttribute("taiKhoan", taiKhoan);
+            redirect.addFlashAttribute("hoTen", hoTen);
+            redirect.addFlashAttribute("email", email);
+            return "redirect:/dang-ky";
+        }
+
+        // Kiểm tra email đã tồn tại
+        if (nguoiDungService.tonTaiEmail(email)) {
+            redirect.addFlashAttribute("error", "Email đã được sử dụng!");
             redirect.addFlashAttribute("taiKhoan", taiKhoan);
             redirect.addFlashAttribute("hoTen", hoTen);
             redirect.addFlashAttribute("email", email);

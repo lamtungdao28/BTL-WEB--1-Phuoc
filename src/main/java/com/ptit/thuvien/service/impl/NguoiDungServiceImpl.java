@@ -53,8 +53,8 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean dangNhap(String taiKhoan, String matKhau) {
-        Optional<NguoiDung> nguoiDung = nguoiDungRepository.findByTaiKhoan(taiKhoan);
+    public boolean dangNhap(String email, String matKhau) {
+        Optional<NguoiDung> nguoiDung = nguoiDungRepository.findByEmail(email);
         return nguoiDung.isPresent() && passwordEncoder.matches(matKhau, nguoiDung.get().getMatKhau());
     }
 
@@ -62,5 +62,17 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     @Transactional(readOnly = true)
     public boolean tonTaiTaiKhoan(String taiKhoan) {
         return nguoiDungRepository.existsByTaiKhoan(taiKhoan);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<NguoiDung> timTheoEmail(String email) {
+        return nguoiDungRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean tonTaiEmail(String email) {
+        return nguoiDungRepository.findByEmail(email).isPresent();
     }
 }

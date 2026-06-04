@@ -114,8 +114,10 @@
         .borrow-form-grid { display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 20px; margin-bottom: 24px; }
         .field-group label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
         .input-icon-wrap { position: relative; }
-        .input-icon-wrap input { width: 100%; padding: 12px 14px 12px 40px; border: 1px solid var(--gray-200); background: var(--gray-50); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--gray-900); outline: none; }
-        .input-icon-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--red); font-size: 15px; }
+        .input-icon-wrap input { width: 100%; padding: 12px 14px 12px 40px; border: 1px solid var(--gray-200); background: var(--gray-50); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--gray-900); outline: none; cursor: pointer; }
+        .input-icon-wrap input[type="datetime-local"] { padding-left: 40px; }
+        .input-icon-wrap input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(200,16,46,.1); }
+        .input-icon-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--red); font-size: 15px; pointer-events: none; }
         .field-group textarea { width: 100%; height: 46px; padding: 12px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 13.5px; font-family: inherit; outline: none; resize: none; transition: border-color .2s; }
         .field-group textarea:focus { border-color: var(--red); }
 
@@ -217,7 +219,7 @@
             <i class="fa-solid fa-circle-info"></i>
             <div>
                 <strong>Lưu ý khi mượn sách</strong><br/>
-                Thời hạn mượn mặc định là <strong>14 ngày</strong>. Trả sách trễ hạn sẽ bị phạt theo quy định của thư viện.
+                Bạn có thể tự chọn ngày giờ mượn và ngày giờ hẹn trả. Thời hạn mặc định là <strong>14 ngày</strong>. Trả sách trễ hạn sẽ bị phạt theo quy định của thư viện.
             </div>
         </div>
 
@@ -228,18 +230,17 @@
                 <i class="fa-regular fa-calendar-check"></i> Thông tin mượn
             </div>
             <div class="borrow-form-grid">
-                <!-- Sử dụng js để set ngày mượn/hạn trả lên UI cho đẹp -->
                 <div class="field-group">
-                    <label>Ngày mượn</label>
+                    <label>Ngày giờ mượn</label>
                     <div class="input-icon-wrap">
-                        <input type="text" id="borrowDate" readonly />
+                        <input type="datetime-local" id="borrowDate" name="ngayMuon" />
                         <i class="fa-regular fa-calendar"></i>
                     </div>
                 </div>
                 <div class="field-group">
-                    <label>Hạn trả (dự kiến)</label>
+                    <label>Ngày giờ hẹn trả</label>
                     <div class="input-icon-wrap">
-                        <input type="text" id="returnDate" readonly />
+                        <input type="datetime-local" id="returnDate" name="ngayHenTra" />
                         <i class="fa-regular fa-calendar-days"></i>
                     </div>
                 </div>
@@ -263,13 +264,34 @@
     <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
     <script>
-        const today = new Date();
-        const returnDay = new Date();
-        returnDay.setDate(today.getDate() + 14);
+        // Hàm format Date thành chuỗi datetime-local (yyyy-MM-ddTHH:mm)
+        function toDatetimeLocal(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const h = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            return y + '-' + m + '-' + d + 'T' + h + ':' + min;
+        }
 
-        const fmt = d => d.toLocaleDateString('vi-VN');
-        document.getElementById('borrowDate').value = fmt(today);
-        document.getElementById('returnDate').value = fmt(returnDay);
+        const now = new Date();
+        const returnDay = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+        const borrowInput = document.getElementById('borrowDate');
+        const returnInput = document.getElementById('returnDate');
+
+        borrowInput.value = toDatetimeLocal(now);
+        returnInput.value = toDatetimeLocal(returnDay);
+
+        // Khi thay đổi ngày mượn, tự động cập nhật hạn trả (+14 ngày)
+        borrowInput.addEventListener('change', function() {
+            const newBorrow = new Date(this.value);
+            if (!isNaN(newBorrow.getTime())) {
+                const newReturn = new Date(newBorrow.getTime() + 14 * 24 * 60 * 60 * 1000);
+                returnInput.value = toDatetimeLocal(newReturn);
+            }
+        });
     </script>
 </body>
 </html>
+

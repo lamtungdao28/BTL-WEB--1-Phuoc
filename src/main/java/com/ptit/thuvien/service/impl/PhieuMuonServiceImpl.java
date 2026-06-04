@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +53,16 @@ public class PhieuMuonServiceImpl implements PhieuMuonService {
 
     @Override
     public PhieuMuon taoPhieuMuon(PhieuMuon phieuMuon) {
-        phieuMuon.setTrangThai(PhieuMuon.TrangThaiMuon.CHO_DUYET);
-        phieuMuon.setNgayMuon(LocalDate.now());
-        phieuMuon.setNgayHenTra(LocalDate.now().plusDays(14)); // Mặc định 14 ngày
+        if (phieuMuon.getMaMuon() == null) {
+            // Chỉ set trạng thái CHO_DUYET cho phiếu mới
+            phieuMuon.setTrangThai(PhieuMuon.TrangThaiMuon.CHO_DUYET);
+        }
+        if (phieuMuon.getNgayMuon() == null) {
+            phieuMuon.setNgayMuon(LocalDateTime.now());
+        }
+        if (phieuMuon.getNgayHenTra() == null) {
+            phieuMuon.setNgayHenTra(LocalDateTime.now().plusDays(14));
+        }
         return phieuMuonRepository.save(phieuMuon);
     }
 

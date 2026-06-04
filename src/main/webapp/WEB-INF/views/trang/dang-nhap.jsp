@@ -29,7 +29,7 @@
         .logo { height: 60px; margin-bottom: 15px; }
         h2 { margin: 5px 0; font-size: 24px; }
         .sub { color: #666; margin-bottom: 25px; }
-        input[type="text"], input[type="password"] {
+        input[type="text"], input[type="email"], input[type="password"] {
             width: 100%; padding: 12px; margin: 10px 0;
             border: 1px solid #ddd; border-radius: 6px;
             outline: none; font-size: 15px; box-sizing: border-box;
@@ -63,7 +63,7 @@
             <%-- Hiển thị lỗi nếu có --%>
             <c:if test="${param.error != null}">
                 <p class="error-msg" style="display:block; color:#c8102e;">
-                    Tài khoản hoặc mật khẩu không đúng!
+                    Email hoặc mật khẩu không đúng!
                 </p>
             </c:if>
             <c:if test="${param.logout != null}">
@@ -72,7 +72,7 @@
 
             <%-- Form đăng nhập (Spring Security xử lý) --%>
             <form action="${pageContext.request.contextPath}/xu-ly-dang-nhap" method="post">
-                <input type="text" name="taiKhoan" placeholder="Tài khoản" required>
+                <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="matKhau" placeholder="Mật khẩu" required>
                 <button type="submit">Đăng nhập</button>
             </form>

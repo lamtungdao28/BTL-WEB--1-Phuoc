@@ -23,15 +23,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final NguoiDungRepository nguoiDungRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String taiKhoan) throws UsernameNotFoundException {
-        NguoiDung nguoiDung = nguoiDungRepository.findByTaiKhoan(taiKhoan)
-                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + taiKhoan));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        NguoiDung nguoiDung = nguoiDungRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với email: " + email));
 
         // Chuyển vai trò thành ROLE_XXX (Spring Security yêu cầu prefix ROLE_)
         String role = "ROLE_" + nguoiDung.getVaiTro().name();
 
         return new User(
-                nguoiDung.getTaiKhoan(),
+                nguoiDung.getEmail(),
                 nguoiDung.getMatKhau(),
                 Collections.singletonList(new SimpleGrantedAuthority(role))
         );

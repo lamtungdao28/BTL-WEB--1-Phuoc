@@ -33,10 +33,10 @@ public class PhieuMuon {
     private LocalDate ngayDangKy;
 
     @Column(name = "ngay_muon")
-    private LocalDate ngayMuon;
+    private LocalDateTime ngayMuon;
 
     @Column(name = "ngay_hen_tra")
-    private LocalDate ngayHenTra;
+    private LocalDateTime ngayHenTra;
 
     @Column(name = "ngay_tra_thuc_te")
     private LocalDate ngayTraThucTe;

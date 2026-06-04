@@ -35,7 +35,7 @@ public class NguoiDung {
     @Column(name = "so_dien_thoai", length = 15)
     private String soDienThoai;
 
-    @Column(name = "lop", length = 20)
+    @Column(name = "lop", length = 100)
     private String lop;
 
     @Enumerated(EnumType.STRING)

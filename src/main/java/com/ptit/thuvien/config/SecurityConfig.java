@@ -57,12 +57,12 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/dang-nhap")                  // GET - trang hiển thị form
                 .loginProcessingUrl("/xu-ly-dang-nhap")   // POST - URL Spring Security xử lý login
-                .usernameParameter("taiKhoan")            // Tên field username
+                .usernameParameter("email")            // Tên field username (email)
                 .passwordParameter("matKhau")             // Tên field password
                 .successHandler((request, response, authentication) -> {
                     // Lưu thông tin người dùng vào session sau khi đăng nhập thành công
-                    String taiKhoan = authentication.getName();
-                    nguoiDungRepository.findByTaiKhoan(taiKhoan).ifPresent(nd -> {
+                    String email = authentication.getName();
+                    nguoiDungRepository.findByEmail(email).ifPresent(nd -> {
                         HttpSession session = request.getSession();
                         session.setAttribute("nguoiDung", nd);
                         session.setAttribute("vaiTro", nd.getVaiTro().name());

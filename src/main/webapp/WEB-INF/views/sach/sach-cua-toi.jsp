@@ -193,12 +193,12 @@
                         </div>
                         <div class="book-dates">
                             <div class="date-item">
-                                <div class="date-label">Ngày mượn/đăng ký</div>
-                                <div class="date-value"><i class="fa-regular fa-calendar"></i> ${pm.ngayDangKy}</div>
+                                <div class="date-label">Ngày giờ mượn</div>
+                                <div class="date-value"><i class="fa-regular fa-calendar"></i> <span class="fmt-datetime">${pm.ngayMuon}</span></div>
                             </div>
                             <div class="date-item">
                                 <div class="date-label">Hạn trả</div>
-                                <div class="date-value"><i class="fa-regular fa-calendar"></i> ${pm.ngayHenTra}</div>
+                                <div class="date-value"><i class="fa-regular fa-calendar"></i> <span class="fmt-datetime">${pm.ngayHenTra}</span></div>
                             </div>
                             <div class="date-item" style="align-self:flex-end">
                                 <div class="date-label">Trạng thái</div>
@@ -286,6 +286,24 @@
 
             document.getElementById('emptyState').style.display = (visibleCount === 0) ? 'block' : 'none';
         }
+
+        // Format LocalDateTime (2026-06-04T17:30) thành dd/MM/yyyy HH:mm
+        document.querySelectorAll('.fmt-datetime').forEach(function(el) {
+            var raw = el.textContent.trim();
+            if (raw && raw.length >= 10) {
+                try {
+                    var d = new Date(raw);
+                    if (!isNaN(d.getTime())) {
+                        var day = String(d.getDate()).padStart(2, '0');
+                        var month = String(d.getMonth() + 1).padStart(2, '0');
+                        var year = d.getFullYear();
+                        var hours = String(d.getHours()).padStart(2, '0');
+                        var mins = String(d.getMinutes()).padStart(2, '0');
+                        el.textContent = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
+                    }
+                } catch(e) { /* giữ nguyên nếu parse lỗi */ }
+            }
+        });
     </script>
 </body>
 </html>
