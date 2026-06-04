@@ -155,24 +155,30 @@ public class DatabaseSeeder implements CommandLineRunner {
             System.out.println("[Seeder] Đã cập nhật mật khẩu tài khoản giảng viên: lam / 123456");
         }
 
-        // Thêm 10 Sinh viên mới
-        createStudentIfNotExist("nguoidung01", "Nguyễn Văn Nam", "namnv.d21@student.ptit.edu.vn", "0981111111", "D21CQCN02-B");
-        createStudentIfNotExist("nguoidung02", "Trần Thị Hoa", "hoatt.d21@student.ptit.edu.vn", "0982222222", "D21CQCN01-B");
-        createStudentIfNotExist("nguoidung03", "Lê Hoàng Long", "longlh.d21@student.ptit.edu.vn", "0983333333", "D21CQCN03-B");
-        createStudentIfNotExist("nguoidung04", "Phạm Minh Đức", "ducpm.d20@student.ptit.edu.vn", "0984444444", "D20CQVT01-A");
-        createStudentIfNotExist("nguoidung05", "Đỗ Thùy Linh", "linhdt.d20@student.ptit.edu.vn", "0985555555", "D20CQVT02-B");
-        createStudentIfNotExist("nguoidung06", "Hoàng Anh Tuấn", "tuanha.d22@student.ptit.edu.vn", "0986666666", "D22CQCN04-A");
-        createStudentIfNotExist("nguoidung07", "Vũ Mai Phương", "phuongvm.d22@student.ptit.edu.vn", "0987777777", "D22CQCN02-B");
-        createStudentIfNotExist("nguoidung08", "Bùi Tiến Dũng", "dungbt.d21@student.ptit.edu.vn", "0988888888", "D21CQKT01-A");
-        createStudentIfNotExist("nguoidung09", "Nguyễn Thanh Hà", "hant.d21@student.ptit.edu.vn", "0989999999", "D21CQKT02-B");
-        createStudentIfNotExist("nguoidung10", "Phan Quốc Anh", "anhpq.d20@student.ptit.edu.vn", "0980000000", "D20CQCN05-B");
-
-        // Thêm 5 Giảng viên mới
+        // Thêm 5 Giảng viên mẫu cũ
         createTeacherIfNotExist("giangvien01", "PGS.TS. Nguyễn Mạnh Hùng", "hungnm@ptit.edu.vn", "0911111222", "Khoa CNTT");
         createTeacherIfNotExist("giangvien02", "TS. Lê Thị Thảo", "thaolt@ptit.edu.vn", "0912222333", "Khoa CNTT");
         createTeacherIfNotExist("giangvien03", "ThS. Nguyễn Quang Huy", "huynq@ptit.edu.vn", "0913333444", "Khoa ĐTVT");
         createTeacherIfNotExist("giangvien04", "TS. Phạm Thanh Sơn", "sonpt@ptit.edu.vn", "0914444555", "Khoa Cơ bản");
         createTeacherIfNotExist("giangvien05", "ThS. Đỗ Thị Quỳnh", "quynhdt@ptit.edu.vn", "0915555666", "Khoa QTKD");
+
+        // Thêm 200 Sinh viên mẫu tự sinh
+        String[] hos = {"Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý"};
+        String[] dems = {"Văn", "Minh", "Quang", "Đức", "Anh", "Ngọc", "Thanh", "Hữu", "Quốc", "Thành", "Thế", "Trọng", "Đình", "Hải"};
+        String[] tens = {"Nam", "Đức", "Linh", "Tuấn", "Phương", "Dũng", "Hà", "Anh", "Huy", "Hùng", "Lan", "Mai", "Sơn", "Quỳnh", "Trang", "Thảo", "Hải", "Phong", "Tiến", "Cường", "Bình", "Minh", "Trung", "Khánh", "Duy"};
+        String[] lops = {"D21CQCN01-B", "D21CQCN02-B", "D21CQCN03-B", "D20CQVT01-A", "D20CQVT02-B", "D22CQCN04-A", "D22CQCN02-B", "D21CQKT01-A", "D21CQKT02-B", "D20CQCN05-B", "D22CQVT01-A", "D22CQVT02-B", "D21CQAT01-B", "D21CQAT02-B"};
+
+        for (int i = 1; i <= 200; i++) {
+            String taiKhoan = String.format("sv%03d", i);
+            String ho = hos[i % hos.length];
+            String dem = dems[(i * 3) % dems.length];
+            String ten = tens[(i * 7) % tens.length];
+            String hoTen = ho + " " + dem + " " + ten;
+            String email = taiKhoan + "@student.ptit.edu.vn";
+            String soDienThoai = String.format("098%07d", i);
+            String lop = lops[(i * 11) % lops.length];
+            createStudentIfNotExist(taiKhoan, hoTen, email, soDienThoai, lop);
+        }
 
         return admin;
     }
@@ -194,6 +200,20 @@ public class DatabaseSeeder implements CommandLineRunner {
         return danhMucs;
     }
 
+    private TaiLieu createBook(String ten, String tacGia, String nxb, int nam, DanhMuc dm, int sl, String hinhAnh, String moTa) {
+        return TaiLieu.builder()
+                .tenTaiLieu(ten)
+                .tacGia(tacGia)
+                .nxb(nxb)
+                .namXuatBan(nam)
+                .danhMuc(dm)
+                .soLuong(sl)
+                .soLuongCon(sl)
+                .hinhAnh(hinhAnh)
+                .moTa(moTa)
+                .build();
+    }
+
     private List<TaiLieu> seedBooks(List<DanhMuc> dsDanhMuc) {
         List<TaiLieu> taiLieus = new ArrayList<>();
         if (!dsDanhMuc.isEmpty()) {
@@ -210,255 +230,68 @@ public class DatabaseSeeder implements CommandLineRunner {
                 existingTitles.add(t.getTenTaiLieu().trim().toLowerCase());
             }
 
-            // Danh sách sách mẫu cần seed (5 cuốn cũ và 15 cuốn mới)
+            // Danh sách 50 cuốn sách mẫu (10 cuốn mỗi danh mục)
             List<TaiLieu> booksToSeed = new ArrayList<>();
 
-            // 5 cuốn sách cũ
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Lập trình Java căn bản & nâng cao")
-                    .tacGia("Nguyễn Văn A")
-                    .nxb("NXB Bách Khoa")
-                    .namXuatBan(2023)
-                    .danhMuc(cntt)
-                    .soLuong(15)
-                    .soLuongCon(12)
-                    .hinhAnh("book.jpg")
-                    .moTa("Sách giáo trình giảng dạy lập trình hướng đối tượng Java tại PTIT.")
-                    .build());
+            // 1. Công nghệ thông tin (10 cuốn)
+            booksToSeed.add(createBook("Lập trình Java căn bản & nâng cao", "Nguyễn Văn A", "NXB Bách Khoa", 2023, cntt, 15, "book.jpg", "Sách giáo trình giảng dạy lập trình hướng đối tượng Java tại PTIT."));
+            booksToSeed.add(createBook("Cấu trúc dữ liệu và Giải thuật", "Phạm Thế Long", "NXB Giáo Dục", 2022, cntt, 20, "tai-lieu-in1.jpg", "Các thuật toán cơ bản, cấu trúc dữ liệu mảng, danh sách liên kết, cây, đồ thị."));
+            booksToSeed.add(createBook("Lập trình Web với Spring Boot và Thymeleaf", "Trần Văn Bình", "NXB Thông tin & Truyền thông", 2024, cntt, 15, "tai-lieu-so1.jpg", "Hướng dẫn xây dựng các ứng dụng web doanh nghiệp hiện đại với Spring Boot."));
+            booksToSeed.add(createBook("Nhập môn Trí tuệ Nhân tạo và Học máy", "TS. Lê Hoài Bắc", "NXB Khoa học và Kỹ thuật", 2023, cntt, 10, "book.jpg", "Kiến thức nền tảng về AI, học máy có giám sát và không giám sát, mạng neural."));
+            booksToSeed.add(createBook("Thiết kế và Quản trị Cơ sở dữ liệu SQL", "Nguyễn Thị Minh", "NXB Bách Khoa", 2022, cntt, 18, "tai-lieu-in1.jpg", "Ngôn ngữ SQL, thiết kế lược đồ quan hệ, chuẩn hóa dữ liệu và tối ưu hóa câu lệnh."));
+            booksToSeed.add(createBook("Kiến trúc phần mềm Clean Architecture", "Robert C. Martin", "NXB Lao Động", 2020, cntt, 12, "tai-lieu-so1.jpg", "Các nguyên lý thiết kế hệ thống phần mềm sạch, dễ mở rộng và kiểm thử."));
+            booksToSeed.add(createBook("Lập trình di động Android nâng cao", "Bill Phillips", "NXB Trẻ", 2023, cntt, 10, "book.jpg", "Lập trình Android nâng cao với Kotlin và Jetpack Compose."));
+            booksToSeed.add(createBook("Điện toán đám mây và AWS cơ bản", "Thomas Erl", "NXB Thông tin & Truyền thông", 2022, cntt, 8, "tai-lieu-in1.jpg", "Nguyên lý điện toán đám mây, kiến trúc dịch vụ AWS, EC2, S3, RDS."));
+            booksToSeed.add(createBook("Nhập môn Mật mã học và An toàn thông tin", "William Stallings", "NXB Khoa học tự nhiên", 2023, cntt, 15, "tai-lieu-so1.jpg", "Mã hóa đối xứng, bất đối xứng, chữ ký số và các cơ chế bảo mật mạng cơ bản."));
+            booksToSeed.add(createBook("Docker và Kubernetes cho lập trình viên", "Nigel Poulton", "NXB Trẻ", 2024, cntt, 14, "book.jpg", "Đóng gói ứng dụng dạng Container, triển khai và quản trị Kubernetes cluster."));
 
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Cấu trúc dữ liệu và Giải thuật")
-                    .tacGia("Phạm Thế Long")
-                    .nxb("NXB Giáo Dục")
-                    .namXuatBan(2022)
-                    .danhMuc(cntt)
-                    .soLuong(20)
-                    .soLuongCon(20)
-                    .hinhAnh("tai-lieu-in1.jpg")
-                    .moTa("Các thuật toán cơ bản, cấu trúc dữ liệu mảng, danh sách liên kết, cây, đồ thị.")
-                    .build());
+            // 2. Điện tử viễn thông (10 cuốn)
+            booksToSeed.add(createBook("Mạng máy tính và Truyền số liệu", "Nguyễn Trung Hiếu", "NXB Thông tin & Truyền thông", 2024, dtvt, 10, "tai-lieu-so1.jpg", "Kiến thức tổng quan về các tầng trong mô hình OSI/TCP-IP và giao thức mạng."));
+            booksToSeed.add(createBook("Kỹ thuật Vi mạch và Hệ thống Nhúng", "Vũ Đình Thành", "NXB Khoa học tự nhiên", 2023, dtvt, 12, "tai-lieu-so1.jpg", "Nguyên lý hoạt động của hệ thống nhúng, lập trình vi điều khiển ARM."));
+            booksToSeed.add(createBook("Thiết kế mạch IoT với ESP32", "Phạm Ngọc Nam", "NXB Bách Khoa", 2024, dtvt, 15, "book.jpg", "Thực hành lập trình kết nối Wi-Fi, Bluetooth trên ESP32, đọc cảm biến."));
+            booksToSeed.add(createBook("Truyền thông vô tuyến và Anten", "Đỗ Quốc Huy", "NXB Giáo dục", 2021, dtvt, 8, "tai-lieu-in1.jpg", "Lý thuyết điện từ trường, thiết kế anten và các mô hình truyền sóng vô tuyến."));
+            booksToSeed.add(createBook("Xử lý tín hiệu số cơ bản", "Alan V. Oppenheim", "NXB Bách Khoa", 2020, dtvt, 11, "tai-lieu-so1.jpg", "Biến đổi Fourier, thiết kế bộ lọc số IIR, FIR và các ứng dụng xử lý tín hiệu thực tế."));
+            booksToSeed.add(createBook("Cơ sở Kỹ thuật Điện tử thông tin", "Trần Xuân Việt", "NXB Giáo dục", 2022, dtvt, 10, "book.jpg", "Các linh kiện bán dẫn, mạch khuếch đại, mạch tạo dao động và biến đổi tần số."));
+            booksToSeed.add(createBook("Mạng di động thế hệ mới 5G và IoT", "Harish Kumar", "NXB Khoa học tự nhiên", 2023, dtvt, 9, "tai-lieu-in1.jpg", "Kiến trúc mạng lõi 5G, truyền thông thiết bị đến thiết bị và ứng dụng trong IoT."));
+            booksToSeed.add(createBook("Kỹ thuật Truyền thanh truyền hình số", "Nguyễn Kim Sách", "NXB Thông tin & Truyền thông", 2021, dtvt, 7, "tai-lieu-so1.jpg", "Nguyên lý số hóa tín hiệu âm thanh, hình ảnh và các chuẩn phát sóng DVB-T2."));
+            booksToSeed.add(createBook("Thông tin sợi quang và Quang điện tử", "Gerd Keiser", "NXB Giáo dục", 2022, dtvt, 10, "book.jpg", "Truyền dẫn ánh sáng trong sợi quang, nguồn phát quang và bộ thu quang điện tử."));
+            booksToSeed.add(createBook("Lập trình vi điều khiển STM32", "Carmine Noviello", "NXB Bách Khoa", 2023, dtvt, 12, "tai-lieu-in1.jpg", "Kiến trúc ARM Cortex-M, lập trình ngoại vi GPIO, USART, ADC, DMA trên STM32."));
 
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Mạng máy tính và Truyền số liệu")
-                    .tacGia("Nguyễn Trung Hiếu")
-                    .nxb("NXB Thông tin & Truyền thông")
-                    .namXuatBan(2024)
-                    .danhMuc(dtvt)
-                    .soLuong(10)
-                    .soLuongCon(8)
-                    .hinhAnh("tai-lieu-so1.jpg")
-                    .moTa("Kiến thức tổng quan về các tầng trong mô hình OSI/TCP-IP và giao thức mạng.")
-                    .build());
+            // 3. Kinh tế & Quản trị (10 cuốn)
+            booksToSeed.add(createBook("Giáo trình Kinh tế vĩ mô", "Trần Thị C", "NXB Đại học Kinh tế Quốc dân", 2021, kinhTe, 12, "ebook.jpg", "Tìm hiểu về lạm phát, thất nghiệp, GDP, chính sách tài khóa và tiền tệ."));
+            booksToSeed.add(createBook("Quản trị Học đại cương", "TS. Nguyễn Thanh Liêm", "NXB Thống kê", 2022, kinhTe, 20, "ebook.jpg", "Các chức năng quản trị cơ bản: hoạch định, tổ chức, lãnh đạo và kiểm tra."));
+            booksToSeed.add(createBook("Marketing kỹ thuật số trong kỷ nguyên 4.0", "Philip Kotler", "NXB Trẻ", 2023, kinhTe, 25, "book.jpg", "Chiến lược tiếp thị số, SEO, SEM, truyền thông xã hội và phân tích dữ liệu hành vi."));
+            booksToSeed.add(createBook("Phân tích báo cáo tài chính doanh nghiệp", "Nguyễn Minh Kiều", "NXB Tài chính", 2024, kinhTe, 15, "ebook.jpg", "Phương pháp đọc hiểu và phân tích bảng cân đối kế toán, báo cáo kết quả kinh doanh."));
+            booksToSeed.add(createBook("Khởi nghiệp đổi mới sáng tạo", "Eric Ries", "NXB Tổng hợp TP.HCM", 2021, kinhTe, 18, "book.jpg", "Phương pháp khởi nghiệp tinh gọn giúp tối ưu nguồn lực và kiểm chứng giả thuyết."));
+            booksToSeed.add(createBook("Quản trị chuỗi cung ứng hiện đại", "Sunil Chopra", "NXB Thống kê", 2022, kinhTe, 10, "ebook.jpg", "Logistics, quản trị tồn kho và điều phối trong chuỗi cung ứng toàn cầu."));
+            booksToSeed.add(createBook("Hành vi tổ chức trong doanh nghiệp", "Stephen P. Robbins", "NXB Trẻ", 2023, kinhTe, 15, "book.jpg", "Động lực làm việc, giao tiếp nội bộ, xung đột và văn hóa tổ chức doanh nghiệp."));
+            booksToSeed.add(createBook("Kinh tế học vi mô căn bản", "N. Gregory Mankiw", "NXB Hồng Đức", 2022, kinhTe, 20, "ebook.jpg", "Cung cầu, thị trường cạnh tranh, độc quyền và hành vi người tiêu dùng, doanh nghiệp."));
+            booksToSeed.add(createBook("Quản trị nguồn nhân lực", "Gary Dessler", "NXB Tài chính", 2021, kinhTe, 12, "book.jpg", "Tuyển dụng, đào tạo, đánh giá hiệu quả công việc và các chính sách đãi ngộ nhân sự."));
+            booksToSeed.add(createBook("Tài chính doanh nghiệp chuyên sâu", "Stephen A. Ross", "NXB Thống kê", 2023, kinhTe, 10, "ebook.jpg", "Hoạch định ngân sách vốn đầu tư, chi phí sử dụng vốn và cấu trúc vốn doanh nghiệp."));
 
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Giáo trình Kinh tế vĩ mô")
-                    .tacGia("Trần Thị C")
-                    .nxb("NXB Đại học Kinh tế Quốc dân")
-                    .namXuatBan(2021)
-                    .danhMuc(kinhTe)
-                    .soLuong(12)
-                    .soLuongCon(12)
-                    .hinhAnh("ebook.jpg")
-                    .moTa("Tìm hiểu về lạm phát, thất nghiệp, GDP, chính sách tài khóa và tiền tệ.")
-                    .build());
+            // 4. Kỹ năng mềm (10 cuốn)
+            booksToSeed.add(createBook("Đắc Nhân Tâm (How to Win Friends & Influence People)", "Dale Carnegie", "NXB Trẻ", 2020, kyNang, 30, "book.jpg", "Cuốn sách kinh điển về nghệ thuật ứng xử, giao tiếp và thu phục lòng người."));
+            booksToSeed.add(createBook("Tư duy ngược - Thay đổi cách nghĩ để thành công", "Nguyễn Anh Dũng", "NXB Lao động", 2022, kyNang, 30, "book.jpg", "Khai phá tư duy đột phá, giải quyết vấn đề từ các góc nhìn khác biệt."));
+            booksToSeed.add(createBook("Kỹ năng thuyết trình và làm việc nhóm hiệu quả", "Lê Huy Khoa", "NXB Tổng hợp TP.HCM", 2023, kyNang, 22, "ebook.jpg", "Phương pháp chuẩn bị slide thuyết trình, kiểm soát giọng nói, tương tác khán giả."));
+            booksToSeed.add(createBook("Quản lý thời gian và giải quyết vấn đề", "Brian Tracy", "NXB Hồng Đức", 2021, kyNang, 25, "book.jpg", "Quy tắc 80/20, thiết lập mục tiêu hàng ngày, tập trung vào nhiệm vụ trọng tâm."));
+            booksToSeed.add(createBook("Đọc vị bất kỳ ai để không bị lợi dụng", "David J. Lieberman", "NXB Trẻ", 2020, kyNang, 20, "ebook.jpg", "Các kỹ thuật tâm lý giúp nhận diện cảm xúc, suy nghĩ và ý đồ thực sự."));
+            booksToSeed.add(createBook("Người tối giản - Hành trình tìm lại bản thân", "Sasaki Fumio", "NXB Lao động", 2022, kyNang, 15, "book.jpg", "Lối sống tối giản, giảm bớt đồ đạc dư thừa để tập trung vào giá trị tinh thần."));
+            booksToSeed.add(createBook("Tư duy nhanh và chậm", "Daniel Kahneman", "NXB Thế giới", 2021, kyNang, 18, "ebook.jpg", "Hai hệ thống tư duy chi phối hành vi: hệ thống 1 (nhanh) và hệ thống 2 (chậm)."));
+            booksToSeed.add(createBook("7 Thói quen của bạn trẻ thành đạt", "Sean Covey", "NXB Trẻ", 2022, kyNang, 28, "book.jpg", "Xây dựng thói quen tích cực, quản lý bản thân, hợp tác và làm mới tâm hồn."));
+            booksToSeed.add(createBook("Nói thế nào để trẻ nghe lời và lắng nghe thế nào", "Adele Faber", "NXB Lao động", 2020, kyNang, 12, "ebook.jpg", "Nghệ thuật giao tiếp trong gia đình, xây dựng sự tin cậy và hiểu biết lẫn nhau."));
+            booksToSeed.add(createBook("Lối tư duy của người thành công", "Carol S. Dweck", "NXB Trẻ", 2021, kyNang, 20, "book.jpg", "Sức mạnh của tư duy phát triển (growth mindset) so với tư duy cố định."));
 
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Đắc Nhân Tâm (How to Win Friends & Influence People)")
-                    .tacGia("Dale Carnegie")
-                    .nxb("NXB Trẻ")
-                    .namXuatBan(2020)
-                    .danhMuc(kyNang)
-                    .soLuong(30)
-                    .soLuongCon(29)
-                    .hinhAnh("book.jpg")
-                    .moTa("Cuốn sách kinh điển về nghệ thuật ứng xử, giao tiếp và thu phục lòng người.")
-                    .build());
-
-            // 15 cuốn sách mới thêm
-            // CNTT (3 cuốn mới)
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Lập trình Web với Spring Boot và Thymeleaf")
-                    .tacGia("Trần Văn Bình")
-                    .nxb("NXB Thông tin & Truyền thông")
-                    .namXuatBan(2024)
-                    .danhMuc(cntt)
-                    .soLuong(15)
-                    .soLuongCon(15)
-                    .hinhAnh("tai-lieu-so1.jpg")
-                    .moTa("Hướng dẫn xây dựng các ứng dụng web doanh nghiệp hiện đại với Spring Boot và Thymeleaf template engine.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Nhập môn Trí tuệ Nhân tạo và Học máy")
-                    .tacGia("TS. Lê Hoài Bắc")
-                    .nxb("NXB Khoa học và Kỹ thuật")
-                    .namXuatBan(2023)
-                    .danhMuc(cntt)
-                    .soLuong(10)
-                    .soLuongCon(10)
-                    .hinhAnh("book.jpg")
-                    .moTa("Kiến thức nền tảng về AI, học máy có giám sát và không giám sát, mạng neural nhân tạo.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Thiết kế và Quản trị Cơ sở dữ liệu SQL")
-                    .tacGia("Nguyễn Thị Minh")
-                    .nxb("NXB Bách Khoa")
-                    .namXuatBan(2022)
-                    .danhMuc(cntt)
-                    .soLuong(18)
-                    .soLuongCon(18)
-                    .hinhAnh("tai-lieu-in1.jpg")
-                    .moTa("Ngôn ngữ SQL, thiết kế lược đồ quan hệ, chuẩn hóa dữ liệu và tối ưu hóa câu lệnh truy vấn.")
-                    .build());
-
-            // ĐTVT (3 cuốn mới)
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Kỹ thuật Vi mạch và Hệ thống Nhúng")
-                    .tacGia("Vũ Đình Thành")
-                    .nxb("NXB Khoa học tự nhiên")
-                    .namXuatBan(2023)
-                    .danhMuc(dtvt)
-                    .soLuong(12)
-                    .soLuongCon(12)
-                    .hinhAnh("tai-lieu-so1.jpg")
-                    .moTa("Nguyên lý hoạt động của hệ thống nhúng, lập trình vi điều khiển ARM và thiết kế vi mạch chuyên dụng.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Thiết kế mạch IoT với ESP32")
-                    .tacGia("Phạm Ngọc Nam")
-                    .nxb("NXB Bách Khoa")
-                    .namXuatBan(2024)
-                    .danhMuc(dtvt)
-                    .soLuong(15)
-                    .soLuongCon(15)
-                    .hinhAnh("book.jpg")
-                    .moTa("Thực hành lập trình kết nối Wi-Fi, Bluetooth trên ESP32, đọc cảm biến và gửi dữ liệu lên Cloud server.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Truyền thông vô tuyến và Anten")
-                    .tacGia("Đỗ Quốc Huy")
-                    .nxb("NXB Giáo dục")
-                    .namXuatBan(2021)
-                    .danhMuc(dtvt)
-                    .soLuong(8)
-                    .soLuongCon(8)
-                    .hinhAnh("tai-lieu-in1.jpg")
-                    .moTa("Lý thuyết điện từ trường, thiết kế anten và các mô hình truyền sóng trong hệ thống thông tin di động.")
-                    .build());
-
-            // Kinh tế (3 cuốn mới)
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Quản trị Học đại cương")
-                    .tacGia("TS. Nguyễn Thanh Liêm")
-                    .nxb("NXB Thống kê")
-                    .namXuatBan(2022)
-                    .danhMuc(kinhTe)
-                    .soLuong(20)
-                    .soLuongCon(20)
-                    .hinhAnh("ebook.jpg")
-                    .moTa("Các chức năng quản trị cơ bản: hoạch định, tổ chức, lãnh đạo và kiểm tra trong tổ chức doanh nghiệp.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Marketing kỹ thuật số trong kỷ nguyên 4.0")
-                    .tacGia("Philip Kotler")
-                    .nxb("NXB Trẻ")
-                    .namXuatBan(2023)
-                    .danhMuc(kinhTe)
-                    .soLuong(25)
-                    .soLuongCon(25)
-                    .hinhAnh("book.jpg")
-                    .moTa("Chiến lược tiếp thị số, SEO, SEM, truyền thông xã hội và phân tích dữ liệu hành vi khách hàng trực tuyến.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Phân tích báo cáo tài chính doanh nghiệp")
-                    .tacGia("Nguyễn Minh Kiều")
-                    .nxb("NXB Tài chính")
-                    .namXuatBan(2024)
-                    .danhMuc(kinhTe)
-                    .soLuong(15)
-                    .soLuongCon(15)
-                    .hinhAnh("ebook.jpg")
-                    .moTa("Phương pháp đọc hiểu và phân tích bảng cân đối kế toán, báo cáo kết quả kinh doanh và lưu chuyển tiền tệ.")
-                    .build());
-
-            // Kỹ năng mềm (3 cuốn mới)
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Tư duy ngược - Thay đổi cách nghĩ để thành công")
-                    .tacGia("Nguyễn Anh Dũng")
-                    .nxb("NXB Lao động")
-                    .namXuatBan(2022)
-                    .danhMuc(kyNang)
-                    .soLuong(30)
-                    .soLuongCon(30)
-                    .hinhAnh("book.jpg")
-                    .moTa("Khai phá tư duy đột phá, giải quyết vấn đề từ các góc nhìn khác biệt và vượt qua rào cản tâm lý thông thường.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Kỹ năng thuyết trình và làm việc nhóm hiệu quả")
-                    .tacGia("Lê Huy Khoa")
-                    .nxb("NXB Tổng hợp TP.HCM")
-                    .namXuatBan(2023)
-                    .danhMuc(kyNang)
-                    .soLuong(22)
-                    .soLuongCon(22)
-                    .hinhAnh("ebook.jpg")
-                    .moTa("Phương pháp chuẩn bị slide thuyết trình, kiểm soát giọng nói, tương tác khán giả và giải quyết xung đột nhóm.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Quản lý thời gian và giải quyết vấn đề")
-                    .tacGia("Brian Tracy")
-                    .nxb("NXB Hồng Đức")
-                    .namXuatBan(2021)
-                    .danhMuc(kyNang)
-                    .soLuong(25)
-                    .soLuongCon(25)
-                    .hinhAnh("book.jpg")
-                    .moTa("Quy tắc 80/20, thiết lập mục tiêu hàng ngày, tập trung vào nhiệm vụ trọng tâm và loại bỏ thói quen trì hoãn.")
-                    .build());
-
-            // Khoa học cơ bản (3 cuốn mới)
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Toán cao cấp cho kỹ sư và cử nhân")
-                    .tacGia("Nguyễn Đình Trí")
-                    .nxb("NXB Giáo dục")
-                    .namXuatBan(2020)
-                    .danhMuc(khoaHoc)
-                    .soLuong(40)
-                    .soLuongCon(40)
-                    .hinhAnh("tai-lieu-in1.jpg")
-                    .moTa("Giải tích toán học một biến, nhiều biến, phép tính vi phân và tích phân, ứng dụng trong kỹ thuật.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Vật lý đại cương - Điện và Từ học")
-                    .tacGia("Lương Duyên Bình")
-                    .nxb("NXB Giáo dục")
-                    .namXuatBan(2021)
-                    .danhMuc(khoaHoc)
-                    .soLuong(35)
-                    .soLuongCon(35)
-                    .hinhAnh("book.jpg")
-                    .moTa("Trường tĩnh điện, vật dẫn, điện môi, từ trường tĩnh, hiện tượng cảm ứng điện từ và sóng điện từ.")
-                    .build());
-
-            booksToSeed.add(TaiLieu.builder()
-                    .tenTaiLieu("Nhập môn Logic học và Phương pháp luận")
-                    .tacGia("Nguyễn Đức Dân")
-                    .nxb("NXB Khoa học Xã hội")
-                    .namXuatBan(2022)
-                    .danhMuc(khoaHoc)
-                    .soLuong(20)
-                    .soLuongCon(20)
-                    .hinhAnh("ebook.jpg")
-                    .moTa("Cơ sở tư duy logic hình thức, các quy luật logic cơ bản, phương pháp luận nghiên cứu và lập luận khoa học.")
-                    .build());
+            // 5. Khoa học cơ bản (10 cuốn)
+            booksToSeed.add(createBook("Toán cao cấp cho kỹ sư và cử nhân", "Nguyễn Đình Trí", "NXB Giáo dục", 2020, khoaHoc, 40, "tai-lieu-in1.jpg", "Giải tích toán học một biến, nhiều biến, phép tính vi phân và tích phân."));
+            booksToSeed.add(createBook("Vật lý đại cương - Điện và Từ học", "Lương Duyên Bình", "NXB Giáo dục", 2021, khoaHoc, 35, "book.jpg", "Trường tĩnh điện, vật dẫn, điện môi, từ trường tĩnh, cảm ứng điện từ."));
+            booksToSeed.add(createBook("Nhập môn Logic học và Phương pháp luận", "Nguyễn Đức Dân", "NXB Khoa học Xã hội", 2022, khoaHoc, 20, "ebook.jpg", "Cơ sở tư duy logic hình thức, các quy luật logic cơ bản, phương pháp luận."));
+            booksToSeed.add(createBook("Đại số tuyến tính và Hình học giải tích", "Nguyễn Hữu Việt Hưng", "NXB Giáo dục", 2021, khoaHoc, 30, "tai-lieu-in1.jpg", "Không gian vector, ma trận, định thức, hệ phương trình tuyến tính và dạng toàn phương."));
+            booksToSeed.add(createBook("Hóa học đại cương và ứng dụng", "Nguyễn Đức Chung", "NXB Bách Khoa", 2020, khoaHoc, 25, "book.jpg", "Cấu tạo chất, nhiệt động hóa học, động hóa học, cân bằng hóa học và điện hóa học."));
+            booksToSeed.add(createBook("Giáo trình Xác suất và Thống kê toán", "Tống Đình Quỳ", "NXB Bách Khoa", 2022, khoaHoc, 28, "tai-lieu-in1.jpg", "Biến ngẫu nhiên, quy luật phân phối xác suất, ước lượng và kiểm định giả thuyết."));
+            booksToSeed.add(createBook("Vật lý đại cương - Cơ và Nhiệt học", "Lương Duyên Bình", "NXB Giáo dục", 2021, khoaHoc, 32, "book.jpg", "Cơ học chất điểm, hệ chất điểm, vật rắn, thuyết động học phân tử và nhiệt động."));
+            booksToSeed.add(createBook("Lịch sử các học thuyết kinh tế học", "Nguyễn Minh Tuấn", "NXB Tài chính", 2020, khoaHoc, 15, "ebook.jpg", "Quá trình hình thành và phát triển các hệ tư tưởng kinh tế học từ cổ đại đến hiện đại."));
+            booksToSeed.add(createBook("Nhập môn Triết học đại cương", "Bộ Giáo dục và Đào tạo", "NXB Chính trị Quốc gia", 2021, khoaHoc, 30, "book.jpg", "Các khái niệm triết học cơ bản, chủ nghĩa duy vật biện chứng và duy vật lịch sử."));
+            booksToSeed.add(createBook("Xác suất thống kê và quy hoạch thực nghiệm", "Phạm Hải Tùng", "NXB Bách Khoa", 2023, khoaHoc, 18, "tai-lieu-in1.jpg", "Xử lý số liệu thực nghiệm, thiết kế thí nghiệm và phân tích hồi quy tương quan."));
 
             // Lưu các cuốn sách chưa tồn tại
             List<TaiLieu> booksToSave = new ArrayList<>();
