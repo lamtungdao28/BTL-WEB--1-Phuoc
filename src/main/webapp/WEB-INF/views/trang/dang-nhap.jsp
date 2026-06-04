@@ -63,7 +63,14 @@
             <%-- Hiển thị lỗi nếu có --%>
             <c:if test="${param.error != null}">
                 <p class="error-msg" style="display:block; color:#c8102e;">
-                    Email hoặc mật khẩu không đúng!
+                    <c:choose>
+                        <c:when test="${param.error == 'locked'}">
+                            Tài khoản của bạn đã bị khóa!
+                        </c:when>
+                        <c:otherwise>
+                            Email hoặc mật khẩu không đúng!
+                        </c:otherwise>
+                    </c:choose>
                 </p>
             </c:if>
             <c:if test="${param.logout != null}">
@@ -72,7 +79,7 @@
 
             <%-- Form đăng nhập (Spring Security xử lý) --%>
             <form action="${pageContext.request.contextPath}/xu-ly-dang-nhap" method="post">
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="email" placeholder="Email hoặc Tên tài khoản" required>
                 <input type="password" name="matKhau" placeholder="Mật khẩu" required>
                 <button type="submit">Đăng nhập</button>
             </form>

@@ -22,32 +22,32 @@ public class PhieuMuonServiceImpl implements PhieuMuonService {
     private final TaiLieuService taiLieuService;
 
     @Override
-    @Transactional(readOnly = true)
     public List<PhieuMuon> layTatCa() {
+        capNhatTrangThaiQuaHan();
         return phieuMuonRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<PhieuMuon> timTheoId(Long id) {
+        capNhatTrangThaiQuaHan();
         return phieuMuonRepository.findById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PhieuMuon> layTheoNguoiDung(Long maNguoiDung) {
+        capNhatTrangThaiQuaHan();
         return phieuMuonRepository.findByNguoiDung_MaNguoiDung(maNguoiDung);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PhieuMuon> layTheoTrangThai(PhieuMuon.TrangThaiMuon trangThai) {
+        capNhatTrangThaiQuaHan();
         return phieuMuonRepository.findByTrangThai(trangThai);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PhieuMuon> layTheoNguoiDungVaTrangThai(Long maNguoiDung, PhieuMuon.TrangThaiMuon trangThai) {
+        capNhatTrangThaiQuaHan();
         return phieuMuonRepository.findByNguoiDung_MaNguoiDungAndTrangThai(maNguoiDung, trangThai);
     }
 
@@ -103,5 +103,20 @@ public class PhieuMuonServiceImpl implements PhieuMuonService {
     @Override
     public void xoa(Long id) {
         phieuMuonRepository.deleteById(id);
+    }
+
+    @Override
+    public void capNhatTrangThaiQuaHan() {
+        LocalDateTime now = LocalDateTime.now();
+        
+        // Quét các phiếu DANG_MUON đã quá hạn để chuyển sang QUA_HAN
+        List<PhieuMuon> dsDangMuon = phieuMuonRepository.findByTrangThai(PhieuMuon.TrangThaiMuon.DANG_MUON);
+        for (PhieuMuon pm : dsDangMuon) {
+            if (pm.getNgayHenTra() != null && now.isAfter(pm.getNgayHenTra())) {
+                pm.setTrangThai(PhieuMuon.TrangThaiMuon.QUA_HAN);
+                phieuMuonRepository.save(pm);
+                System.out.println("[Scheduler/Check] Phiếu mượn #" + pm.getMaMuon() + " của " + pm.getNguoiDung().getHoTen() + " đã quá hạn.");
+            }
+        }
     }
 }

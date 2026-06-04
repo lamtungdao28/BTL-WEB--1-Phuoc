@@ -28,4 +28,6 @@ public interface PhieuMuonService {
     PhieuMuon traSach(Long maMuon);
 
     void xoa(Long id);
+
+    void capNhatTrangThaiQuaHan();
 }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Cấu hình Spring Security - Phân quyền truy cập
@@ -60,13 +61,14 @@ public class SecurityConfig {
                 .usernameParameter("email")            // Tên field username (email)
                 .passwordParameter("matKhau")             // Tên field password
                 .successHandler((request, response, authentication) -> {
-                    // Lưu thông tin người dùng vào session sau khi đăng nhập thành công
-                    String email = authentication.getName();
-                    nguoiDungRepository.findByEmail(email).ifPresent(nd -> {
-                        HttpSession session = request.getSession();
-                        session.setAttribute("nguoiDung", nd);
-                        session.setAttribute("vaiTro", nd.getVaiTro().name());
-                    });
+                    String emailOrUsername = authentication.getName();
+                    nguoiDungRepository.findByEmail(emailOrUsername)
+                            .or(() -> nguoiDungRepository.findByTaiKhoan(emailOrUsername))
+                            .ifPresent(nd -> {
+                                HttpSession session = request.getSession();
+                                session.setAttribute("nguoiDung", nd);
+                                session.setAttribute("vaiTro", nd.getVaiTro().name());
+                            });
 
                     // Điều hướng theo vai trò
                     boolean isAdmin = authentication.getAuthorities().stream()
@@ -77,12 +79,19 @@ public class SecurityConfig {
                         response.sendRedirect(request.getContextPath() + "/trang-chu");
                     }
                 })
-                .failureUrl("/dang-nhap?error=true")      // Sau login thất bại
+                .failureHandler((request, response, exception) -> {
+                    String error = "true";
+                    if (exception instanceof org.springframework.security.authentication.LockedException ||
+                        exception instanceof org.springframework.security.authentication.DisabledException) {
+                        error = "locked";
+                    }
+                    response.sendRedirect(request.getContextPath() + "/dang-nhap?error=" + error);
+                })
                 .permitAll()
             )
 
             .logout(logout -> logout
-                .logoutUrl("/dang-xuat")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/dang-xuat"))
                 .logoutSuccessUrl("/dang-nhap?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")

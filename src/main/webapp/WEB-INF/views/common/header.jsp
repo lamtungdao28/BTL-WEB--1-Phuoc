@@ -29,11 +29,13 @@
 
 <header class="header">
     <div class="left">
-        <img src="${pageContext.request.contextPath}/tai-nguyen/logo.png" class="logo">
-        <div class="title">
-            <p class="highlight-title">THƯ VIỆN ĐIỆN TỬ</p>
-            <p>HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</p>
-        </div>
+        <a href="${pageContext.request.contextPath}/trang-chu" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+            <img src="${pageContext.request.contextPath}/tai-nguyen/logo.png" class="logo">
+            <div class="title">
+                <p class="highlight-title">THƯ VIỆN ĐIỆN TỬ</p>
+                <p>HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</p>
+            </div>
+        </a>
     </div>
 
     <nav>

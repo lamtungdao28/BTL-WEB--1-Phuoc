@@ -347,7 +347,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                             .ngayMuon(LocalDateTime.now().minusDays(20))
                             .ngayHenTra(LocalDateTime.now().minusDays(6))
                             .trangThai(PhieuMuon.TrangThaiMuon.QUA_HAN)
-                            .tienPhat(6000L) // Phạt 6 ngày trễ (1000đ/ngày)
+                            .tienPhat(0L)
                             .ghiChu("Mượn đọc kỹ năng giao tiếp.")
                             .build());
                 }

@@ -15,10 +15,18 @@
     <%-- NỘI DUNG TRANG CHỦ --%>
     <section class="slider">
         <div class="slides">
-            <div class="slide active" style="background-image: url('${pageContext.request.contextPath}/tai-nguyen/slide1.jpg')"></div>
-            <div class="slide" style="background-image: url('${pageContext.request.contextPath}/tai-nguyen/slide2.jpg')"></div>
-            <div class="slide" style="background-image: url('${pageContext.request.contextPath}/tai-nguyen/slide3.jpg')"></div>
-            <div class="slide" style="background-image: url('${pageContext.request.contextPath}/tai-nguyen/slide4.jpg')"></div>
+            <div class="slide active">
+                <img src="${pageContext.request.contextPath}/tai-nguyen/slide1.jpg" alt="Slide 1">
+            </div>
+            <div class="slide">
+                <img src="${pageContext.request.contextPath}/tai-nguyen/slide2.jpg" alt="Slide 2">
+            </div>
+            <div class="slide">
+                <img src="${pageContext.request.contextPath}/tai-nguyen/slide3.jpg" alt="Slide 3">
+            </div>
+            <div class="slide">
+                <img src="${pageContext.request.contextPath}/tai-nguyen/slide4.jpg" alt="Slide 4">
+            </div>
         </div>
 
         <button class="prev" onclick="prevSlide()">❮</button>
