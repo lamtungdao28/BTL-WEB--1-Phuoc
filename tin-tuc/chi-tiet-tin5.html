@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết tin tức - PTIT Library</title>
+
+    <link rel="stylesheet" href="../css/giao-dien.css">
+    <link rel="stylesheet" href="../css/tin-tuc.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .article-breadcrumb span{
+    position: relative;
+    font-weight: bold;
+}
+.related-news{
+    margin-top: 60px;
+}
+
+.related-title{
+    color: #c8102e;
+    font-size: 18px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+
+.related-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.related-card{
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.related-card:hover{
+    transform: translateY(-5px);
+}
+
+.related-card img{
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.related-content{
+    padding: 16px;
+}
+
+.related-content h4{
+    color: #0d2a5c;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.related-content span{
+    color: #888;
+    font-size: 13px;
+}
+
+@media(max-width:768px){
+
+    .related-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.article-breadcrumb span::after{
+    content: "";
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 3px;
+
+    background: #c8102e;
+}
+
+        .article-banner{
+            background:
+            linear-gradient(rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)),
+            url("../tai-nguyen/banner-tin-tuc.jpg")
+            center/cover no-repeat;
+
+            padding: 90px 0;
+            color: white;
+        }
+
+        .article-banner h1{
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .article-breadcrumb a{
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .article-wrapper{
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+
+            display: flex;
+            gap: 40px;
+        }
+
+        .article-main{
+            flex: 2.5;
+        }
+
+        .article-sidebar{
+            flex: 1;
+        }
+
+        .article-main img{
+            width: 100%;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .article-meta{
+            display: flex;
+            gap: 20px;
+            color: #777;
+            margin: 15px 0 25px;
+            font-size: 14px;
+        }
+
+        .article-meta i{
+            color: #c8102e;
+        }
+
+        .article-title{
+            font-size: 38px;
+            color: #0d2a5c;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .article-content p{
+            font-size: 17px;
+            line-height: 1.9;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 22px;
+        }
+
+        .article-content h3{
+            color: #0d2a5c;
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        .sidebar-box{
+            background: #f8f8f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-box h3{
+            border-left: 4px solid #c8102e;
+            padding-left: 12px;
+            color: #0d2a5c;
+            margin-bottom: 20px;
+        }
+
+        .related-item{
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .related-item img{
+            width: 90px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .related-item a{
+            text-decoration: none;
+            color: #0d2a5c;
+            font-weight: bold;
+            line-height: 1.5;
+            transition: 0.3s;
+        }
+
+        .related-item a:hover{
+            color: #c8102e;
+        }
+
+        @media(max-width: 768px){
+
+            .article-wrapper{
+                flex-direction: column;
+                padding: 0 18px;
+            }
+
+            .article-title{
+                font-size: 28px;
+            }
+
+            .article-banner h1{
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="dau-trang"></div>
+
+    <!-- BANNER -->
+    <section class="article-banner">
+        <div class="container-news">
+
+            <h1>TIN TỨC</h1>
+
+            <div class="article-breadcrumb">
+                <a href="../trang/trang-chu.html">Trang chủ</a> /
+                <a href="tin-tuc.html">Tin tức</a> /
+                <span>Bài viết</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NỘI DUNG -->
+    <section class="article-wrapper">
+
+        <div class="article-main">
+
+            <h1 class="article-title">
+                Tâp huấn sử dụng nguồn tài nguyên điện tử năm 2026 tại Trung tâm Thông tin - Thư viện PTIT
+            </h1>
+
+            <div class="article-meta">
+
+                <span>
+                    <i class="fas fa-calendar-alt"></i>
+                    10/05/2026
+                </span>
+
+                <span>
+                    <i class="fas fa-folder"></i>
+                    Hướng dẫn
+                </span>
+
+            </div>
+
+<div class="article-content">
+
+    <p>
+        <strong>
+            Trung tâm Thông tin - Thư viện PTIT tổ chức chương trình
+            “Tập huấn sử dụng nguồn tài nguyên điện tử năm 2026”
+            nhằm hỗ trợ sinh viên tiếp cận hiệu quả các cơ sở dữ liệu học thuật,
+            tài liệu số và hệ thống thư viện điện tử phục vụ học tập, nghiên cứu khoa học.
+        </strong>
+    </p>
+
+    <p>
+        Chương trình được tổ chức định kỳ hằng năm và thu hút đông đảo sinh viên,
+        giảng viên tham gia. Đây là hoạt động thiết thực nhằm nâng cao kỹ năng
+        tìm kiếm, khai thác và sử dụng thông tin học thuật trong môi trường số.
+    </p>
+
+    <img src="../tai-nguyen/news4.jpg" alt="Tập huấn tài nguyên điện tử">
+
+    <p class="img-caption">
+        Sinh viên tham gia buổi tập huấn sử dụng nguồn tài nguyên điện tử tại thư viện.
+    </p>
+
+    <h3>Mục tiêu của chương trình tập huấn</h3>
+
+    <p>
+        Trong bối cảnh chuyển đổi số giáo dục hiện nay, việc tiếp cận và khai thác
+        hiệu quả các nguồn tài nguyên điện tử đóng vai trò quan trọng đối với sinh viên,
+        đặc biệt trong quá trình nghiên cứu khoa học và thực hiện đồ án, khóa luận.
+    </p>
+
+    <p>
+        Chương trình tập huấn được tổ chức nhằm:
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            Hướng dẫn sinh viên sử dụng hệ thống thư viện số của PTIT.
+        </li>
+
+        <li>
+            Giới thiệu các cơ sở dữ liệu học thuật quốc tế.
+        </li>
+
+        <li>
+            Nâng cao kỹ năng tìm kiếm và đánh giá nguồn thông tin.
+        </li>
+
+        <li>
+            Hỗ trợ trích dẫn tài liệu và phòng tránh đạo văn học thuật.
+        </li>
+
+        <li>
+            Giúp sinh viên tiếp cận nguồn học liệu chất lượng cao phục vụ học tập.
+        </li>
+
+    </ul>
+
+    <blockquote style="
+        border-left:4px solid #c8102e;
+        padding:15px 20px;
+        background:#f8f8f8;
+        font-style:italic;
+        color:#555;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Kỹ năng khai thác tài nguyên số là một trong những năng lực quan trọng
+        đối với sinh viên trong thời đại học tập và nghiên cứu số.”
+    </blockquote>
+
+    <h3>Nội dung chính của buổi tập huấn</h3>
+
+    <p>
+        Tại chương trình, cán bộ thư viện và chuyên gia thông tin đã trực tiếp
+        hướng dẫn sinh viên thao tác trên hệ thống tra cứu tài liệu,
+        truy cập cơ sở dữ liệu quốc tế và sử dụng các công cụ hỗ trợ nghiên cứu.
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            Hướng dẫn tra cứu tài liệu trên hệ thống OPAC.
+        </li>
+
+        <li>
+            Sử dụng thư viện số và kho học liệu mở.
+        </li>
+
+        <li>
+            Truy cập cơ sở dữ liệu IEEE, Springer, ScienceDirect...
+        </li>
+
+        <li>
+            Tìm kiếm bài báo khoa học theo từ khóa chuyên ngành.
+        </li>
+
+        <li>
+            Quản lý tài liệu tham khảo bằng Zotero và Mendeley.
+        </li>
+
+        <li>
+            Hướng dẫn chuẩn trích dẫn APA, IEEE trong nghiên cứu khoa học.
+        </li>
+
+    </ul>
+
+    
+
+    <p class="img-caption">
+        Sinh viên thực hành tra cứu tài liệu và sử dụng cơ sở dữ liệu điện tử.
+    </p>
+
+    <h3>Đẩy mạnh chuyển đổi số trong thư viện</h3>
+
+    <p>
+        Những năm gần đây, Trung tâm Thông tin - Thư viện PTIT không ngừng
+        đầu tư nâng cấp hạ tầng công nghệ, mở rộng nguồn tài nguyên điện tử
+        và phát triển các dịch vụ thư viện số hiện đại.
+    </p>
+
+    <p>
+        Việc tổ chức các buổi tập huấn định kỳ giúp sinh viên từng bước
+        làm quen với phương pháp học tập và nghiên cứu trong môi trường số,
+        đồng thời nâng cao khả năng tự học và tiếp cận tri thức toàn cầu.
+    </p>
+
+    <h3>Lợi ích đối với sinh viên</h3>
+
+    <p>
+        Thông qua chương trình, sinh viên có cơ hội tiếp cận nhiều kỹ năng hữu ích
+        phục vụ trực tiếp cho quá trình học tập và nghiên cứu:
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            Tìm kiếm thông tin nhanh và chính xác hơn.
+        </li>
+
+        <li>
+            Tiếp cận các bài báo khoa học chất lượng cao.
+        </li>
+
+        <li>
+            Nâng cao kỹ năng nghiên cứu và viết học thuật.
+        </li>
+
+        <li>
+            Hỗ trợ thực hiện đồ án, khóa luận tốt nghiệp.
+        </li>
+
+        <li>
+            Tiết kiệm thời gian trong quá trình học tập và tra cứu tài liệu.
+        </li>
+
+    </ul>
+
+    <blockquote style="
+        border-left:4px solid #0d2a5c;
+        padding:15px 20px;
+        background:#f5f7fb;
+        font-style:italic;
+        color:#444;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Nguồn tài nguyên điện tử không chỉ giúp mở rộng tri thức
+        mà còn tạo điều kiện để sinh viên tiếp cận các xu hướng công nghệ,
+        nghiên cứu và đổi mới sáng tạo trên thế giới.”
+    </blockquote>
+
+    <h3>Phản hồi tích cực từ sinh viên</h3>
+
+    <p>
+        Sau buổi tập huấn, nhiều sinh viên cho biết chương trình đã giúp các bạn
+        hiểu rõ hơn về cách sử dụng tài nguyên học thuật trực tuyến,
+        đồng thời cải thiện kỹ năng nghiên cứu và xử lý thông tin.
+    </p>
+
+    <p style="
+        background:#fafafa;
+        padding:18px 22px;
+        border-radius:8px;
+        border:1px solid #eee;
+        line-height:1.9;
+        color:#555;
+    ">
+        “Trước đây mình thường tìm tài liệu trên internet khá mất thời gian
+        và khó đánh giá độ tin cậy. Sau buổi tập huấn, mình biết cách sử dụng
+        các cơ sở dữ liệu học thuật và tìm được nhiều tài liệu chất lượng hơn.”
+    </p>
+
+    <h3>Kế hoạch trong thời gian tới</h3>
+
+    <p>
+        Trong thời gian tới, thư viện sẽ tiếp tục tổ chức thêm nhiều chương trình
+        hướng dẫn kỹ năng thông tin, workshop nghiên cứu khoa học
+        và các khóa tập huấn chuyên sâu về sử dụng nguồn học liệu số.
+    </p>
+
+    <p>
+        Đồng thời, thư viện cũng sẽ mở rộng hợp tác với các nhà xuất bản,
+        tổ chức học thuật trong và ngoài nước nhằm bổ sung thêm nhiều cơ sở dữ liệu,
+        tài nguyên học thuật phục vụ cộng đồng sinh viên và giảng viên.
+    </p>
+
+    <p>
+        Sinh viên có thể theo dõi lịch tổ chức các buổi tập huấn tiếp theo
+        trên website chính thức của thư viện hoặc fanpage Trung tâm Thông tin - Thư viện PTIT.
+    </p>
+
+</div>
+
+        <!-- SIDEBAR -->
+        <div class="article-sidebar">
+
+           <div class="related-news">
+
+    <h3 class="related-title">
+        <i class="fas fa-newspaper"></i>
+        Tin tức liên quan
+    </h3>
+
+    <div class="related-grid">
+
+        <!-- CARD 1 -->
+        <a href="chi-tiet-tin.html" class="related-card">
+
+            <img src="../tai-nguyen/news1.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Giới thiệu 6 CSDL luận văn, luận án miễn phí trên thế giới
+                </h4>
+
+                <span>15/05/2026</span>
+
+            </div>
+
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="chi-tiet-tin2.html" class="related-card">
+
+            <img src="../tai-nguyen/News2.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                  Bộ Thông tin và Truyền thông sắp phát động cuộc thi sáng tác biểu trưng “Chuyển đổi số quốc gia”
+                </h4>
+
+                <span>28/09/2025</span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+    <div id="chan-trang"></div>
+
+    <script src="../js/tai-thanh-phan.js"></script>
+
+</body>
+</html>

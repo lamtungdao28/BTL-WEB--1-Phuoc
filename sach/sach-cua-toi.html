@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sách Của Tôi - PTIT Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES - PTIT Brand Colors
+       ============================================================ */
+    :root {
+      --ptit-red:       #c8102e;
+      --ptit-red-dark:  #a00d24;
+      --ptit-red-light: #fde8ec;
+      --green:          #16a34a;
+      --green-light:    #dcfce7;
+      --orange:         #ea580c;
+      --orange-light:   #fff7ed;
+      --blue:           #2563eb;
+      --blue-light:     #eff6ff;
+      --gray-50:        #f9fafb;
+      --gray-100:       #f3f4f6;
+      --gray-200:       #e5e7eb;
+      --gray-300:       #d1d5db;
+      --gray-400:       #9ca3af;
+      --gray-500:       #6b7280;
+      --gray-700:       #374151;
+      --gray-900:       #111827;
+      --white:          #ffffff;
+      --shadow-sm:      0 1px 2px rgba(0,0,0,.06);
+      --shadow:         0 1px 3px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md:      0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+      --radius:         12px;
+      --radius-sm:      8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       NAVBAR
+       ============================================================ */
+    .navbar {
+      background: var(--ptit-red);
+      padding: 0 40px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      background: var(--white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--ptit-red);
+      flex-shrink: 0;
+      letter-spacing: -1px;
+    }
+
+    .brand-text .line1 {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: .9;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .brand-text .line2 {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+    .brand-text .line3 {
+      font-size: 10px;
+      opacity: .75;
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all .2s;
+    }
+    .nav-link:hover { background: rgba(255,255,255,.12); color: var(--white); }
+    .nav-link.active {
+      color: var(--white);
+      font-weight: 700;
+      border-bottom: 2px solid var(--white);
+      border-radius: 0;
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      color: var(--gray-900);
+      border-radius: 50px;
+      padding: 6px 14px 6px 6px;
+      cursor: pointer;
+      transition: box-shadow .2s;
+      font-size: 14px;
+      font-weight: 600;
+      position: relative;
+    }
+    .user-badge:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.3); }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      background: var(--ptit-red);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .user-info .name { font-size: 13px; font-weight: 700; line-height: 1.2; }
+    .user-info .role { font-size: 11px; color: var(--gray-500); font-weight: 400; }
+
+    /* ---- USER DROPDOWN MENU ---- */
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 220px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.14);
+      border: 1px solid var(--gray-200);
+      z-index: 9999;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .user-badge.open .user-dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .user-badge.open .fa-chevron-down {
+      transform: rotate(180deg);
+      transition: transform .18s ease;
+    }
+    .fa-chevron-down { transition: transform .18s ease; }
+    .dropdown-header {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .dropdown-header .dh-name { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+    .dropdown-header .dh-role {
+      font-size: 12px; color: var(--gray-500); margin-top: 2px;
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: var(--gray-700);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .15s;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      text-align: left;
+    }
+    .dropdown-item:hover { background: var(--gray-50); color: var(--ptit-red); }
+    .dropdown-item i { width: 16px; text-align: center; font-size: 13px; color: var(--gray-400); }
+    .dropdown-item:hover i { color: var(--ptit-red); }
+    .dropdown-item.danger { color: #dc2626; }
+    .dropdown-item.danger i { color: #dc2626; }
+    .dropdown-item.danger:hover { background: #fff0f0; }
+    .dropdown-divider { height: 1px; background: var(--gray-100); margin: 4px 0; }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .page-title { font-size: 26px; font-weight: 800; color: var(--gray-900); }
+    .page-subtitle { font-size: 13.5px; color: var(--gray-500); margin-top: 4px; }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+    .breadcrumb a { color: var(--gray-500); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--ptit-red); }
+    .breadcrumb .sep { color: var(--gray-300); }
+    .breadcrumb .current { color: var(--gray-700); }
+
+    /* ============================================================
+       STAT CARDS
+       ============================================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid var(--gray-100);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .stat-icon.green  { background: var(--green-light);  color: var(--green); }
+    .stat-icon.orange { background: var(--orange-light); color: var(--orange); }
+    .stat-icon.blue   { background: var(--blue-light);   color: var(--blue); }
+    .stat-icon.red    { background: var(--ptit-red-light); color: var(--ptit-red); }
+
+    .stat-number { font-size: 28px; font-weight: 800; line-height: 1; }
+    .stat-number.green  { color: var(--green); }
+    .stat-number.orange { color: var(--orange); }
+    .stat-number.blue   { color: var(--blue); }
+    .stat-number.red    { color: var(--ptit-red); }
+
+    .stat-label { font-size: 13.5px; font-weight: 600; margin-top: 3px; color: var(--gray-700); }
+    .stat-desc  { font-size: 12px; color: var(--gray-400); margin-top: 1px; }
+
+    /* ============================================================
+       FILTER BAR
+       ============================================================ */
+  .filter-bar {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+
+  position: relative;
+  z-index: 20;
+}
+
+    .filter-tabs { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--gray-600, #4b5563);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .tab-btn:hover { background: var(--gray-100); }
+    .tab-btn.active {
+      background: var(--ptit-red);
+      color: var(--white);
+      font-weight: 600;
+    }
+    .tab-btn i { font-size: 13px; }
+
+    .filter-right { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 8px 14px;
+      width: 220px;
+      transition: border-color .2s;
+    }
+    .search-box:focus-within { border-color: var(--ptit-red); }
+    .search-box input {
+      border: none;
+      background: transparent;
+      font-size: 13.5px;
+      color: var(--gray-700);
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+    }
+    .search-box i { color: var(--gray-400); font-size: 13px; }
+
+    .select-filter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13.5px;
+      color: var(--gray-700);
+      cursor: pointer;
+      font-family: inherit;
+      min-width: 160px;
+    }
+    .select-filter select {
+      border: none;
+      background: transparent;
+      font-size: 13.5px;
+      color: var(--gray-700);
+      outline: none;
+      font-family: inherit;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       BOOK CARDS LIST
+       ============================================================ */
+    .book-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .book-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      transition: box-shadow .2s, border-color .2s;
+      position: relative;
+  z-index: 1;
+    }
+    .book-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--gray-300);
+    }
+
+    .book-thumb {
+      width: 108px;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: var(--gray-100);
+    }
+    .book-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .book-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: var(--gray-300);
+    }
+
+    .book-body {
+      flex: 1;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .book-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.3;
+    }
+
+    .book-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .book-meta span { display: flex; align-items: center; gap: 5px; }
+    .book-meta i { font-size: 12px; }
+
+    .book-dates {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .date-item { display: flex; flex-direction: column; gap: 3px; }
+    .date-label { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+    .date-value {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    .date-value i { font-size: 12px; color: var(--ptit-red); }
+    .date-value.warning { color: var(--ptit-red); }
+    .date-remaining {
+      font-size: 12px;
+      color: var(--ptit-red);
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* STATUS BADGES */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .status-badge.dang-muon  { background: var(--green-light);       color: var(--green); }
+    .status-badge.cho-duyet  { background: #fff8e1;                  color: #b45309; }
+    .status-badge.qua-han    { background: var(--ptit-red-light);    color: var(--ptit-red); }
+    .status-badge.da-tra     { background: var(--gray-100);          color: var(--gray-500); }
+
+    /* ACTION BUTTONS SIDE */
+    .book-actions {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      min-width: 160px;
+      flex-shrink: 0;
+      border-left: 1px solid var(--gray-100);
+      
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: all .18s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      color: var(--gray-700);
+    }
+    .btn-outline:hover { border-color: var(--gray-400); background: var(--gray-50); }
+
+    .btn-danger-outline {
+      background: var(--white);
+      border: 1.5px solid var(--ptit-red);
+      color: var(--ptit-red);
+    }
+    .btn-danger-outline:hover { background: var(--ptit-red-light); }
+
+    .btn-primary {
+      background: var(--ptit-red);
+      color: var(--white);
+      border: 1.5px solid var(--ptit-red);
+    }
+    .btn-primary:hover { background: var(--ptit-red-dark); border-color: var(--ptit-red-dark); }
+
+    .btn-disabled {
+      background: var(--gray-100);
+      color: var(--gray-400);
+      border: 1.5px solid var(--gray-200);
+      cursor: not-allowed;
+    }
+
+    /* STATUS DATE AREA */
+    .date-status-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--gray-400);
+      display: none;
+    }
+    .empty-state i { font-size: 56px; margin-bottom: 16px; }
+    .empty-state p { font-size: 15px; }
+
+    /* ============================================================
+       MODAL - Xem chi tiết / Gia hạn / Hủy đăng ký
+       ============================================================ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 560px;
+      max-width: calc(100vw - 32px);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      transform: translateY(16px) scale(.98);
+      transition: transform .2s;
+    }
+    .modal-overlay.show .modal { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-size: 17px; font-weight: 700; }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-100);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--gray-500);
+      transition: background .2s;
+    }
+    .modal-close:hover { background: var(--gray-200); }
+
+    .modal-body { padding: 20px 24px; }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .detail-thumb {
+      width: 90px;
+      height: 120px;
+      background: var(--gray-100);
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .detail-info { flex: 1; }
+    .detail-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .detail-field { font-size: 13px; color: var(--gray-500); margin-bottom: 5px; }
+    .detail-field strong { color: var(--gray-700); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .info-item label { font-size: 12px; color: var(--gray-400); display: block; margin-bottom: 3px; }
+    .info-item .val { font-size: 14px; font-weight: 600; color: var(--gray-700); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gray-900);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 340px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error   { background: var(--ptit-red); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .navbar { padding: 0 16px; }
+      .page-wrapper { padding: 20px 16px 40px; }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .book-thumb { width: 80px; }
+      .book-actions { min-width: 130px; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-right { flex-direction: column; }
+      .search-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVBAR
+     Backend: lấy thông tin user từ session/JWT để hiển thị tên, vai trò
+     ================================================================ -->
+<nav class="navbar">
+  <a href="../trang/trang-chu.html" class="navbar-brand">
+    <div class="brand-logo">PTIT</div>
+    <div class="brand-text">
+      <div class="line1">Học Viện</div>
+      <div class="line2">CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</div>
+      <div class="line3">Posts and Telecommunications Institute of Technology</div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="../trang/trang-chu.html" class="nav-link">Trang chủ</a>
+    <a href="muon-sach.html" class="nav-link">Mượn sách</a>
+    <a href="sach-cua-toi.html" class="nav-link active">Sách của tôi</a>
+</div>
+
+  <!-- Backend: data-user-id, data-role từ session -->
+  <div class="user-badge" id="userDropdownToggle"
+       data-user-id="1"
+       data-role="SinhVien">
+    <div class="user-avatar" id="userInitial">N</div>
+    <div class="user-info">
+      <div class="name" id="userName">Nguyễn Văn A</div>
+      <div class="role" id="userRole">Sinh viên</div>
+    </div>
+    <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--gray-400);margin-left:4px"></i>
+
+    <!-- DROPDOWN MENU -->
+    <div class="user-dropdown">
+      <div class="dropdown-header">
+        <div class="dh-name" id="dropdownName">Nguyễn Văn A</div>
+        <div class="dh-role" id="dropdownRole">Sinh viên</div>
+      </div>
+      <a href="sach-cua-toi.html" class="dropdown-item">
+        <i class="fa-solid fa-book-bookmark"></i> Sách của tôi
+      </a>
+      <a href="muon-sach.html" class="dropdown-item">
+        <i class="fa-solid fa-book"></i> Mượn sách
+      </a>
+      <div class="dropdown-divider"></div>
+      
+      <div class="dropdown-divider"></div>
+      <a href="../trang/dang-nhap.html" class="dropdown-item danger" onclick="dangXuat()">
+        <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================================================================
+     MAIN CONTENT
+     ================================================================ -->
+<div class="page-wrapper">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">SÁCH CỦA TÔI</h1>
+      <p class="page-subtitle">Quản lý các sách bạn đã đăng ký mượn tại thư viện</p>
+    </div>
+    <div class="breadcrumb">
+      <i class="fa-solid fa-house" style="font-size:12px"></i>
+      <a href="../trang/trang-chu.html">Trang chủ</a>
+      <span class="sep">›</span>
+      <span class="current">Sách của tôi</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       STATS CARDS
+       Backend API: GET /api/muon-tra/thong-ke?maNguoiDung={id}
+       Response: { dangMuon: number, choDuyet: number, daTra: number, quaHan: number }
+       Table: MuonTra – đếm theo TrangThai cho mỗi MaNguoiDung
+       ============================================================ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="fa-solid fa-book-open"></i></div>
+      <div>
+        <div class="stat-number green" id="statDangMuon">3</div>
+        <div class="stat-label">Đang mượn</div>
+        <div class="stat-desc">Sách bạn đang mượn</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+      <div>
+        <div class="stat-number orange" id="statChoDuyet">1</div>
+        <div class="stat-label">Chờ duyệt</div>
+        <div class="stat-desc">Sách đang chờ duyệt</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="fa-solid fa-circle-check"></i></div>
+      <div>
+        <div class="stat-number blue" id="statDaTra">12</div>
+        <div class="stat-label">Đã trả</div>
+        <div class="stat-desc">Sách đã trả</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red"><i class="fa-solid fa-calendar-xmark"></i></div>
+      <div>
+        <div class="stat-number red" id="statQuaHan">2</div>
+        <div class="stat-label">Quá hạn</div>
+        <div class="stat-desc">Sách quá hạn trả</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       FILTER BAR
+       ============================================================ -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="tab-btn active" data-filter="all" onclick="filterBooks('all', this)">
+        <i class="fa-solid fa-grid-2"></i> Tất cả
+      </button>
+      <button class="tab-btn" data-filter="DangMuon" onclick="filterBooks('DangMuon', this)">
+        <i class="fa-regular fa-book"></i> Đang mượn
+      </button>
+      <button class="tab-btn" data-filter="ChoDuyet" onclick="filterBooks('ChoDuyet', this)">
+        <i class="fa-regular fa-hourglass"></i> Chờ duyệt
+      </button>
+      <button class="tab-btn" data-filter="DaTra" onclick="filterBooks('DaTra', this)">
+        <i class="fa-regular fa-circle-check"></i> Đã trả
+      </button>
+      <button class="tab-btn" data-filter="QuaHan" onclick="filterBooks('QuaHan', this)">
+        <i class="fa-regular fa-calendar-xmark"></i> Quá hạn
+      </button>
+    </div>
+
+    <div class="filter-right">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Tìm kiếm sách..." id="searchInput"
+               oninput="searchBooks(this.value)" />
+      </div>
+      <div class="select-filter">
+        <i class="fa-solid fa-filter" style="color:var(--gray-400);font-size:13px"></i>
+        <select onchange="filterByCategory(this.value)" id="categoryFilter">
+          <option value="">Tất cả thể loại</option>
+          <!-- Backend: GET /api/danh-muc → populate options -->
+          <option value="Công nghệ thông tin">Công nghệ thông tin</option>
+          <option value="Mạng máy tính">Mạng máy tính</option>
+          <option value="Lập trình">Lập trình</option>
+          <option value="Toán học">Toán học</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOOK LIST
+       Backend API: GET /api/muon-tra?maNguoiDung={id}&trangThai=&search=
+       Response: Array of { MaMuon, MaTaiLieu, MaNguoiDung, NgayDangKy, NgayMuon,
+                             HanTra, NgayTra, TrangThai, TienPhat,
+                             TaiLieu: { TenTaiLieu, TacGia, NhaXuatBan, MaDanhMuc,
+                                        HinhAnh, DanhMuc: { TenDanhMuc } } }
+       Table: MuonTra JOIN TaiLieu JOIN DanhMuc (MaDanhMuc)
+       TrangThai values: 'DangMuon' | 'ChoDuyet' | 'DaTra' | 'QuaHan'
+       ============================================================ -->
+  <div class="book-list" id="bookList">
+
+    <!-- BOOK CARD: Đang mượn -->
+    <!-- data-ma-muon: MaMuon (PK của MuonTra) -->
+    <!-- data-ma-tai-lieu: MaTaiLieu (FK → TaiLieu) -->
+    <!-- data-trang-thai: TrangThai -->
+    <!-- data-the-loai: TenDanhMuc -->
+    <div class="book-card"
+         data-ma-muon="1"
+         data-ma-tai-lieu="2"
+         data-trang-thai="DangMuon"
+         data-the-loai="Công nghệ thông tin">
+      <div class="book-thumb">
+        <!-- Backend: src = "/uploads/" + TaiLieu.HinhAnh -->
+        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80"
+             alt="Cơ sở dữ liệu SQL Server"
+             onerror="this.parentNode.innerHTML='<div class=book-thumb-placeholder><i class=fa-solid fa-book></i></div>'" />
+      </div>
+      <div class="book-body">
+        <div class="book-title">Cơ sở dữ liệu SQL Server</div>
+        <div class="book-meta">
+          <!-- MaTaiLieu: TL0002 = "TL" + LPAD(MaTaiLieu, 4) -->
+          <span><i class="fa-regular fa-file-lines"></i> Mã tài liệu: <strong>TL0002</strong></span>
+          <span><i class="fa-regular fa-comment"></i> Thể loại: <strong>Công nghệ thông tin</strong></span>
+          <span><i class="fa-regular fa-user"></i> Tác giả: <strong>Trần Văn D</strong></span>
+          <span><i class="fa-solid fa-building-columns"></i> NXB: <strong>NXB ĐHQG</strong></span>
+        </div>
+        <div class="book-dates">
+          <div class="date-item">
+            <div class="date-label">Ngày đăng ký</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <!-- Backend: NgayDangKy (lưu trong MuonTra) -->
+              <span data-field="ngay-dang-ky">15/05/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Ngày mượn</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <!-- Backend: NgayMuon -->
+              <span data-field="ngay-muon">15/05/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Hạn trả</div>
+            <div class="date-value warning">
+              <i class="fa-regular fa-calendar"></i>
+              <!-- Backend: HanTra -->
+              <span data-field="han-tra">25/05/2026</span>
+            </div>
+            <!-- tính = HanTra - TODAY (hiển thị nếu TrangThai = DangMuon) -->
+            <div class="date-remaining">Còn 10 ngày</div>
+          </div>
+          <div class="date-item" style="align-self:flex-end">
+            <div class="date-label">Trạng thái</div>
+            <!-- Backend: map TrangThai → class & label -->
+            <span class="status-badge dang-muon">
+              <i class="fa-solid fa-circle" style="font-size:7px"></i> Đang mượn
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="book-actions">
+        <!-- Xem chi tiết: navigate to chi-tiet-sach.html?id={MaTaiLieu} -->
+        <button class="btn btn-outline" onclick="xemChiTiet(2, 1)">
+          <i class="fa-regular fa-eye"></i> Xem chi tiết
+        </button>
+        <!-- Gia hạn: POST /api/muon-tra/{maMuon}/gia-han -->
+        <!-- Chỉ hiện khi TrangThai = 'DangMuon' và HanTra > TODAY -->
+        <button class="btn btn-primary" onclick="giaHan(1, this)">
+          <i class="fa-solid fa-rotate-right"></i> Gia hạn
+        </button>
+      </div>
+    </div>
+
+    <!-- BOOK CARD: Chờ duyệt -->
+    <div class="book-card"
+         data-ma-muon="2"
+         data-ma-tai-lieu="5"
+         data-trang-thai="ChoDuyet"
+         data-the-loai="Công nghệ thông tin">
+      <div class="book-thumb">
+        <img src="https://images.unsplash.com/photo-1568667256549-094345857637?w=200&q=80"
+             alt="Cấu trúc dữ liệu"
+             onerror="this.parentNode.innerHTML='<div class=book-thumb-placeholder><i class=fa-solid fa-book></i></div>'" />
+      </div>
+      <div class="book-body">
+        <div class="book-title">Cấu trúc dữ liệu và giải thuật</div>
+        <div class="book-meta">
+          <span><i class="fa-regular fa-file-lines"></i> Mã tài liệu: <strong>TL0005</strong></span>
+          <span><i class="fa-regular fa-comment"></i> Thể loại: <strong>Công nghệ thông tin</strong></span>
+          <span><i class="fa-regular fa-user"></i> Tác giả: <strong>Nguyễn Văn B</strong></span>
+          <span><i class="fa-solid fa-building-columns"></i> NXB: <strong>NXB Giáo dục</strong></span>
+        </div>
+        <div class="book-dates">
+          <div class="date-item">
+            <div class="date-label">Ngày đăng ký</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-dang-ky">14/05/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Ngày mượn</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-muon">-</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Hạn trả</div>
+            <div class="date-value">
+              <span data-field="han-tra">-</span>
+            </div>
+          </div>
+          <div class="date-item" style="align-self:flex-end">
+            <div class="date-label">Trạng thái</div>
+            <span class="status-badge cho-duyet">
+              <i class="fa-solid fa-circle" style="font-size:7px"></i> Chờ duyệt
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="book-actions">
+        <button class="btn btn-outline" onclick="xemChiTiet(5, 2)">
+          <i class="fa-regular fa-eye"></i> Xem chi tiết
+        </button>
+        <!-- Hủy đăng ký: DELETE /api/muon-tra/{maMuon} - chỉ khi ChoDuyet -->
+        <button class="btn btn-danger-outline" onclick="huyDangKy(2, this)">
+          <i class="fa-solid fa-ban"></i> Hủy đăng ký
+        </button>
+      </div>
+    </div>
+
+    <!-- BOOK CARD: Quá hạn -->
+    <div class="book-card"
+         data-ma-muon="3"
+         data-ma-tai-lieu="8"
+         data-trang-thai="QuaHan"
+         data-the-loai="Công nghệ thông tin">
+      <div class="book-thumb">
+        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=200&q=80"
+             alt="Python"
+             onerror="this.parentNode.innerHTML='<div class=book-thumb-placeholder><i class=fa-solid fa-book></i></div>'" />
+      </div>
+      <div class="book-body">
+        <div class="book-title">Lập trình Python cơ bản</div>
+        <div class="book-meta">
+          <span><i class="fa-regular fa-file-lines"></i> Mã tài liệu: <strong>TL0008</strong></span>
+          <span><i class="fa-regular fa-comment"></i> Thể loại: <strong>Công nghệ thông tin</strong></span>
+          <span><i class="fa-regular fa-user"></i> Tác giả: <strong>Phạm Văn C</strong></span>
+          <span><i class="fa-solid fa-building-columns"></i> NXB: <strong>NXB Thông tin</strong></span>
+        </div>
+        <div class="book-dates">
+          <div class="date-item">
+            <div class="date-label">Ngày đăng ký</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-dang-ky">20/04/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Ngày mượn</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-muon">20/04/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Hạn trả</div>
+            <div class="date-value warning">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="han-tra">30/04/2026</span>
+            </div>
+          </div>
+          <div class="date-item" style="align-self:flex-end">
+            <div class="date-label">Trạng thái</div>
+            <span class="status-badge qua-han">
+              <i class="fa-solid fa-circle" style="font-size:7px"></i> Quá hạn
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="book-actions">
+        <button class="btn btn-outline" onclick="xemChiTiet(8, 3)">
+          <i class="fa-regular fa-eye"></i> Xem chi tiết
+        </button>
+        <!-- Gia hạn disabled khi QuaHan (theo nghiệp vụ có thể mở nếu cần phạt) -->
+        <button class="btn btn-disabled" disabled>
+          <i class="fa-solid fa-rotate-right"></i> Gia hạn
+        </button>
+      </div>
+    </div>
+
+    <!-- BOOK CARD: Đã trả -->
+    <div class="book-card"
+         data-ma-muon="4"
+         data-ma-tai-lieu="10"
+         data-trang-thai="DaTra"
+         data-the-loai="Công nghệ thông tin">
+      <div class="book-thumb">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80"
+             alt="Mạng máy tính"
+             onerror="this.parentNode.innerHTML='<div class=book-thumb-placeholder><i class=fa-solid fa-book></i></div>'" />
+      </div>
+      <div class="book-body">
+        <div class="book-title">Mạng máy tính</div>
+        <div class="book-meta">
+          <span><i class="fa-regular fa-file-lines"></i> Mã tài liệu: <strong>TL0010</strong></span>
+          <span><i class="fa-regular fa-comment"></i> Thể loại: <strong>Công nghệ thông tin</strong></span>
+          <span><i class="fa-regular fa-user"></i> Tác giả: <strong>Hoàng Văn E</strong></span>
+          <span><i class="fa-solid fa-building-columns"></i> NXB: <strong>NXB Bưu điện</strong></span>
+        </div>
+        <div class="book-dates">
+          <div class="date-item">
+            <div class="date-label">Ngày đăng ký</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-dang-ky">10/03/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Ngày mượn</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="ngay-muon">10/03/2026</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <div class="date-label">Hạn trả</div>
+            <div class="date-value">
+              <i class="fa-regular fa-calendar"></i>
+              <span data-field="han-tra">20/03/2026</span>
+            </div>
+          </div>
+          <div class="date-item" style="align-self:flex-end">
+            <div class="date-label">Trạng thái</div>
+            <span class="status-badge da-tra">
+              <i class="fa-solid fa-circle" style="font-size:7px"></i> Đã trả
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="book-actions">
+        <button class="btn btn-outline" onclick="xemChiTiet(10, 4)">
+          <i class="fa-regular fa-eye"></i> Xem chi tiết
+        </button>
+        <!-- Mượn lại: navigate to dang-ky-muon.html?maTaiLieu={id} -->
+        <button class="btn btn-primary" onclick="muonLai(10)">
+          <i class="fa-solid fa-book-bookmark"></i> Mượn lại
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /book-list -->
+
+  <div class="empty-state" id="emptyState">
+    <i class="fa-regular fa-folder-open"></i>
+    <p>Không có sách nào phù hợp với bộ lọc.</p>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<!-- ================================================================
+     MODAL – Xem chi tiết
+     Sau khi Backend tích hợp:
+       GET /api/muon-tra/{maMuon} → trả về đầy đủ thông tin
+     ================================================================ -->
+<div class="modal-overlay" id="modalDetail" onclick="closeModalIfOverlay(event, 'modalDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Chi tiết mượn sách</div>
+      <button class="modal-close" onclick="closeModal('modalDetail')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-row">
+        <div class="detail-thumb">
+          <img id="detailImg" src="" alt="" />
+        </div>
+        <div class="detail-info">
+          <h3 id="detailTitle">-</h3>
+          <!-- TaiLieu.MaTaiLieu (format TL + pad 4) -->
+          <div class="detail-field"><strong>Mã tài liệu:</strong> <span id="detailMaTL">-</span></div>
+          <div class="detail-field"><strong>Tác giả:</strong> <span id="detailTacGia">-</span></div>
+          <div class="detail-field"><strong>NXB:</strong> <span id="detailNXB">-</span></div>
+          <div class="detail-field"><strong>Thể loại:</strong> <span id="detailTheLoai">-</span></div>
+        </div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--gray-100);margin:0 0 16px" />
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Ngày đăng ký</label>
+          <div class="val" id="detailNgayDK">-</div>
+        </div>
+        <div class="info-item">
+          <label>Ngày mượn</label>
+          <div class="val" id="detailNgayMuon">-</div>
+        </div>
+        <div class="info-item">
+          <label>Hạn trả</label>
+          <div class="val" id="detailHanTra">-</div>
+        </div>
+        <div class="info-item">
+          <label>Ngày trả thực tế</label>
+          <!-- MuonTra.NgayTra - null nếu chưa trả -->
+          <div class="val" id="detailNgayTra">-</div>
+        </div>
+        <div class="info-item">
+          <label>Trạng thái</label>
+          <div class="val" id="detailTrangThai">-</div>
+        </div>
+        <div class="info-item">
+          <label>Tiền phạt</label>
+          <!-- MuonTra.TienPhat -->
+          <div class="val" id="detailTienPhat" style="color:var(--ptit-red)">-</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalDetail')">Đóng</button>
+      <!-- navigate to chi-tiet-sach.html?id={MaTaiLieu} -->
+      <a class="btn btn-primary" id="detailLinkSach" href="#">
+        <i class="fa-regular fa-eye"></i> Xem trang sách
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     MODAL – Gia hạn
+     Backend API: POST /api/muon-tra/{maMuon}/gia-han
+     Body: { soNgayGiaHan: number }  (default = 7 hoặc 14)
+     Kiểm tra: chỉ cho phép gia hạn tối đa 1 lần, TrangThai = DangMuon
+     ================================================================ -->
+<div class="modal-overlay" id="modalGiaHan" onclick="closeModalIfOverlay(event, 'modalGiaHan')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Gia hạn mượn sách</div>
+      <button class="modal-close" onclick="closeModal('modalGiaHan')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--gray-600,#4b5563);margin-bottom:16px">
+        Gia hạn sẽ kéo dài thêm thời gian mượn sách của bạn.
+        <strong id="ghTenSach">-</strong>
+      </p>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Hạn trả hiện tại</label>
+          <div class="val" id="ghHanTra">-</div>
+        </div>
+        <div class="info-item">
+          <label>Số ngày gia hạn</label>
+          <select id="ghSoNgay" style="border:1.5px solid var(--gray-200);border-radius:8px;padding:8px 12px;font-size:14px;width:100%;font-family:inherit;outline:none">
+            <option value="7">7 ngày</option>
+            <option value="14" selected>14 ngày</option>
+          </select>
+        </div>
+      </div>
+      <div style="background:var(--blue-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--blue);margin-top:8px">
+        <i class="fa-solid fa-circle-info"></i>
+        Hạn trả mới sẽ được tính từ ngày hạn trả hiện tại.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalGiaHan')">Hủy</button>
+      <button class="btn btn-primary" id="btnConfirmGiaHan" onclick="confirmGiaHan()">
+        <i class="fa-solid fa-rotate-right"></i> Xác nhận gia hạn
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     MODAL – Hủy đăng ký
+     Backend API: DELETE /api/muon-tra/{maMuon}
+     Chỉ khi TrangThai = ChoDuyet
+     ================================================================ -->
+<div class="modal-overlay" id="modalHuy" onclick="closeModalIfOverlay(event, 'modalHuy')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Hủy đăng ký mượn sách</div>
+      <button class="modal-close" onclick="closeModal('modalHuy')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--gray-600,#4b5563);margin-bottom:10px">
+        Bạn có chắc muốn hủy đăng ký mượn sách
+        <strong id="huyTenSach">-</strong>?
+      </p>
+      <div style="background:var(--ptit-red-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--ptit-red)">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Hành động này không thể hoàn tác.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalHuy')">Quay lại</button>
+      <button class="btn btn-danger-outline" id="btnConfirmHuy" onclick="confirmHuy()">
+        <i class="fa-solid fa-ban"></i> Xác nhận hủy
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+  <span id="toastMsg">-</span>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+  /* ----------------------------------------------------------------
+     MOCK DATA
+     Khi Backend sẵn sàng, thay thế bằng fetch() calls tương ứng
+     -----------------------------------------------------------------
+     Cấu trúc map với DB:
+     - maMuon    → MuonTra.MaMuon (PK)
+     - maTaiLieu → MuonTra.MaTaiLieu (FK → TaiLieu.MaTaiLieu)
+     - trangThai → MuonTra.TrangThai ('DangMuon'|'ChoDuyet'|'DaTra'|'QuaHan')
+     - ngayMuon  → MuonTra.NgayMuon
+     - hanTra    → MuonTra.HanTra
+     - ngayTra   → MuonTra.NgayTra
+     - tienPhat  → MuonTra.TienPhat
+  ---------------------------------------------------------------- */
+  const MOCK_BOOKS = {
+    1: {
+      maMuon: 1,
+      maTaiLieu: 2,
+      maTLDisplay: 'TL0002',
+      tenSach: 'Cơ sở dữ liệu SQL Server',
+      tacGia: 'Trần Văn D',
+      nxb: 'NXB ĐHQG',
+      theLoai: 'Công nghệ thông tin',
+      hinhAnh: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80',
+      ngayDangKy: '15/05/2026',
+      ngayMuon: '15/05/2026',
+      hanTra: '25/05/2026',
+      ngayTra: null,
+      trangThai: 'DangMuon',
+      tienPhat: 0
+    },
+    2: {
+      maMuon: 2,
+      maTaiLieu: 5,
+      maTLDisplay: 'TL0005',
+      tenSach: 'Cấu trúc dữ liệu và giải thuật',
+      tacGia: 'Nguyễn Văn B',
+      nxb: 'NXB Giáo dục',
+      theLoai: 'Công nghệ thông tin',
+      hinhAnh: 'https://images.unsplash.com/photo-1568667256549-094345857637?w=200&q=80',
+      ngayDangKy: '14/05/2026',
+      ngayMuon: '-',
+      hanTra: '-',
+      ngayTra: null,
+      trangThai: 'ChoDuyet',
+      tienPhat: 0
+    },
+    3: {
+      maMuon: 3,
+      maTaiLieu: 8,
+      maTLDisplay: 'TL0008',
+      tenSach: 'Lập trình Python cơ bản',
+      tacGia: 'Phạm Văn C',
+      nxb: 'NXB Thông tin',
+      theLoai: 'Lập trình',
+      hinhAnh: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=200&q=80',
+      ngayDangKy: '20/04/2026',
+      ngayMuon: '20/04/2026',
+      hanTra: '30/04/2026',
+      ngayTra: null,
+      trangThai: 'QuaHan',
+      tienPhat: 15000
+    },
+    4: {
+      maMuon: 4,
+      maTaiLieu: 10,
+      maTLDisplay: 'TL0010',
+      tenSach: 'Mạng máy tính',
+      tacGia: 'Hoàng Văn E',
+      nxb: 'NXB Bưu điện',
+      theLoai: 'Mạng máy tính',
+      hinhAnh: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80',
+      ngayDangKy: '10/03/2026',
+      ngayMuon: '10/03/2026',
+      hanTra: '20/03/2026',
+      ngayTra: '19/03/2026',
+      trangThai: 'DaTra',
+      tienPhat: 0
+    }
+  };
+
+  let currentGiaHanMaMuon = null;
+  let currentHuyMaMuon    = null;
+
+  /* ---- Helpers ---- */
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    const ic = document.getElementById('toastIcon');
+    document.getElementById('toastMsg').textContent = msg;
+    t.className = 'toast ' + type;
+    ic.className = type === 'success'
+      ? 'fa-solid fa-circle-check'
+      : 'fa-solid fa-circle-xmark';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function openModal(id)  { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  function closeModalIfOverlay(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+
+  /* ---- Filter & Search ---- */
+  let currentFilter   = 'all';
+  let currentSearch   = '';
+  let currentCategory = '';
+
+  function filterBooks(status, el) {
+    currentFilter = status;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters();
+  }
+
+  function searchBooks(val) {
+    currentSearch = val.toLowerCase();
+    applyFilters();
+  }
+
+  function filterByCategory(val) {
+    currentCategory = val;
+    applyFilters();
+  }
+
+  function applyFilters() {
+    let visible = 0;
+    document.querySelectorAll('.book-card').forEach(card => {
+      const status   = card.dataset.trangThai;
+      const theLoai  = card.dataset.theLoai;
+      const title    = card.querySelector('.book-title').textContent.toLowerCase();
+      const maTL     = card.querySelector('[data-field="ngay-muon"]') ?
+                       card.querySelector('.book-meta strong')?.textContent?.toLowerCase() : '';
+
+      const matchStatus   = currentFilter === 'all' || status === currentFilter;
+      const matchSearch   = !currentSearch ||
+                            title.includes(currentSearch) ||
+                            card.querySelector('.book-meta').textContent.toLowerCase().includes(currentSearch);
+      const matchCategory = !currentCategory || theLoai === currentCategory;
+
+      const show = matchStatus && matchSearch && matchCategory;
+      card.style.display = show ? 'flex' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  /* ---- Xem chi tiết ---- */
+  function xemChiTiet(maTaiLieu, maMuon) {
+    /*
+      Backend: GET /api/muon-tra/{maMuon}
+      Sau đó populate modal hoặc redirect: window.location.href = 'chi-tiet-sach.html?id=' + maTaiLieu + '&muon=' + maMuon;
+    */
+    const b = MOCK_BOOKS[maMuon];
+    if (!b) return;
+
+    document.getElementById('detailImg').src          = b.hinhAnh;
+    document.getElementById('detailImg').alt          = b.tenSach;
+    document.getElementById('detailTitle').textContent = b.tenSach;
+    document.getElementById('detailMaTL').textContent  = b.maTLDisplay;
+    document.getElementById('detailTacGia').textContent = b.tacGia;
+    document.getElementById('detailNXB').textContent   = b.nxb;
+    document.getElementById('detailTheLoai').textContent = b.theLoai;
+    document.getElementById('detailNgayDK').textContent  = b.ngayDangKy;
+    document.getElementById('detailNgayMuon').textContent = b.ngayMuon;
+    document.getElementById('detailHanTra').textContent  = b.hanTra;
+    document.getElementById('detailNgayTra').textContent = b.ngayTra || '-';
+    document.getElementById('detailTienPhat').textContent = b.tienPhat
+      ? b.tienPhat.toLocaleString('vi-VN') + ' đ'
+      : 'Không có';
+
+    const statusMap = {
+      DangMuon: 'Đang mượn',
+      ChoDuyet: 'Chờ duyệt',
+      DaTra:    'Đã trả',
+      QuaHan:   'Quá hạn'
+    };
+    document.getElementById('detailTrangThai').textContent = statusMap[b.trangThai] || b.trangThai;
+    document.getElementById('detailLinkSach').href = `chi-tiet-sach.html?id=${maTaiLieu}`;
+
+    openModal('modalDetail');
+  }
+
+  /* ---- Gia hạn ---- */
+  function giaHan(maMuon, btn) {
+    /*
+      Backend: POST /api/muon-tra/{maMuon}/gia-han { soNgayGiaHan: 14 }
+      Check: TrangThai = 'DangMuon' và SoLanGiaHan < 1 (hoặc theo nghiệp vụ)
+    */
+    const b = MOCK_BOOKS[maMuon];
+    if (!b) return;
+    currentGiaHanMaMuon = maMuon;
+    document.getElementById('ghTenSach').textContent = '"' + b.tenSach + '"';
+    document.getElementById('ghHanTra').textContent  = b.hanTra;
+    openModal('modalGiaHan');
+  }
+
+  function confirmGiaHan() {
+    const soNgay = document.getElementById('ghSoNgay').value;
+    /*
+      TODO Backend:
+      fetch('/api/muon-tra/' + currentGiaHanMaMuon + '/gia-han', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ soNgayGiaHan: parseInt(soNgay) })
+      })
+      .then(r => r.json())
+      .then(data => { ... cập nhật UI, reload danh sách ... })
+    */
+    closeModal('modalGiaHan');
+    showToast(`Gia hạn thành công thêm ${soNgay} ngày!`, 'success');
+  }
+
+  /* ---- Hủy đăng ký ---- */
+  function huyDangKy(maMuon, btn) {
+    /*
+      Backend: DELETE /api/muon-tra/{maMuon}
+      Chỉ khi TrangThai = 'ChoDuyet'
+    */
+    const b = MOCK_BOOKS[maMuon];
+    if (!b) return;
+    currentHuyMaMuon = maMuon;
+    document.getElementById('huyTenSach').textContent = '"' + b.tenSach + '"';
+    openModal('modalHuy');
+  }
+
+  function confirmHuy() {
+    /*
+      TODO Backend:
+      fetch('/api/muon-tra/' + currentHuyMaMuon, { method: 'DELETE', ... })
+      .then(() => { removeCardFromDOM(currentHuyMaMuon); updateStats(); })
+    */
+    closeModal('modalHuy');
+    // Xóa card khỏi DOM (mock)
+    const cards = document.querySelectorAll('.book-card');
+    cards.forEach(c => {
+      if (parseInt(c.dataset.maMuon) === currentHuyMaMuon) {
+        c.style.transition = 'opacity .3s';
+        c.style.opacity = '0';
+        setTimeout(() => { c.remove(); applyFilters(); }, 300);
+      }
+    });
+    showToast('Đã hủy đăng ký mượn sách.', 'success');
+    // Cập nhật stat ChoDuyet
+    const el = document.getElementById('statChoDuyet');
+    el.textContent = Math.max(0, parseInt(el.textContent) - 1);
+  }
+
+  /* ---- USER DROPDOWN ---- */
+  const dropdownToggle = document.getElementById('userDropdownToggle');
+  dropdownToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    this.classList.toggle('open');
+  });
+  // Click ngoài thì đóng
+  document.addEventListener('click', function() {
+    dropdownToggle.classList.remove('open');
+  });
+
+  // Load tên từ localStorage nếu có
+  (function() {
+    const hoTen = localStorage.getItem('hoTen');
+    const vaiTro = localStorage.getItem('vaiTro');
+    if (hoTen) {
+      document.getElementById('userName').textContent = hoTen;
+      document.getElementById('dropdownName').textContent = hoTen;
+      // Avatar chữ cái đầu
+      const initial = hoTen.trim().split(' ').pop()[0].toUpperCase();
+      document.getElementById('userInitial').textContent = initial;
+    }
+    if (vaiTro) {
+      const label = vaiTro === 'Admin' ? 'Quản trị viên' : 'Sinh viên';
+      document.getElementById('userRole').textContent = label;
+      document.getElementById('dropdownRole').textContent = label;
+    }
+  })();
+
+  function dangXuat() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('hoTen');
+    localStorage.removeItem('vaiTro');
+  }
+
+  function doiMatKhau() {
+    alert('Chức năng đổi mật khẩu đang phát triển.');
+  }
+
+
+  function muonLai(maTaiLieu) {
+    /*
+      Navigate đến trang đăng ký mượn với sách đã chọn sẵn
+      Backend sẽ pre-populate form từ query param ?maTaiLieu=...
+    */
+    window.location.href = `dang-ky-muon.html?maTaiLieu=${maTaiLieu}`;
+  }
+
+  /* ----------------------------------------------------------------
+     BACKEND INTEGRATION EXAMPLE
+     Uncomment và thay thế khi backend sẵn sàng:
+
+     async function loadMyBooks() {
+       // Lấy maNguoiDung từ localStorage / sessionStorage / cookie
+       const maNguoiDung = localStorage.getItem('maNguoiDung');
+       const token       = localStorage.getItem('token');
+
+       // Thống kê
+       const stats = await fetch(`/api/muon-tra/thong-ke?maNguoiDung=${maNguoiDung}`, {
+         headers: { 'Authorization': 'Bearer ' + token }
+       }).then(r => r.json());
+       document.getElementById('statDangMuon').textContent = stats.dangMuon;
+       document.getElementById('statChoDuyet').textContent = stats.choDuyet;
+       document.getElementById('statDaTra').textContent    = stats.daTra;
+       document.getElementById('statQuaHan').textContent   = stats.quaHan;
+
+       // Danh sách mượn
+       const list = await fetch(`/api/muon-tra?maNguoiDung=${maNguoiDung}`, {
+         headers: { 'Authorization': 'Bearer ' + token }
+       }).then(r => r.json());
+       renderBookList(list); // render dynamic cards
+     }
+
+     window.addEventListener('DOMContentLoaded', loadMyBooks);
+  ---------------------------------------------------------------- */
+</script>
+
+</body>
+</html>

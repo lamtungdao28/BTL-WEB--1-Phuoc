@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đăng nhập thư viện PTIT</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    overflow: hidden;
+}
+.container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-box {
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    text-align: center;
+    z-index: 10;
+}
+.logo { height: 60px; margin-bottom: 15px; }
+h2 { margin: 5px 0; font-size: 24px; }
+.sub { color: #666; margin-bottom: 25px; }
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    font-size: 15px;
+}
+input:focus { border-color: #c8102e; }
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 14px;
+}
+.left-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.forgot { color: #c8102e; text-decoration: none; font-weight: 500; }
+button {
+    width: 100%;
+    padding: 12px;
+    background: #c8102e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover { background: #a00d25; }
+.left-img, .right-img { position: absolute; z-index: 1; }
+.left-img { left: 5%; bottom: 10%; }
+.left-img img { width: 280px; }
+.right-img { right: 5%; bottom: 5%; }
+.right-img img { width: 450px; }
+@media (max-width: 1000px) {
+    .left-img, .right-img { display: none; }
+}
+.error-msg {
+    color: #c8102e;
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="login-box">
+        <img src="../tai-nguyen/logo.png" class="logo" alt="Logo">
+        <h2>Đăng nhập</h2>
+        <p class="sub">Thư viện PTIT</p>
+        <input type="text" id="user" placeholder="Tài khoản">
+        <input type="password" id="pass" placeholder="Mật khẩu">
+        <div class="row">
+            <label class="left-row">
+                <input type="checkbox" id="remember">
+                <span>Ghi nhớ</span>
+            </label>
+            <a href="#" class="forgot">Quên mật khẩu?</a>
+        </div>
+        <button onclick="dangNhap()">Đăng nhập</button>
+        <p class="error-msg" id="error-msg">Tài khoản hoặc mật khẩu không đúng!</p>
+    </div>
+    <div class="left-img"><img src="../tai-nguyen/cay.png" alt="Decoration"></div>
+    <div class="right-img"><img src="../tai-nguyen/code.png" alt="Decoration"></div>
+</div>
+
+<script>
+// ===== DỮ LIỆU SINH VIÊN MẪU (lấy từ CSDL) =====
+const danhSachSinhVien = [
+    { taiKhoan: 'namdt.b21.tc603_1', matKhau: '123456', hoTen: 'Dương Thị Nam', vaiTro: 'SinhVien' },
+    { taiKhoan: 'phongvq.b21.tc873_2', matKhau: '123456', hoTen: 'Vũ Quang Phong', vaiTro: 'SinhVien' },
+    { taiKhoan: 'phucdt.b20.tc317_3', matKhau: '123456', hoTen: 'Đặng Thị Phúc', vaiTro: 'SinhVien' },
+    { taiKhoan: 'trangbd.b20.tc293_4', matKhau: '123456', hoTen: 'Bùi Đức Trang', vaiTro: 'SinhVien' },
+    { taiKhoan: 'lanpn.b22.tc248_5', matKhau: '123456', hoTen: 'Phạm Ngọc Lan', vaiTro: 'SinhVien' },
+    { taiKhoan: 'duchm.b24.tc422_7', matKhau: '123456', hoTen: 'Hồ Minh Đức', vaiTro: 'SinhVien' },
+    { taiKhoan: 'cuongnt.b22.tc166_8', matKhau: '123456', hoTen: 'Nguyễn Tuấn Cường', vaiTro: 'SinhVien' },
+    { taiKhoan: 'giangph.b24.tc526_10', matKhau: '123456', hoTen: 'Phạm Hữu Giang', vaiTro: 'SinhVien' },
+    { taiKhoan: 'anhtt.b18.tc859_45', matKhau: '123456', hoTen: 'Trần Tuấn Anh', vaiTro: 'SinhVien' },
+    { taiKhoan: 'linhlm.b23.tc725_50', matKhau: '123456', hoTen: 'Lê Minh Linh', vaiTro: 'SinhVien' },
+    // Thêm từ DB nếu cần...
+];
+
+function dangNhap() {
+    const user = document.getElementById("user").value.trim();
+    const pass = document.getElementById("pass").value.trim();
+    const errMsg = document.getElementById("error-msg");
+    errMsg.style.display = 'none';
+
+    // ===== KIỂM TRA ADMIN =====
+    if (user === "admin" && pass === "123456") {
+        localStorage.setItem("username", user);
+        localStorage.setItem("hoTen", "Quản trị viên");
+        localStorage.setItem("vaiTro", "Admin");
+        window.location.href = "../sach/quan-ly-sach.html";
+        return;
+    }
+
+    // ===== KIỂM TRA SINH VIÊN =====
+    const sv = danhSachSinhVien.find(s => s.taiKhoan === user && s.matKhau === pass);
+    if (sv) {
+        localStorage.setItem("username", sv.taiKhoan);
+        localStorage.setItem("hoTen", sv.hoTen);
+        localStorage.setItem("vaiTro", sv.vaiTro);
+        window.location.href = "trang-chu.html";
+        return;
+    }
+
+    errMsg.style.display = 'block';
+    errMsg.textContent = `Tài khoản hoặc mật khẩu không đúng!`;
+}
+
+// Enter key support
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') dangNhap();
+});
+</script>
+</body>
+</html>

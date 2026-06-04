@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết tin tức - PTIT Library</title>
+
+    <link rel="stylesheet" href="../css/giao-dien.css">
+    <link rel="stylesheet" href="../css/tin-tuc.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .article-breadcrumb span{
+    position: relative;
+    font-weight: bold;
+}
+.related-news{
+    margin-top: 60px;
+}
+
+.related-title{
+    color: #c8102e;
+    font-size: 18px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+
+.related-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.related-card{
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.related-card:hover{
+    transform: translateY(-5px);
+}
+
+.related-card img{
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.related-content{
+    padding: 16px;
+}
+
+.related-content h4{
+    color: #0d2a5c;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.related-content span{
+    color: #888;
+    font-size: 13px;
+}
+
+@media(max-width:768px){
+
+    .related-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.article-breadcrumb span::after{
+    content: "";
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 3px;
+
+    background: #c8102e;
+}
+
+        .article-banner{
+            background:
+            linear-gradient(rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)),
+            url("../tai-nguyen/banner-tin-tuc.jpg")
+            center/cover no-repeat;
+
+            padding: 90px 0;
+            color: white;
+        }
+
+        .article-banner h1{
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .article-breadcrumb a{
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .article-wrapper{
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+
+            display: flex;
+            gap: 40px;
+        }
+
+        .article-main{
+            flex: 2.5;
+        }
+
+        .article-sidebar{
+            flex: 1;
+        }
+
+        .article-main img{
+            width: 100%;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .article-meta{
+            display: flex;
+            gap: 20px;
+            color: #777;
+            margin: 15px 0 25px;
+            font-size: 14px;
+        }
+
+        .article-meta i{
+            color: #c8102e;
+        }
+
+        .article-title{
+            font-size: 38px;
+            color: #0d2a5c;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .article-content p{
+            font-size: 17px;
+            line-height: 1.9;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 22px;
+        }
+
+        .article-content h3{
+            color: #0d2a5c;
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        .sidebar-box{
+            background: #f8f8f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-box h3{
+            border-left: 4px solid #c8102e;
+            padding-left: 12px;
+            color: #0d2a5c;
+            margin-bottom: 20px;
+        }
+
+        .related-item{
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .related-item img{
+            width: 90px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .related-item a{
+            text-decoration: none;
+            color: #0d2a5c;
+            font-weight: bold;
+            line-height: 1.5;
+            transition: 0.3s;
+        }
+
+        .related-item a:hover{
+            color: #c8102e;
+        }
+
+        @media(max-width: 768px){
+
+            .article-wrapper{
+                flex-direction: column;
+                padding: 0 18px;
+            }
+
+            .article-title{
+                font-size: 28px;
+            }
+
+            .article-banner h1{
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="dau-trang"></div>
+
+    <!-- BANNER -->
+    <section class="article-banner">
+        <div class="container-news">
+
+            <h1>TIN TỨC</h1>
+
+            <div class="article-breadcrumb">
+                <a href="../trang/trang-chu.html">Trang chủ</a> /
+                <a href="tin-tuc.html">Tin tức</a> /
+                <span>Bài viết</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NỘI DUNG -->
+    <section class="article-wrapper">
+
+        <div class="article-main">
+
+            <h1 class="article-title">
+                Thông báo lịch phục vụ hè 2026 tại Trung tâm Thông tin - Thư viện PTIT
+            </h1>
+
+            <div class="article-meta">
+
+                <span>
+                    <i class="fas fa-calendar-alt"></i>
+                    10/05/2026
+                </span>
+
+                <span>
+                    <i class="fas fa-folder"></i>
+                    Hướng dẫn
+                </span>
+
+            </div>
+
+
+          <div class="article-content">
+
+    <p>
+        <strong>
+            Trung tâm Thông tin - Thư viện PTIT thông báo lịch phục vụ hè năm 2026
+            nhằm tạo điều kiện thuận lợi cho sinh viên học tập, nghiên cứu và sử dụng
+            các nguồn tài nguyên học liệu trong thời gian nghỉ hè.
+        </strong>
+    </p>
+
+    <p>
+        Theo kế hoạch hoạt động mùa hè, thư viện sẽ điều chỉnh thời gian mở cửa
+        và tăng cường một số dịch vụ hỗ trợ trực tuyến để đáp ứng nhu cầu học tập,
+        ôn thi và nghiên cứu khoa học của sinh viên.
+    </p>
+
+    <img src="../tai-nguyen/anh1.jpg" alt="Lịch phục vụ thư viện hè 2026">
+
+    <p class="img-caption">
+        Khu vực Trung tâm Thông tin - Thư viện PTIT trong thời gian phục vụ hè 2026.
+    </p>
+
+    <h3>Thời gian phục vụ hè 2026</h3>
+
+    <p>
+        Thư viện sẽ hoạt động theo khung giờ mới bắt đầu từ ngày
+        <strong>01/06/2026 đến hết 31/08/2026</strong>.
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            <strong>Thứ Hai - Thứ Sáu:</strong> 7h30 - 17h30
+        </li>
+
+        <li>
+            <strong>Thứ Bảy:</strong> 7h30 - 11h30
+        </li>
+
+        <li>
+            <strong>Chủ nhật:</strong> Nghỉ
+        </li>
+
+        <li>
+            <strong>Khu tự học:</strong> Mở cửa đến 21h00 mỗi ngày
+        </li>
+
+    </ul>
+
+    <blockquote style="
+        border-left:4px solid #c8102e;
+        padding:15px 20px;
+        background:#f8f8f8;
+        font-style:italic;
+        color:#555;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Thư viện luôn nỗ lực tạo môi trường học tập thuận lợi,
+        hiện đại và thân thiện nhằm hỗ trợ tốt nhất cho sinh viên trong quá trình học tập và nghiên cứu.”
+    </blockquote>
+
+    <h3>Các dịch vụ hỗ trợ trong dịp hè</h3>
+
+    <p>
+        Bên cạnh hoạt động phục vụ trực tiếp, thư viện tiếp tục duy trì
+        và mở rộng nhiều dịch vụ hỗ trợ trực tuyến nhằm giúp sinh viên
+        dễ dàng tiếp cận nguồn học liệu mọi lúc, mọi nơi.
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            Tra cứu tài liệu trực tuyến trên hệ thống OPAC.
+        </li>
+
+        <li>
+            Truy cập cơ sở dữ liệu học thuật và giáo trình điện tử.
+        </li>
+
+        <li>
+            Hỗ trợ mượn - trả tài liệu qua hệ thống tự động.
+        </li>
+
+        <li>
+            Tư vấn tìm kiếm tài liệu và hướng dẫn trích dẫn học thuật.
+        </li>
+
+        <li>
+            Hỗ trợ sinh viên làm khóa luận, đồ án và nghiên cứu khoa học.
+        </li>
+
+    </ul>
+
+   
+
+    <p class="img-caption">
+        Không gian học tập và tra cứu tài liệu dành cho sinh viên tại thư viện.
+    </p>
+
+    <h3>Tăng cường không gian tự học cho sinh viên</h3>
+
+    <p>
+        Trong thời gian hè, nhu cầu sử dụng không gian tự học và làm việc nhóm
+        của sinh viên tăng cao, đặc biệt đối với các bạn chuẩn bị bảo vệ đồ án,
+        khóa luận tốt nghiệp và ôn thi chứng chỉ quốc tế.
+    </p>
+
+    <p>
+        Vì vậy, thư viện đã bố trí thêm nhiều khu vực tự học yên tĩnh,
+        bổ sung ổ cắm điện, wifi tốc độ cao và nâng cấp hệ thống điều hòa
+        nhằm mang lại trải nghiệm học tập tốt hơn cho người dùng.
+    </p>
+
+    <h3>Một số lưu ý khi sử dụng thư viện</h3>
+
+    <p>
+        Để đảm bảo môi trường học tập văn minh và hiệu quả,
+        thư viện đề nghị bạn đọc thực hiện nghiêm túc các quy định sau:
+    </p>
+
+    <ul style="line-height:2; padding-left:25px; color:#444;">
+
+        <li>
+            Giữ gìn trật tự trong khu vực đọc và tự học.
+        </li>
+
+        <li>
+            Không mang đồ ăn, thức uống có mùi vào thư viện.
+        </li>
+
+        <li>
+            Sử dụng tài khoản sinh viên đúng quy định khi truy cập tài nguyên số.
+        </li>
+
+        <li>
+            Chủ động bảo quản tư trang cá nhân khi sử dụng thư viện.
+        </li>
+
+        <li>
+            Trả tài liệu đúng hạn để tránh phát sinh phí quá hạn.
+        </li>
+
+    </ul>
+
+    <h3>Đồng hành cùng sinh viên trong mùa hè học tập</h3>
+
+    <p>
+        Đại diện Trung tâm Thông tin - Thư viện cho biết đơn vị sẽ tiếp tục
+        nâng cao chất lượng phục vụ, cập nhật thêm nhiều tài nguyên học liệu mới
+        và triển khai các hoạt động hỗ trợ học thuật dành cho sinh viên trong mùa hè.
+    </p>
+
+    <p>
+        Trong thời gian tới, thư viện dự kiến tổ chức thêm nhiều workshop,
+        buổi hướng dẫn kỹ năng nghiên cứu và các chương trình giới thiệu nguồn tài nguyên số
+        nhằm giúp sinh viên nâng cao kỹ năng học tập và nghiên cứu khoa học.
+    </p>
+
+    <blockquote style="
+        border-left:4px solid #0d2a5c;
+        padding:15px 20px;
+        background:#f5f7fb;
+        font-style:italic;
+        color:#444;
+        margin:30px 0;
+        line-height:1.8;
+    ">
+        “Không gian học tập hiện đại cùng nguồn tài nguyên phong phú
+        sẽ là nền tảng quan trọng giúp sinh viên phát triển tư duy,
+        khả năng nghiên cứu và đổi mới sáng tạo.”
+    </blockquote>
+
+    <p>
+        Mọi thông tin chi tiết về lịch phục vụ hè và các dịch vụ hỗ trợ,
+        sinh viên vui lòng theo dõi trên website chính thức của thư viện
+        hoặc liên hệ trực tiếp quầy hỗ trợ thông tin tại tầng 1.
+    </p>
+
+</div>
+
+        <!-- SIDEBAR -->
+        <div class="article-sidebar">
+
+           <div class="related-news">
+
+    <h3 class="related-title">
+        <i class="fas fa-newspaper"></i>
+        Tin tức liên quan
+    </h3>
+
+    <div class="related-grid">
+
+        <!-- CARD 1 -->
+        <a href="chi-tiet-tin.html" class="related-card">
+
+            <img src="../tai-nguyen/news1.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Giới thiệu 6 CSDL luận văn, luận án miễn phí trên thế giới
+                </h4>
+
+                <span>15/05/2026</span>
+
+            </div>
+
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="chi-tiet-tin3.html" class="related-card">
+
+            <img src="../tai-nguyen/News3.jpg" alt="">
+
+            <div class="related-content">
+
+                <h4>
+                    Ra mắt sách "Lịch sử Việt Nam bằng hình"
+                </h4>
+
+                <span>28/09/2025</span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+    <div id="chan-trang"></div>
+
+    <script src="../js/tai-thanh-phan.js"></script>
+
+</body>
+</html>
