@@ -42,7 +42,14 @@
                 </div>
                 <div>
                     <strong>Số lượng còn</strong>
-                    <p class="stock" style="${taiLieu.soLuongCon == 0 ? 'color: red;' : ''}">${taiLieu.soLuongCon == 0 ? 'Hết sách' : taiLieu.soLuongCon}</p>
+                    <c:choose>
+                        <c:when test="${taiLieu.soLuongCon == 0}">
+                            <p class="stock" style="color: red;">Hết sách</p>
+                        </c:when>
+                        <c:otherwise>
+                            <p class="stock">${taiLieu.soLuongCon}</p>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 

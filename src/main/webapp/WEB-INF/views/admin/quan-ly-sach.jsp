@@ -302,7 +302,7 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
             <div class="admin-avatar">A</div>
             <span id="admin-name"><sec:authentication property="principal.username" /></span>
         </div>
-        <form action="${pageContext.request.contextPath}/logout" method="POST" style="margin:0;">
+        <form action="${pageContext.request.contextPath}/dang-xuat" method="POST" style="margin:0;">
             <button type="submit" style="background:none;border:none;color:rgba(255,255,255,0.7); font-size:12px; cursor:pointer;">
                 <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
             </button>
@@ -458,7 +458,15 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                             <td style="text-align:center; font-weight:600">${tl.soLuongCon}</td>
                             <td>
                                 <div style="display:flex; gap:4px;">
-                                    <button class="btn btn-outline btn-sm" onclick="suaSach(${tl.maTaiLieu}, '${tl.tenTaiLieu}', '${tl.tacGia}', '${tl.nxb}', ${tl.soLuong}, ${tl.soLuongCon})" title="Sửa"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-outline btn-sm" 
+                                            data-id="${tl.maTaiLieu}" 
+                                            data-ten="${tl.tenTaiLieu}" 
+                                            data-tacgia="${tl.tacGia}" 
+                                            data-nxb="${tl.nxb}" 
+                                            data-sl="${tl.soLuong}" 
+                                            data-slcon="${tl.soLuongCon}" 
+                                            onclick="suaSach(this)" 
+                                            title="Sửa"><i class="fa-solid fa-pen"></i></button>
                                     <form action="${pageContext.request.contextPath}/admin/xoa-sach/${tl.maTaiLieu}" method="POST" style="margin:0;" onsubmit="return confirm('Bạn có chắc muốn xoá sách này không?');">
                                         <button class="btn btn-danger btn-sm" title="Xoá"><i class="fa-solid fa-trash"></i></button>
                                     </form>
@@ -821,7 +829,14 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
     });
 });
 
-function suaSach(id, ten, tacGia, nxb, sl, slCon) {
+function suaSach(btn) {
+    const id = btn.getAttribute('data-id');
+    const ten = btn.getAttribute('data-ten');
+    const tacGia = btn.getAttribute('data-tacgia');
+    const nxb = btn.getAttribute('data-nxb');
+    const sl = btn.getAttribute('data-sl');
+    const slCon = btn.getAttribute('data-slcon');
+
     document.getElementById('edit-ten').value = ten;
     document.getElementById('edit-tacgia').value = tacGia;
     document.getElementById('edit-nxb').value = nxb;

@@ -1,6 +1,5 @@
 package com.ptit.thuvien.config;
 
-import com.ptit.thuvien.model.NguoiDung;
 import com.ptit.thuvien.repository.NguoiDungRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;

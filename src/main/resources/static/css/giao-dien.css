@@ -416,6 +416,15 @@ nav a.active::after {
     font-size: 14px;
 }
 
+/* NÚT SÁCH CỦA TÔI - Navy style */
+.btn-header-sach-cua-toi {
+    background-color: #0d2a5c !important;
+}
+
+.btn-header-sach-cua-toi:hover {
+    background-color: #c8102e !important;
+}
+
 .search {
     width: 45px;
     height: 45px;

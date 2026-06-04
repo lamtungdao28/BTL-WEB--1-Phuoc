@@ -51,9 +51,14 @@
         </div>
     </nav>
 
-    <div>
+    <div style="display: flex; gap: 8px;">
         <a href="${pageContext.request.contextPath}/sach/muon-sach" class="btn-header-muon">
             <i class="fas fa-book-reader"></i> Mượn sách
         </a>
+        <sec:authorize access="isAuthenticated()">
+            <a href="${pageContext.request.contextPath}/sach/sach-cua-toi" class="btn-header-muon btn-header-sach-cua-toi">
+                <i class="fas fa-book-open"></i> Sách của tôi
+            </a>
+        </sec:authorize>
     </div>
 </header>
