@@ -512,6 +512,7 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                     <tr>
                         <th>Tài khoản</th>
                         <th>Họ tên</th>
+                        <th>Lớp</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
                         <th>Trạng thái</th>
@@ -524,6 +525,7 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                             <tr class="sv-row" data-ten="${nd.hoTen.toLowerCase()}" data-tk="${nd.taiKhoan.toLowerCase()}">
                                 <td style="font-family:monospace; font-size:12px; color:var(--gray-600)">${nd.taiKhoan}</td>
                                 <td><strong>${nd.hoTen}</strong></td>
+                                <td style="color:var(--gray-600)">${nd.lop}</td>
                                 <td style="font-size:13px; color:var(--gray-600)">${nd.email}</td>
                                 <td style="color:var(--gray-600)">${nd.soDienThoai}</td>
                                 <td>
@@ -538,9 +540,19 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                 </td>
                                 <td>
                                     <div style="display:flex; gap:4px;">
+                                        <button class="btn btn-outline btn-sm" 
+                                                data-id="${nd.maNguoiDung}" 
+                                                data-tk="${nd.taiKhoan}" 
+                                                data-hoten="${nd.hoTen}" 
+                                                data-email="${nd.email}" 
+                                                data-sdt="${nd.soDienThoai}" 
+                                                data-lop="${nd.lop}" 
+                                                data-trangthai="${nd.trangThai}" 
+                                                onclick="suaSinhVien(this)" 
+                                                title="Sửa"><i class="fa-solid fa-pen"></i></button>
                                         <c:if test="${nd.trangThai == 'HOAT_DONG'}">
                                             <form action="${pageContext.request.contextPath}/admin/khoa-tai-khoan/${nd.maNguoiDung}" method="POST" style="margin:0;">
-                                                <button class="btn btn-danger btn-sm" title="Khoá"><i class="fa-solid fa-lock"></i></button>
+                                                <button class="btn btn-warning btn-sm" title="Khoá"><i class="fa-solid fa-lock"></i></button>
                                             </form>
                                         </c:if>
                                         <c:if test="${nd.trangThai == 'BI_KHOA'}">
@@ -548,6 +560,9 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                                 <button class="btn btn-success btn-sm" title="Mở khoá"><i class="fa-solid fa-lock-open"></i></button>
                                             </form>
                                         </c:if>
+                                        <form action="${pageContext.request.contextPath}/admin/xoa-sinh-vien/${nd.maNguoiDung}" method="POST" style="margin:0;" onsubmit="return confirm('Bạn có chắc chắn muốn xoá sinh viên này không?');">
+                                            <button class="btn btn-danger btn-sm" title="Xoá"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -733,9 +748,15 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                         <input class="form-input" type="password" name="matKhau" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input class="form-input" type="email" name="email">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input class="form-input" type="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lớp</label>
+                        <input class="form-input" type="text" name="lop" placeholder="Ví dụ: D21CQCN01-B">
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -754,6 +775,61 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeModal('them-sv')">Hủy</button>
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== MODAL SỬA SINH VIÊN ===== -->
+<div class="modal-overlay" id="modal-sua-sv">
+    <div class="modal">
+        <form id="form-sua-sv" method="POST">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fa-solid fa-pen" style="color:var(--red)"></i> Sửa thông tin sinh viên</span>
+                <button type="button" class="modal-close" onclick="closeModal('sua-sv')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Tài khoản (Không thể sửa)</label>
+                    <input class="form-input" type="text" id="edit-sv-tk" disabled style="background:#f1f5f9; cursor:not-allowed;">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Họ tên *</label>
+                        <input class="form-input" type="text" id="edit-sv-hoten" name="hoTen" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mật khẩu mới (Để trống nếu giữ nguyên)</label>
+                        <input class="form-input" type="password" name="matKhau" placeholder="Nhập để thay đổi">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input class="form-input" type="email" id="edit-sv-email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lớp</label>
+                        <input class="form-input" type="text" id="edit-sv-lop" name="lop">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input class="form-input" type="text" id="edit-sv-sdt" name="soDienThoai">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" id="edit-sv-trangthai" name="trangThai">
+                            <option value="HOAT_DONG">Hoạt động</option>
+                            <option value="BI_KHOA">Khoá tài khoản</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('sua-sv')">Hủy</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Cập nhật</button>
             </div>
         </form>
     </div>
@@ -912,6 +988,26 @@ function suaSach(btn) {
     
     document.getElementById('form-sua-sach').action = '${pageContext.request.contextPath}/admin/sua-sach/' + id;
     openModal('sua-sach');
+}
+
+function suaSinhVien(btn) {
+    const id = btn.getAttribute('data-id');
+    const tk = btn.getAttribute('data-tk');
+    const hoTen = btn.getAttribute('data-hoten');
+    const email = btn.getAttribute('data-email') || '';
+    const sdt = btn.getAttribute('data-sdt') || '';
+    const lop = btn.getAttribute('data-lop') || '';
+    const trangThai = btn.getAttribute('data-trangthai');
+
+    document.getElementById('edit-sv-tk').value = tk;
+    document.getElementById('edit-sv-hoten').value = hoTen;
+    document.getElementById('edit-sv-email').value = email;
+    document.getElementById('edit-sv-lop').value = lop;
+    document.getElementById('edit-sv-sdt').value = sdt;
+    document.getElementById('edit-sv-trangthai').value = trangThai;
+
+    document.getElementById('form-sua-sv').action = '${pageContext.request.contextPath}/admin/sua-sinh-vien/' + id;
+    openModal('sua-sv');
 }
 
 // Format LocalDateTime (2026-06-04T17:30) thành dd/MM/yyyy HH:mm

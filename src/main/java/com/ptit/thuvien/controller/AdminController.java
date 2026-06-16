@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +30,7 @@ public class AdminController {
     private final DanhMucService danhMucService;
     private final PhieuMuonService phieuMuonService;
     private final NguoiDungService nguoiDungService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${app.upload.dir:${user.dir}/uploads}")
     private String uploadDir;
@@ -173,6 +175,7 @@ public class AdminController {
                                 @RequestParam String hoTen,
                                 @RequestParam(required = false) String email,
                                 @RequestParam(required = false) String soDienThoai,
+                                @RequestParam(required = false) String lop,
                                 @RequestParam(defaultValue = "HOAT_DONG") String trangThai,
                                 RedirectAttributes redirect) {
 
@@ -182,12 +185,44 @@ public class AdminController {
                 .hoTen(hoTen)
                 .email(email)
                 .soDienThoai(soDienThoai)
+                .lop(lop)
                 .vaiTro(NguoiDung.VaiTro.SINH_VIEN)
                 .trangThai(NguoiDung.TrangThaiNguoiDung.valueOf(trangThai))
                 .build();
 
         nguoiDungService.luu(sv);
         redirect.addFlashAttribute("thongBao", "Thêm sinh viên thành công!");
+        return "redirect:/admin/quan-ly-sach";
+    }
+
+    @PostMapping("/sua-sinh-vien/{id}")
+    public String suaSinhVien(@PathVariable Long id,
+                              @RequestParam String hoTen,
+                              @RequestParam(required = false) String email,
+                              @RequestParam(required = false) String soDienThoai,
+                              @RequestParam(required = false) String lop,
+                              @RequestParam(required = false) String matKhau,
+                              @RequestParam String trangThai,
+                              RedirectAttributes redirect) {
+        nguoiDungService.timTheoId(id).ifPresent(nd -> {
+            nd.setHoTen(hoTen);
+            nd.setEmail(email);
+            nd.setSoDienThoai(soDienThoai);
+            nd.setLop(lop);
+            nd.setTrangThai(NguoiDung.TrangThaiNguoiDung.valueOf(trangThai));
+            if (matKhau != null && !matKhau.trim().isEmpty()) {
+                nd.setMatKhau(passwordEncoder.encode(matKhau));
+            }
+            nguoiDungService.luu(nd);
+        });
+        redirect.addFlashAttribute("thongBao", "Cập nhật sinh viên thành công!");
+        return "redirect:/admin/quan-ly-sach";
+    }
+
+    @PostMapping("/xoa-sinh-vien/{id}")
+    public String xoaSinhVien(@PathVariable Long id, RedirectAttributes redirect) {
+        nguoiDungService.xoa(id);
+        redirect.addFlashAttribute("thongBao", "Đã xóa sinh viên!");
         return "redirect:/admin/quan-ly-sach";
     }
 
