@@ -84,19 +84,43 @@ public class AdminController {
         return "/uploads/pdf/" + fileName;
     }
 
+    /**
+     * Lưu file ảnh upload và trả về đường dẫn tương đối
+     */
+    private String luuFileAnh(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+        Path uploadPath = Paths.get(uploadDir, "images");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        // Tên file unique: timestamp_originalname
+        String originalName = file.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + originalName;
+        Path filePath = uploadPath.resolve(fileName);
+        file.transferTo(filePath.toFile());
+        return "/uploads/images/" + fileName;
+    }
+
     @PostMapping("/them-sach")
     public String themSach(@ModelAttribute TaiLieu taiLieu,
                            @RequestParam(value = "pdfFile", required = false) MultipartFile pdfFile,
+                           @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                            RedirectAttributes redirect) {
         try {
             String pdfPath = luuFilePdf(pdfFile);
             if (pdfPath != null) {
                 taiLieu.setFilePdf(pdfPath);
             }
+            String imagePath = luuFileAnh(imageFile);
+            if (imagePath != null) {
+                taiLieu.setHinhAnh(imagePath);
+            }
             taiLieuService.luu(taiLieu);
             redirect.addFlashAttribute("thongBao", "Thêm sách thành công!");
         } catch (IOException e) {
-            redirect.addFlashAttribute("thongBao", "Lỗi khi upload file PDF: " + e.getMessage());
+            redirect.addFlashAttribute("thongBao", "Lỗi khi upload file: " + e.getMessage());
         }
         return "redirect:/admin/quan-ly-sach";
     }
@@ -105,6 +129,7 @@ public class AdminController {
     public String suaSach(@PathVariable Long id,
                            @ModelAttribute TaiLieu taiLieuMoi,
                            @RequestParam(value = "pdfFile", required = false) MultipartFile pdfFile,
+                           @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                            RedirectAttributes redirect) {
         taiLieuService.timTheoId(id).ifPresent(tl -> {
             tl.setTenTaiLieu(taiLieuMoi.getTenTaiLieu());
@@ -118,8 +143,12 @@ public class AdminController {
                 if (pdfPath != null) {
                     tl.setFilePdf(pdfPath);
                 }
+                String imagePath = luuFileAnh(imageFile);
+                if (imagePath != null) {
+                    tl.setHinhAnh(imagePath);
+                }
             } catch (IOException e) {
-                throw new RuntimeException("Lỗi upload PDF: " + e.getMessage());
+                throw new RuntimeException("Lỗi upload file: " + e.getMessage());
             }
             taiLieuService.luu(tl);
         });

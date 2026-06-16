@@ -165,7 +165,11 @@
                 </div>
                 <div class="book-layout">
                     <div class="book-cover-wrap">
-                        <img class="book-cover-img" src="${taiLieu.hinhAnh}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'" />
+                        <c:set var="bookImg" value="${taiLieu.hinhAnh}" />
+                        <c:if test="${not empty bookImg && !bookImg.startsWith('http')}">
+                            <c:set var="bookImg" value="${pageContext.request.contextPath}${bookImg}" />
+                        </c:if>
+                        <img class="book-cover-img" src="${bookImg}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'" />
                     </div>
                     <div class="book-meta">
                         <h3>${taiLieu.tenTaiLieu}</h3>

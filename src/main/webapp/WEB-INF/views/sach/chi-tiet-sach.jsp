@@ -372,7 +372,11 @@
         <!-- Hero Section -->
         <div class="book-hero">
             <div class="book-cover-wrap">
-                <img src="${taiLieu.hinhAnh}" alt="${taiLieu.tenTaiLieu}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'">
+                <c:set var="bookImg" value="${taiLieu.hinhAnh}" />
+                <c:if test="${not empty bookImg && !bookImg.startsWith('http')}">
+                    <c:set var="bookImg" value="${pageContext.request.contextPath}${bookImg}" />
+                </c:if>
+                <img src="${bookImg}" alt="${taiLieu.tenTaiLieu}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'">
             </div>
             <div class="book-hero-info">
                 <span class="book-category-badge">

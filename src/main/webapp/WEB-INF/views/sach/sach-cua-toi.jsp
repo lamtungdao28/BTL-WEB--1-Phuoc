@@ -185,7 +185,11 @@
             <c:forEach items="${dsPhieuMuon}" var="pm">
                 <div class="book-card" data-trang-thai="${pm.trangThai}" data-ten-sach="${pm.taiLieu.tenTaiLieu.toLowerCase()}">
                     <div class="book-thumb">
-                        <img src="${pm.taiLieu.hinhAnh}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'" />
+                        <c:set var="bookImg" value="${pm.taiLieu.hinhAnh}" />
+                        <c:if test="${not empty bookImg && !bookImg.startsWith('http')}">
+                            <c:set var="bookImg" value="${pageContext.request.contextPath}${bookImg}" />
+                        </c:if>
+                        <img src="${bookImg}" onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'" />
                     </div>
                     <div class="book-body">
                         <div class="book-title">${pm.taiLieu.tenTaiLieu}</div>

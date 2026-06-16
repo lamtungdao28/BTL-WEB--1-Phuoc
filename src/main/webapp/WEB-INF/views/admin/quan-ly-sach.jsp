@@ -447,7 +447,11 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                         <tr class="sach-row" data-danh-muc="${tl.danhMuc.maDanhMuc}" data-ten="${tl.tenTaiLieu.toLowerCase()}" data-tac-gia="${tl.tacGia.toLowerCase()}">
                             <td>
                                 <div class="book-thumb-cell">
-                                    <img src="${tl.hinhAnh}" onerror="this.style.display='none'" class="book-img" />
+                                    <c:set var="bookImg" value="${tl.hinhAnh}" />
+                                    <c:if test="${not empty bookImg && !bookImg.startsWith('http')}">
+                                        <c:set var="bookImg" value="${pageContext.request.contextPath}${bookImg}" />
+                                    </c:if>
+                                    <img src="${bookImg}" onerror="this.style.display='none'" class="book-img" />
                                     <div class="book-title">${tl.tenTaiLieu}</div>
                                 </div>
                             </td>
@@ -467,6 +471,7 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                             data-slcon="${tl.soLuongCon}" 
                                             data-noidung="${tl.noiDungChiTiet}"
                                             data-pdf="${tl.filePdf}"
+                                            data-hinhanh="${tl.hinhAnh}"
                                             onclick="suaSach(this)" 
                                             title="Sửa"><i class="fa-solid fa-pen"></i></button>
                                     <form action="${pageContext.request.contextPath}/admin/xoa-sach/${tl.maTaiLieu}" method="POST" style="margin:0;" onsubmit="return confirm('Bạn có chắc muốn xoá sách này không?');">
@@ -687,6 +692,11 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                     <textarea class="form-input" name="noiDungChiTiet" rows="5" style="resize:vertical;" placeholder="Nhập nội dung chi tiết về sách..."></textarea>
                 </div>
                 <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-image" style="color:var(--red)"></i> Ảnh bìa sách</label>
+                    <input class="form-input" type="file" name="imageFile" accept="image/*" style="padding:8px;">
+                    <span style="font-size:11px; color:var(--gray-600);">Chấp nhận các định dạng ảnh (.jpg, .jpeg, .png, .webp)</span>
+                </div>
+                <div class="form-group">
                     <label class="form-label"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File PDF</label>
                     <input class="form-input" type="file" name="pdfFile" accept=".pdf" style="padding:8px;">
                     <span style="font-size:11px; color:var(--gray-600);">Tối đa 50MB. Chỉ chấp nhận file .pdf</span>
@@ -787,6 +797,12 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                     <textarea class="form-input" id="edit-noidung" name="noiDungChiTiet" rows="5" style="resize:vertical;" placeholder="Nhập nội dung chi tiết về sách..."></textarea>
                 </div>
                 <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-image" style="color:var(--red)"></i> Ảnh bìa sách</label>
+                    <input class="form-input" type="file" name="imageFile" accept="image/*" style="padding:8px;">
+                    <span style="font-size:11px; color:var(--gray-600);">Để trống nếu không muốn thay đổi ảnh hiện tại</span>
+                    <div id="edit-image-current" style="margin-top:6px; font-size:12px; color:var(--gray-600);"></div>
+                </div>
+                <div class="form-group">
                     <label class="form-label"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File PDF</label>
                     <input class="form-input" type="file" name="pdfFile" accept=".pdf" style="padding:8px;">
                     <span style="font-size:11px; color:var(--gray-600);">Để trống nếu không muốn thay đổi file PDF hiện tại</span>
@@ -870,6 +886,7 @@ function suaSach(btn) {
     const slCon = btn.getAttribute('data-slcon');
     const noiDung = btn.getAttribute('data-noidung') || '';
     const pdf = btn.getAttribute('data-pdf') || '';
+    const hinhAnh = btn.getAttribute('data-hinhanh') || '';
 
     document.getElementById('edit-ten').value = ten;
     document.getElementById('edit-tacgia').value = tacGia;
@@ -878,6 +895,14 @@ function suaSach(btn) {
     document.getElementById('edit-slcon').value = slCon;
     document.getElementById('edit-noidung').value = noiDung;
     
+    var imgInfo = document.getElementById('edit-image-current');
+    if (hinhAnh) {
+        let imgSrc = hinhAnh.startsWith('http') ? hinhAnh : '${pageContext.request.contextPath}' + hinhAnh;
+        imgInfo.innerHTML = '<div style="margin-top: 5px;"><img src="' + imgSrc + '" style="max-height:80px; border-radius:4px; border:1px solid var(--gray-200);"/></div>';
+    } else {
+        imgInfo.innerHTML = '<span style="color:#94a3b8">Chưa có ảnh bìa</span>';
+    }
+
     var pdfInfo = document.getElementById('edit-pdf-current');
     if (pdf) {
         pdfInfo.innerHTML = '<i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File hiện tại: <a href="' + '${pageContext.request.contextPath}' + pdf + '" target="_blank" style="color:var(--red)">' + pdf.split('/').pop() + '</a>';

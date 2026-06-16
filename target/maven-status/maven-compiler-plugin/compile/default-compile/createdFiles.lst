@@ -11,6 +11,7 @@ com/ptit/thuvien/service/PhieuMuonService.class
 com/ptit/thuvien/controller/TinTucController.class
 com/ptit/thuvien/exception/GlobalExceptionHandler.class
 com/ptit/thuvien/controller/AdminController.class
+com/ptit/thuvien/scheduler/PhieuMuonScheduler.class
 com/ptit/thuvien/model/TaiLieu$TaiLieuBuilder.class
 com/ptit/thuvien/model/PhieuMuon$PhieuMuonBuilder.class
 com/ptit/thuvien/repository/ThongBaoRepository.class

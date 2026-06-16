@@ -398,7 +398,11 @@
                         <a href="${pageContext.request.contextPath}/sach/chi-tiet/${sach.maTaiLieu}"
                             class="book-card">
                             <div class="book-cover">
-                                <img src="${sach.hinhAnh}"
+                                <c:set var="bookImg" value="${sach.hinhAnh}" />
+                                <c:if test="${not empty bookImg && !bookImg.startsWith('http')}">
+                                    <c:set var="bookImg" value="${pageContext.request.contextPath}${bookImg}" />
+                                </c:if>
+                                <img src="${bookImg}"
                                     onerror="this.src='${pageContext.request.contextPath}/tai-nguyen/book.jpg'" />
                                 <span class="book-badge">${sach.danhMuc.tenDanhMuc}</span>
                             </div>
