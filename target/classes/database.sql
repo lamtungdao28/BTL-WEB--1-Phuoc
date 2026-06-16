@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS tai_lieu (
 
 -- ===================================================================
 -- BẢNG 4: PHIEU_MUON (Mượn sách / Thuê sách)
--- Trạng thái: CHO_DUYET, DANG_MUON, DA_TRA, QUA_HAN, TU_CHOI, MAT_SACH
+-- Trạng thái: CHO_DUYET, DANG_MUON, DA_TRA, QUA_HAN, TU_CHOI, MAT_SACH, CHO_GIA_HAN
 -- ===================================================================
 CREATE TABLE IF NOT EXISTS phieu_muon (
     ma_muon         BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS phieu_muon (
     ngay_muon       DATE,
     ngay_hen_tra    DATE,
     ngay_tra_thuc_te DATE,
-    trang_thai      ENUM('CHO_DUYET','DANG_MUON','DA_TRA','QUA_HAN','TU_CHOI','MAT_SACH')
+    trang_thai      ENUM('CHO_DUYET','DANG_MUON','DA_TRA','QUA_HAN','TU_CHOI','MAT_SACH','CHO_GIA_HAN')
                     NOT NULL DEFAULT 'CHO_DUYET',
     ghi_chu         TEXT,
     tien_phat       DECIMAL(12,0) DEFAULT 0,
