@@ -5,10 +5,17 @@ import com.ptit.thuvien.model.PhieuMuon;
 import com.ptit.thuvien.model.TaiLieu;
 import com.ptit.thuvien.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Controller quản lý admin - Dashboard, Quản lý sách, Sinh viên, Lịch sử mượn
@@ -22,6 +29,9 @@ public class AdminController {
     private final DanhMucService danhMucService;
     private final PhieuMuonService phieuMuonService;
     private final NguoiDungService nguoiDungService;
+
+    @Value("${app.upload.dir:${user.dir}/uploads}")
+    private String uploadDir;
 
     // ==========================================
     //              DASHBOARD
@@ -55,16 +65,46 @@ public class AdminController {
     //            QUẢN LÝ SÁCH (CRUD)
     // ==========================================
 
+    /**
+     * Lưu file PDF upload và trả về đường dẫn tương đối
+     */
+    private String luuFilePdf(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+        Path uploadPath = Paths.get(uploadDir, "pdf");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        // Tên file unique: timestamp_originalname
+        String originalName = file.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + originalName;
+        Path filePath = uploadPath.resolve(fileName);
+        file.transferTo(filePath.toFile());
+        return "/uploads/pdf/" + fileName;
+    }
+
     @PostMapping("/them-sach")
-    public String themSach(@ModelAttribute TaiLieu taiLieu, RedirectAttributes redirect) {
-        taiLieuService.luu(taiLieu);
-        redirect.addFlashAttribute("thongBao", "Thêm sách thành công!");
+    public String themSach(@ModelAttribute TaiLieu taiLieu,
+                           @RequestParam(value = "pdfFile", required = false) MultipartFile pdfFile,
+                           RedirectAttributes redirect) {
+        try {
+            String pdfPath = luuFilePdf(pdfFile);
+            if (pdfPath != null) {
+                taiLieu.setFilePdf(pdfPath);
+            }
+            taiLieuService.luu(taiLieu);
+            redirect.addFlashAttribute("thongBao", "Thêm sách thành công!");
+        } catch (IOException e) {
+            redirect.addFlashAttribute("thongBao", "Lỗi khi upload file PDF: " + e.getMessage());
+        }
         return "redirect:/admin/quan-ly-sach";
     }
 
     @PostMapping("/sua-sach/{id}")
     public String suaSach(@PathVariable Long id,
                            @ModelAttribute TaiLieu taiLieuMoi,
+                           @RequestParam(value = "pdfFile", required = false) MultipartFile pdfFile,
                            RedirectAttributes redirect) {
         taiLieuService.timTheoId(id).ifPresent(tl -> {
             tl.setTenTaiLieu(taiLieuMoi.getTenTaiLieu());
@@ -72,6 +112,15 @@ public class AdminController {
             tl.setNxb(taiLieuMoi.getNxb());
             tl.setSoLuong(taiLieuMoi.getSoLuong());
             tl.setSoLuongCon(taiLieuMoi.getSoLuongCon());
+            tl.setNoiDungChiTiet(taiLieuMoi.getNoiDungChiTiet());
+            try {
+                String pdfPath = luuFilePdf(pdfFile);
+                if (pdfPath != null) {
+                    tl.setFilePdf(pdfPath);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Lỗi upload PDF: " + e.getMessage());
+            }
             taiLieuService.luu(tl);
         });
         redirect.addFlashAttribute("thongBao", "Cập nhật sách thành công!");
@@ -155,6 +204,20 @@ public class AdminController {
     public String xacNhanTra(@PathVariable Long id, RedirectAttributes redirect) {
         phieuMuonService.traSach(id);
         redirect.addFlashAttribute("thongBao", "Đã xác nhận trả sách!");
+        return "redirect:/admin/quan-ly-sach";
+    }
+
+    @PostMapping("/duyet-gia-han/{id}")
+    public String duyetGiaHan(@PathVariable Long id, RedirectAttributes redirect) {
+        phieuMuonService.duyetGiaHan(id);
+        redirect.addFlashAttribute("thongBao", "Đã duyệt gia hạn! Hạn trả được gia hạn thêm 14 ngày.");
+        return "redirect:/admin/quan-ly-sach";
+    }
+
+    @PostMapping("/tu-choi-gia-han/{id}")
+    public String tuChoiGiaHan(@PathVariable Long id, RedirectAttributes redirect) {
+        phieuMuonService.tuChoiGiaHan(id);
+        redirect.addFlashAttribute("thongBao", "Đã từ chối yêu cầu gia hạn!");
         return "redirect:/admin/quan-ly-sach";
     }
 }

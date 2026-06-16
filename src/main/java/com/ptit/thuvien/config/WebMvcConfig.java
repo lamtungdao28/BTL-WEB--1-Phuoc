@@ -1,5 +1,6 @@
 package com.ptit.thuvien.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -11,8 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    @Value("${app.upload.dir:${user.dir}/uploads}")
+    private String uploadDir;
+
     /**
-     * Cấu hình đường dẫn tài nguyên tĩnh (CSS, JS, ảnh)
+     * Cấu hình đường dẫn tài nguyên tĩnh (CSS, JS, ảnh, uploads)
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -24,6 +28,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/tai-nguyen/**")
                 .addResourceLocations("classpath:/static/tai-nguyen/");
+
+        // Serve uploaded files (PDF sách)
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:" + uploadDir + "/");
     }
 
     /**

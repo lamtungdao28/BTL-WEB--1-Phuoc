@@ -84,12 +84,12 @@ public class MuonSachController {
             PhieuMuon pm = phieuMuonService.timTheoId(maMuon)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu mượn"));
 
-            // Chỉ gia hạn khi đang mượn và chưa quá hạn
+            // Chỉ cho phép gửi yêu cầu gia hạn khi đang mượn và chưa quá hạn
             if (pm.getTrangThai() == PhieuMuon.TrangThaiMuon.DANG_MUON
                     && pm.getNgayHenTra().isAfter(LocalDateTime.now())) {
-                pm.setNgayHenTra(pm.getNgayHenTra().plusDays(14));
+                pm.setTrangThai(PhieuMuon.TrangThaiMuon.CHO_GIA_HAN);
                 phieuMuonService.taoPhieuMuon(pm); // lưu lại
-                redirect.addFlashAttribute("success", "Gia hạn thành công! Hạn trả mới: " + pm.getNgayHenTra());
+                redirect.addFlashAttribute("success", "Đã gửi yêu cầu gia hạn! Vui lòng chờ admin duyệt.");
             } else {
                 redirect.addFlashAttribute("error", "Không thể gia hạn phiếu mượn này!");
             }

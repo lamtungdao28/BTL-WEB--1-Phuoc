@@ -366,7 +366,7 @@
                     <p>Tìm kiếm và đăng ký mượn sách trực tuyến dành cho sinh viên PTIT.<br>Nhanh chóng, tiện lợi, mọi
                         lúc mọi nơi.</p>
                     <form action="${pageContext.request.contextPath}/sach/muon-sach" method="GET" class="hero-search">
-                        <input type="text" name="tuKhoan" placeholder="Tìm kiếm theo tên sách, tác giả..."
+                        <input type="text" name="tuKhoa" placeholder="Tìm kiếm theo tên sách, tác giả..."
                             value="${tuKhoa}" />
                         <button type="submit">
                             <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
@@ -395,7 +395,7 @@
 
                 <div class="book-grid">
                     <c:forEach items="${dsTaiLieu}" var="sach">
-                        <a href="${pageContext.request.contextPath}/sach/dang-ky-muon/${sach.maTaiLieu}"
+                        <a href="${pageContext.request.contextPath}/sach/chi-tiet/${sach.maTaiLieu}"
                             class="book-card">
                             <div class="book-cover">
                                 <img src="${sach.hinhAnh}"

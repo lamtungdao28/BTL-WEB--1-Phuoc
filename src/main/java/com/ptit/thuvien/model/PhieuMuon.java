@@ -73,6 +73,7 @@ public class PhieuMuon {
         DA_TRA,         // Đã trả
         QUA_HAN,        // Quá hạn
         TU_CHOI,        // Bị từ chối
-        MAT_SACH        // Mất sách
+        MAT_SACH,       // Mất sách
+        CHO_GIA_HAN     // Chờ admin duyệt gia hạn
     }
 }

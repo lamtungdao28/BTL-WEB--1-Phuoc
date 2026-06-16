@@ -93,6 +93,7 @@
         .status-badge.cho-duyet { background: #fff8e1; color: #b45309; }
         .status-badge.qua-han { background: var(--ptit-red-light); color: var(--ptit-red); }
         .status-badge.da-tra { background: var(--gray-100); color: var(--gray-500); }
+        .status-badge.cho-gia-han { background: #f3e8ff; color: #7c3aed; }
         .book-actions { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; gap: 10px; min-width: 160px; border-left: 1px solid var(--gray-100); }
         
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; }
@@ -168,6 +169,7 @@
                 <button class="tab-btn active" onclick="filterBooks('ALL', this)"><i class="fa-solid fa-grid-2"></i> Tất cả</button>
                 <button class="tab-btn" onclick="filterBooks('DANG_MUON', this)"><i class="fa-regular fa-book"></i> Đang mượn</button>
                 <button class="tab-btn" onclick="filterBooks('CHO_DUYET', this)"><i class="fa-regular fa-hourglass"></i> Chờ duyệt</button>
+                <button class="tab-btn" onclick="filterBooks('CHO_GIA_HAN', this)"><i class="fa-solid fa-rotate-right"></i> Chờ gia hạn</button>
                 <button class="tab-btn" onclick="filterBooks('DA_TRA', this)"><i class="fa-regular fa-circle-check"></i> Đã trả</button>
                 <button class="tab-btn" onclick="filterBooks('QUA_HAN', this)"><i class="fa-regular fa-calendar-xmark"></i> Quá hạn</button>
             </div>
@@ -215,6 +217,9 @@
                                     <c:when test="${pm.trangThai == 'QUA_HAN'}">
                                         <span class="status-badge qua-han"><i class="fa-solid fa-circle" style="font-size:7px"></i> Quá hạn</span>
                                     </c:when>
+                                    <c:when test="${pm.trangThai == 'CHO_GIA_HAN'}">
+                                        <span class="status-badge cho-gia-han"><i class="fa-solid fa-circle" style="font-size:7px"></i> Chờ gia hạn</span>
+                                    </c:when>
                                 </c:choose>
                             </div>
                         </div>
@@ -225,10 +230,15 @@
                         </a>
                         <c:if test="${pm.trangThai == 'DANG_MUON'}">
                             <form action="${pageContext.request.contextPath}/sach/gia-han/${pm.maMuon}" method="POST" style="margin:0;">
-                                <button type="submit" class="btn btn-primary" style="width:100%" onclick="return confirm('Bạn có chắc muốn gia hạn mượn sách này thêm 14 ngày?');">
-                                    <i class="fa-solid fa-rotate-right"></i> Gia hạn
+                                <button type="submit" class="btn btn-primary" style="width:100%" onclick="return confirm('Bạn có chắc muốn gửi yêu cầu gia hạn mượn sách này thêm 14 ngày?');">
+                                    <i class="fa-solid fa-rotate-right"></i> Yêu cầu gia hạn
                                 </button>
                             </form>
+                        </c:if>
+                        <c:if test="${pm.trangThai == 'CHO_GIA_HAN'}">
+                            <button class="btn btn-outline" style="width:100%; cursor:not-allowed; opacity:0.7;" disabled>
+                                <i class="fa-solid fa-hourglass-half"></i> Đang chờ duyệt
+                            </button>
                         </c:if>
                         <c:if test="${pm.trangThai == 'CHO_DUYET'}">
                             <form action="${pageContext.request.contextPath}/sach/huy-dang-ky/${pm.maMuon}" method="POST" style="margin:0;">

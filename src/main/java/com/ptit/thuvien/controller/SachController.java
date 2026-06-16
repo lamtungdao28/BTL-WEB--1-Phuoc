@@ -78,7 +78,8 @@ public class SachController {
 
             // Thống kê
             long dangMuon = dsPhieu.stream().filter(p ->
-                    p.getTrangThai().name().equals("DANG_MUON")).count();
+                    p.getTrangThai().name().equals("DANG_MUON") ||
+                    p.getTrangThai().name().equals("CHO_GIA_HAN")).count();
             long choDuyet = dsPhieu.stream().filter(p ->
                     p.getTrangThai().name().equals("CHO_DUYET")).count();
             long daTra = dsPhieu.stream().filter(p ->

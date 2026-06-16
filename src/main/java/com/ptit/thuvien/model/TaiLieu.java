@@ -46,4 +46,10 @@ public class TaiLieu {
 
     @Column(name = "mo_ta", columnDefinition = "TEXT")
     private String moTa;
+
+    @Column(name = "noi_dung_chi_tiet", columnDefinition = "LONGTEXT")
+    private String noiDungChiTiet;
+
+    @Column(name = "file_pdf", length = 500)
+    private String filePdf;
 }

@@ -101,6 +101,27 @@ public class PhieuMuonServiceImpl implements PhieuMuonService {
     }
 
     @Override
+    public PhieuMuon duyetGiaHan(Long maMuon) {
+        PhieuMuon phieuMuon = phieuMuonRepository.findById(maMuon)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu mượn: " + maMuon));
+
+        // Gia hạn thêm 14 ngày và chuyển về trạng thái DANG_MUON
+        phieuMuon.setNgayHenTra(phieuMuon.getNgayHenTra().plusDays(14));
+        phieuMuon.setTrangThai(PhieuMuon.TrangThaiMuon.DANG_MUON);
+        return phieuMuonRepository.save(phieuMuon);
+    }
+
+    @Override
+    public PhieuMuon tuChoiGiaHan(Long maMuon) {
+        PhieuMuon phieuMuon = phieuMuonRepository.findById(maMuon)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu mượn: " + maMuon));
+
+        // Từ chối gia hạn → chuyển về DANG_MUON (giữ nguyên hạn trả cũ)
+        phieuMuon.setTrangThai(PhieuMuon.TrangThaiMuon.DANG_MUON);
+        return phieuMuonRepository.save(phieuMuon);
+    }
+
+    @Override
     public void xoa(Long id) {
         phieuMuonRepository.deleteById(id);
     }

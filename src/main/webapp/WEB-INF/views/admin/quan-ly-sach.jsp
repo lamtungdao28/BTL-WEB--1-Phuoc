@@ -465,6 +465,8 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                             data-nxb="${tl.nxb}" 
                                             data-sl="${tl.soLuong}" 
                                             data-slcon="${tl.soLuongCon}" 
+                                            data-noidung="${tl.noiDungChiTiet}"
+                                            data-pdf="${tl.filePdf}"
                                             onclick="suaSach(this)" 
                                             title="Sửa"><i class="fa-solid fa-pen"></i></button>
                                     <form action="${pageContext.request.contextPath}/admin/xoa-sach/${tl.maTaiLieu}" method="POST" style="margin:0;" onsubmit="return confirm('Bạn có chắc muốn xoá sách này không?');">
@@ -594,6 +596,9 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                     <c:when test="${pm.trangThai == 'QUA_HAN'}">
                                         <span class="badge badge-red">Quá hạn</span>
                                     </c:when>
+                                    <c:when test="${pm.trangThai == 'CHO_GIA_HAN'}">
+                                        <span class="badge" style="background:#f3e8ff; color:#7c3aed;">Chờ gia hạn</span>
+                                    </c:when>
                                 </c:choose>
                             </td>
                             <td>
@@ -603,6 +608,14 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                                             <button class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i> Duyệt</button>
                                         </form>
                                         <form action="${pageContext.request.contextPath}/admin/tu-choi-muon/${pm.maMuon}" method="POST" style="margin:0;">
+                                            <button class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark"></i> Từ chối</button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${pm.trangThai == 'CHO_GIA_HAN'}">
+                                        <form action="${pageContext.request.contextPath}/admin/duyet-gia-han/${pm.maMuon}" method="POST" style="margin:0;">
+                                            <button class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i> Duyệt gia hạn</button>
+                                        </form>
+                                        <form action="${pageContext.request.contextPath}/admin/tu-choi-gia-han/${pm.maMuon}" method="POST" style="margin:0;">
                                             <button class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark"></i> Từ chối</button>
                                         </form>
                                     </c:if>
@@ -624,8 +637,8 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
 
 <!-- ===== MODAL THÊM SÁCH ===== -->
 <div class="modal-overlay" id="modal-them-sach">
-    <div class="modal">
-        <form action="${pageContext.request.contextPath}/admin/them-sach" method="POST">
+    <div class="modal" style="width:620px;">
+        <form action="${pageContext.request.contextPath}/admin/them-sach" method="POST" enctype="multipart/form-data">
             <div class="modal-header">
                 <span class="modal-title"><i class="fa-solid fa-plus" style="color:var(--red)"></i> Thêm sách mới</span>
                 <button type="button" class="modal-close" onclick="closeModal('them-sach')">×</button>
@@ -668,6 +681,15 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                         <label class="form-label">Số lượng còn</label>
                         <input class="form-input" type="number" name="soLuongCon" value="10">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nội dung chi tiết</label>
+                    <textarea class="form-input" name="noiDungChiTiet" rows="5" style="resize:vertical;" placeholder="Nhập nội dung chi tiết về sách..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File PDF</label>
+                    <input class="form-input" type="file" name="pdfFile" accept=".pdf" style="padding:8px;">
+                    <span style="font-size:11px; color:var(--gray-600);">Tối đa 50MB. Chỉ chấp nhận file .pdf</span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -729,8 +751,8 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
 
 <!-- ===== MODAL SỬA SÁCH ===== -->
 <div class="modal-overlay" id="modal-sua-sach">
-    <div class="modal">
-        <form id="form-sua-sach" method="POST">
+    <div class="modal" style="width:620px;">
+        <form id="form-sua-sach" method="POST" enctype="multipart/form-data">
             <div class="modal-header">
                 <span class="modal-title"><i class="fa-solid fa-pen" style="color:var(--red)"></i> Sửa thông tin sách</span>
                 <button type="button" class="modal-close" onclick="closeModal('sua-sach')">×</button>
@@ -759,6 +781,16 @@ tbody td { padding: 12px 16px; vertical-align: middle; }
                         <label class="form-label">Số lượng còn</label>
                         <input class="form-input" type="number" id="edit-slcon" name="soLuongCon">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nội dung chi tiết</label>
+                    <textarea class="form-input" id="edit-noidung" name="noiDungChiTiet" rows="5" style="resize:vertical;" placeholder="Nhập nội dung chi tiết về sách..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File PDF</label>
+                    <input class="form-input" type="file" name="pdfFile" accept=".pdf" style="padding:8px;">
+                    <span style="font-size:11px; color:var(--gray-600);">Để trống nếu không muốn thay đổi file PDF hiện tại</span>
+                    <div id="edit-pdf-current" style="margin-top:6px; font-size:12px; color:var(--gray-600);"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -836,12 +868,23 @@ function suaSach(btn) {
     const nxb = btn.getAttribute('data-nxb');
     const sl = btn.getAttribute('data-sl');
     const slCon = btn.getAttribute('data-slcon');
+    const noiDung = btn.getAttribute('data-noidung') || '';
+    const pdf = btn.getAttribute('data-pdf') || '';
 
     document.getElementById('edit-ten').value = ten;
     document.getElementById('edit-tacgia').value = tacGia;
     document.getElementById('edit-nxb').value = nxb;
     document.getElementById('edit-sl').value = sl;
     document.getElementById('edit-slcon').value = slCon;
+    document.getElementById('edit-noidung').value = noiDung;
+    
+    var pdfInfo = document.getElementById('edit-pdf-current');
+    if (pdf) {
+        pdfInfo.innerHTML = '<i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> File hiện tại: <a href="' + '${pageContext.request.contextPath}' + pdf + '" target="_blank" style="color:var(--red)">' + pdf.split('/').pop() + '</a>';
+    } else {
+        pdfInfo.innerHTML = '<span style="color:#94a3b8">Chưa có file PDF</span>';
+    }
+    
     document.getElementById('form-sua-sach').action = '${pageContext.request.contextPath}/admin/sua-sach/' + id;
     openModal('sua-sach');
 }

@@ -27,6 +27,10 @@ public interface PhieuMuonService {
 
     PhieuMuon traSach(Long maMuon);
 
+    PhieuMuon duyetGiaHan(Long maMuon);
+
+    PhieuMuon tuChoiGiaHan(Long maMuon);
+
     void xoa(Long id);
 
     void capNhatTrangThaiQuaHan();

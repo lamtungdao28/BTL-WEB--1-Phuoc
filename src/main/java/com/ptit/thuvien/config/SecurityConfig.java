@@ -41,7 +41,7 @@ public class SecurityConfig {
                     "/", "/trang-chu", "/gioi-thieu", "/noi-quy",
                     "/dang-nhap", "/xu-ly-dang-nhap", "/dang-xuat", "/dang-ky",
                     "/tin-tuc/**", "/su-kien/**",
-                    "/css/**", "/js/**", "/tai-nguyen/**", "/images/**",
+                    "/css/**", "/js/**", "/tai-nguyen/**", "/images/**", "/uploads/**",
                     "/WEB-INF/**", "/error/**"
                 ).permitAll()
 
