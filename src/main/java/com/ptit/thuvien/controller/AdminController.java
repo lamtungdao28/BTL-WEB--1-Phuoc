@@ -221,8 +221,12 @@ public class AdminController {
 
     @PostMapping("/xoa-sinh-vien/{id}")
     public String xoaSinhVien(@PathVariable Long id, RedirectAttributes redirect) {
-        nguoiDungService.xoa(id);
-        redirect.addFlashAttribute("thongBao", "Đã xóa sinh viên!");
+        try {
+            nguoiDungService.xoa(id);
+            redirect.addFlashAttribute("thongBao", "Đã xóa sinh viên!");
+        } catch (Exception e) {
+            redirect.addFlashAttribute("thongBao", "Lỗi khi xóa sinh viên: " + e.getMessage());
+        }
         return "redirect:/admin/quan-ly-sach";
     }
 

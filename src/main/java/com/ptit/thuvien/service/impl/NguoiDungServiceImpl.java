@@ -1,8 +1,11 @@
 package com.ptit.thuvien.service.impl;
 
 import com.ptit.thuvien.model.NguoiDung;
+import com.ptit.thuvien.model.PhieuMuon;
 import com.ptit.thuvien.repository.NguoiDungRepository;
+import com.ptit.thuvien.repository.PhieuMuonRepository;
 import com.ptit.thuvien.service.NguoiDungService;
+import com.ptit.thuvien.service.TaiLieuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class NguoiDungServiceImpl implements NguoiDungService {
 
     private final NguoiDungRepository nguoiDungRepository;
+    private final PhieuMuonRepository phieuMuonRepository;
+    private final TaiLieuService taiLieuService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -48,6 +53,18 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
     @Override
     public void xoa(Long id) {
+        // Trước khi xóa người dùng, cần hoàn trả số lượng sách cho các phiếu đang mượn
+        List<PhieuMuon> dsPhieuMuon = phieuMuonRepository.findByNguoiDung_MaNguoiDung(id);
+        for (PhieuMuon pm : dsPhieuMuon) {
+            // Nếu phiếu đang mượn hoặc quá hạn, hoàn trả số lượng sách
+            if (pm.getTrangThai() == PhieuMuon.TrangThaiMuon.DANG_MUON
+                    || pm.getTrangThai() == PhieuMuon.TrangThaiMuon.QUA_HAN) {
+                taiLieuService.capNhatSoLuongCon(pm.getTaiLieu().getMaTaiLieu(), 1);
+            }
+        }
+        // Xóa tất cả phiếu mượn của người dùng này
+        phieuMuonRepository.deleteByNguoiDung_MaNguoiDung(id);
+        // Rồi mới xóa người dùng
         nguoiDungRepository.deleteById(id);
     }
 

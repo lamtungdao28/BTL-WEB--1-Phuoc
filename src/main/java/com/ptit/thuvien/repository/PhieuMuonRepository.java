@@ -13,4 +13,6 @@ public interface PhieuMuonRepository extends JpaRepository<PhieuMuon, Long> {
     List<PhieuMuon> findByTrangThai(PhieuMuon.TrangThaiMuon trangThai);
 
     List<PhieuMuon> findByNguoiDung_MaNguoiDungAndTrangThai(Long maNguoiDung, PhieuMuon.TrangThaiMuon trangThai);
+
+    void deleteByNguoiDung_MaNguoiDung(Long maNguoiDung);
 }
