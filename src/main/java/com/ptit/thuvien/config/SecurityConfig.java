@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/", "/trang-chu", "/gioi-thieu", "/noi-quy",
                     "/dang-nhap", "/xu-ly-dang-nhap", "/dang-xuat", "/dang-ky",
-                    "/tin-tuc/**", "/su-kien/**",
+                    "/tin-tuc/**", "/su-kien/**", "/thong-bao/**",
                     "/css/**", "/js/**", "/tai-nguyen/**", "/images/**", "/uploads/**",
                     "/WEB-INF/**", "/error/**"
                 ).permitAll()

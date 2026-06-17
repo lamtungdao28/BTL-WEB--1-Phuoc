@@ -1,5 +1,6 @@
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/impl/TinTucServiceImpl.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/model/PhieuMuon.java
+/Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/ThongBaoService.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/util/DateUtil.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/repository/PhieuMuonRepository.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/config/DatabaseSeeder.java
@@ -9,6 +10,7 @@
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/repository/SuKienRepository.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/repository/ThongBaoRepository.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/TinTucService.java
+/Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/controller/ThongBaoController.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/controller/TinTucController.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/impl/SuKienServiceImpl.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/PhieuMuonService.java
@@ -16,6 +18,7 @@
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/controller/DangKyController.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/config/SecurityConfig.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/model/NguoiDung.java
+/Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/impl/ThongBaoServiceImpl.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/impl/PhieuMuonServiceImpl.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/security/CustomUserDetailsService.java
 /Users/1am/Documents/code-phuoc/BTL-WEB--1-Phuoc/src/main/java/com/ptit/thuvien/service/impl/DanhMucServiceImpl.java
