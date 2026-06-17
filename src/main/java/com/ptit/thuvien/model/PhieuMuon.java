@@ -42,7 +42,7 @@ public class PhieuMuon {
     private LocalDate ngayTraThucTe;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "trang_thai")
+    @Column(name = "trang_thai", length = 20)
     @Builder.Default
     private TrangThaiMuon trangThai = TrangThaiMuon.DANG_MUON;
 

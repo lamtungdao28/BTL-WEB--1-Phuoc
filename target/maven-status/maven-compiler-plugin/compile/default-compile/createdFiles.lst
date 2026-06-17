@@ -1,3 +1,4 @@
+com/ptit/thuvien/controller/ThongBaoController.class
 com/ptit/thuvien/model/PhieuMuon.class
 com/ptit/thuvien/service/TaiLieuService.class
 com/ptit/thuvien/controller/DangKyController.class
@@ -33,7 +34,9 @@ com/ptit/thuvien/controller/SuKienController.class
 com/ptit/thuvien/service/impl/TaiLieuServiceImpl.class
 com/ptit/thuvien/repository/TaiLieuRepository.class
 com/ptit/thuvien/model/TinTuc.class
+com/ptit/thuvien/service/ThongBaoService.class
 com/ptit/thuvien/model/DanhMuc$DanhMucBuilder.class
+com/ptit/thuvien/service/impl/ThongBaoServiceImpl.class
 com/ptit/thuvien/repository/NguoiDungRepository.class
 com/ptit/thuvien/model/SuKien$SuKienBuilder.class
 com/ptit/thuvien/controller/MuonSachController.class
